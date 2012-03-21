@@ -1,4 +1,12 @@
 
 # Directives
 
-> Angular.js - UI directives
+## Angular.js - UI directives
+
+***
+
+## Build:
+
+```bash
+$ make js
+```
