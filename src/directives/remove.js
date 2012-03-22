@@ -1,7 +1,5 @@
 
 /**
- * ui-remove directive
- * 
  * Actually removes html from the DOM instead of hiding it for assistance with 
  * CSS3 selectors such as :first-child, :last-child, etc
  * 
