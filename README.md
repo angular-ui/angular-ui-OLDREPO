@@ -13,7 +13,7 @@ Install Uglify-JS
 $ [sudo] npm install uglify-js -g
 ```
 
-## Build:
+## Build/Compress:
 
 ```bash
 $ make js
@@ -22,15 +22,17 @@ $ make js
 ## Template
 
 ```javascript
+
 /**
  * Directive Description
- *
  * @param expression {type} description
  * @example code demo (if possible)
  */
-angular.module('ui.directives', []).directive('uiMYDIRECTIVENAME', [function() {
+
+angular.module('ui.directives', []).directive('uiMyDirectiveName', [function() {
   return function(scope, elm, attrs) {
     /* YOUR UI:DIRECTIVE */
   };
 }]);
+
 ```
