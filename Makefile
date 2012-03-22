@@ -3,9 +3,9 @@ SRC_DIR = src/
 LIB_DIR = lib/
 
 JS_FILES = \
+	${SRC_DIR}module.js\
 	${SRC_DIR}directives/*.js\
-	${SRC_DIR}filters/*.js\
-	${SRC_DIR}module.js
+	${SRC_DIR}filters/*.js
 
 CSS_FILES = \
 	${SRC_DIR}directives/*.css
