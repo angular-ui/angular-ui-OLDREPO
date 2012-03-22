@@ -1,7 +1,6 @@
 
 /**
  * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @directive ui:linky
  * @param expression {boolean} condition to check if it should be a link or not
  */
 
@@ -26,26 +25,5 @@ angular.module('ui.directives', []).directive('uiLinky', [function() {
     delete attrs.uiLinky;
     newElm.attr(attrs);
     elm.html(newElm);
-  };
-}]);
-
-/**
- * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @directive ui:scrollfix
- * @param [offset] {int} optional Y-offset to override the detected offset
- */
-
-angular.module('ui.directives', []).directive('uiScrollfix', [function() {
-  return function(scope, elm, attrs) {
-    if (!attrs.jvScrollfix) {
-      attrs.jvScrollfix = elm.offset().top;
-    }
-    $(window).scroll(function(){
-      if (!elm.hasClass('fixed') && window.pageYOffset > attrs.jvScrollfix) {
-        elm.addClass('fixed');
-      } else if (elm.hasClass('fixed') && window.pageYOffset < attrs.jvScrollfix) {
-        elm.removeClass('fixed');
-      }
-    });
   };
 }]);

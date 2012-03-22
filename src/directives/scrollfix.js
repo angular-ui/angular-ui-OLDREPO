@@ -1,7 +1,6 @@
 
 /**
  * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @directive ui:scrollfix
  * @param [offset] {int} optional Y-offset to override the detected offset
  */
 
