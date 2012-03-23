@@ -9,7 +9,7 @@ angular.module('ui.directives', []).directive('uiKeypress', [function(){
 	return function(scope, elm, attrs) {
 		var params = scope.$eval( '[' + attrs.uiKeypress + ']' );
 		params[1] = params[1] || angular.noop();
-		elm.keyup(function(event){
+		elm.bind('keypress', function(event){
 			if (event.keyCode == params[0]){
 				params[1](event);
 				scope.$apply();
