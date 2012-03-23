@@ -9,12 +9,13 @@ JS_FILES = \
 
 CSS_FILES = \
 	${SRC_DIR}directives/*.css
-	
+
 js:
 	cat ${JS_FILES} > ${LIB_DIR}angular-ui.js
 	uglifyjs -o ${LIB_DIR}angular-ui.min.js --no-mangle --no-squeeze ${LIB_DIR}angular-ui.js
 	
 css:	
 	cat ${CSS_FILES} > ${LIB_DIR}angular-ui.css
+	lessc ${LIB_DIR}angular-ui.css ${LIB_DIR}angular-ui.min.css -compress
 
 .PHONY: js css

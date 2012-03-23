@@ -31,7 +31,9 @@ $ make js
 
 angular.module('ui.directives', []).directive('uiMyDirectiveName', [function() {
   return function(scope, elm, attrs) {
-    /* YOUR UI:DIRECTIVE */
+    
+    /* Your ui:code */
+  
   };
 }]);
 
