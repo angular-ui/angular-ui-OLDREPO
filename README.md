@@ -7,10 +7,11 @@
 
 ## Build Requirements:
 
-Install Uglify-JS
+Install UglifyJS & LESS:
 
 ```bash
 $ [sudo] npm install uglify-js -g
+$ [sudo] npm install less -g
 ```
 
 ## Build/Compress:
@@ -31,9 +32,7 @@ $ make js
 
 angular.module('ui.directives', []).directive('uiMyDirectiveName', [function() {
   return function(scope, elm, attrs) {
-    
     /* Your ui:code */
-  
   };
 }]);
 
