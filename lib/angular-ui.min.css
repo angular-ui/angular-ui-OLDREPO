@@ -1,3 +1,6 @@
 .ui-resetwrap{display:inline-block;position:relative;}
 .ui-reset{display:none;position:absolute;top:5px;right:5px;z-index:2;}
 .ui-resetwrap:hover .ui-reset{display:block;}
+div.help{-webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.25);-moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.25);box-shadow:0 1px 3px rgba(0, 0, 0, 0.25);display:none;width:400px;z-index:1099;position:absolute;background:#000;color:#fff;padding:4px 0 4px 10px;font-family:'Lucida Grande',verdana,sans-serif;font-size:12px;border:1px solid #555;text-align:left;}
+div.help h1,div.help h2{text-align:left;font-weight:bold;font-size:12px;color:#fff;}
+div.help p{color:#fff;text-align:left;font-size:12px;margin-bottom:10px;}

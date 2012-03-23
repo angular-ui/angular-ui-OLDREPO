@@ -1,21 +1,19 @@
 
-SRC_DIR = src/
+JS_SRC_DIR = src/js/
+LESS_SRC_DIR = src/less/
 LIB_DIR = lib/
 
 JS_FILES = \
-	${SRC_DIR}module.js\
-	${SRC_DIR}directives/*.js\
-	${SRC_DIR}filters/*.js
-
-CSS_FILES = \
-	${SRC_DIR}directives/*.css
+	${JS_SRC_DIR}module.js\
+	${JS_SRC_DIR}directives/*.js\
+	${JS_SRC_DIR}filters/*.js
 
 js:
 	cat ${JS_FILES} > ${LIB_DIR}angular-ui.js
 	uglifyjs -o ${LIB_DIR}angular-ui.min.js --no-mangle --no-squeeze ${LIB_DIR}angular-ui.js
 	
 css:	
-	cat ${CSS_FILES} > ${LIB_DIR}angular-ui.css
-	lessc ${LIB_DIR}angular-ui.css ${LIB_DIR}angular-ui.min.css -compress
+	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.css
+	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.min.css -compress
 
 .PHONY: js css
