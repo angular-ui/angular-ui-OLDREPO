@@ -15,5 +15,7 @@ js:
 css:	
 	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.css
 	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.min.css -compress
+		
+build: js css
 
 .PHONY: js css

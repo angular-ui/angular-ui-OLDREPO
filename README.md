@@ -20,6 +20,42 @@ $ [sudo] npm install less -g
 $ make js
 ```
 
+## Using Tooltips
+
+```html
+<div ng:app="demoApp">
+  <div ng:controller="TooltipController">
+    <h3>Tooltip</h3>
+    <p>
+      <a ng-bind-html="item.title" class="help" ui:tooltip="{{item}}"></a>
+    </p>
+  </div>
+</div>
+```
+
+```javascript
+
+/**
+ * Setup our App Module
+ * Register the 'ui' module as a dependency
+ */
+ 
+var demoApp = angular.module('demoApp', ['ui'], function($routeProvider) {
+});
+
+/**
+ * Tooltip Demo Controller
+ */
+
+function TooltipController($scope) {
+  $scope.item =  {
+    title : 'Title',
+    body  : 'Tooltip Body...'
+  };
+};
+
+```
+
 ## Template
 
 ```javascript
