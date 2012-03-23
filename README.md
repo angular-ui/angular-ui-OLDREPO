@@ -30,9 +30,8 @@ $ make js
  * @example code demo (if possible)
  */
 
-angular.module('ui.directives', []).directive('uiMyDirectiveName', [function() {
+angular.module('ui.directives', []).directive('uiMYDIRECTIVE', [function() {
   return function(scope, elm, attrs) {
-    /* Your ui:code */
   };
 }]);
 
