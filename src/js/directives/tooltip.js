@@ -7,15 +7,16 @@
  * 
  * JSON:
  *
- * [{
- *  
-* }] 
+ * {
+ *  title : 'Title',
+ *  body  : 'Tooltip Body...'
+ * } 
  *
  * <a ng-bind-html="item.title" class="help" ui:tooltip="item"></a>
  *
  */
 
-itemBankApp.directive('uiTooltip', function($compile) {
+angular.module('ui.directives', []).directive('uiTooltip', [function() {
   return function linkingFn(scope, linkElement, attrs) {
     var view = angular.element('<div class="help"></div>');
     view.prepend(angular.element('<h1></h1>'));
@@ -42,6 +43,6 @@ itemBankApp.directive('uiTooltip', function($compile) {
       };
     });
   };
-});
+}]);
 
 /* EOF */
