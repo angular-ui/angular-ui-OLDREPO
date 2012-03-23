@@ -17,7 +17,7 @@ $ [sudo] npm install less -g
 ## Build/Compress:
 
 ```bash
-$ make js
+$ make build
 ```
 
 ## Using Tooltips
