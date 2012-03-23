@@ -23,9 +23,9 @@ angular.module('ui.directives', []).directive('uiTooltip', [function() {
     var body = document.getElementsByTagName('body')[0];
     var $tooltip = angular.element(body).after(view).next();
     setTimeout(function() {
-      var data = JSON.parse(attrs.uiTooltip);
-      view.find('h1').text(item.title);
-      view.append(angular.element('<p>' + item.body + '</p>'));
+      var data = attrs.uiTooltip;
+      view.find('h1').text(data.title);
+      view.append(angular.element('<p>' + data.body + '</p>'));
     }, 500);
     linkElement.bind('mouseover',function(evt) {
       $tooltip.running = true;
