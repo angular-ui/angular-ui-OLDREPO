@@ -6,13 +6,13 @@
 
 angular.module('ui.directives').directive('uiScrollfix', [function() {
   return function(scope, elm, attrs) {
-    if (!attrs.jvScrollfix) {
-      attrs.jvScrollfix = elm.offset().top;
+    if (!attrs.uiScrollfix) {
+      attrs.uiScrollfix = elm.offset().top;
     }
     $(window).scroll(function(){
-      if (!elm.hasClass('fixed') && window.pageYOffset > attrs.jvScrollfix) {
+      if (!elm.hasClass('fixed') && window.pageYOffset > attrs.uiScrollfix) {
         elm.addClass('fixed');
-      } else if (elm.hasClass('fixed') && window.pageYOffset < attrs.jvScrollfix) {
+      } else if (elm.hasClass('fixed') && window.pageYOffset < attrs.uiScrollfix) {
         elm.removeClass('fixed');
       }
     });
