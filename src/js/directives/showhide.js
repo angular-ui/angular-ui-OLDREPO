@@ -12,7 +12,7 @@
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 
-angular.module('ui.directives', []).directive('uiShow', [function() {
+angular.module('ui.directives').directive('uiShow', [function() {
 	return function(scope, elm, attrs) {
 		if (scope.$eval(attrs.uiShow)) {
 			elm.addClass('show');
@@ -31,7 +31,7 @@ angular.module('ui.directives', []).directive('uiShow', [function() {
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 
-angular.module('ui.directives', []).directive('uiHide', [function() {
+angular.module('ui.directives').directive('uiHide', [function() {
 	return function(scope, elm, attrs) {
 		if (scope.$eval(attrs.uiShow)) {
 			elm.addClass('hide');
@@ -51,7 +51,7 @@ angular.module('ui.directives', []).directive('uiHide', [function() {
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 
-angular.module('ui.directives', []).directive('uiToggle', [function() {
+angular.module('ui.directives').directive('uiToggle', [function() {
 	return function(scope, elm, attrs) {
 		if (scope.$eval(attrs.uiShow)) {
 			elm.switchClass('show', 'hide');

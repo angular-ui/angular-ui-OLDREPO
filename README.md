@@ -30,7 +30,7 @@ $ make build
  * @example code demo (if possible)
  */
 
-angular.module('ui.directives', []).directive('uiMYDIRECTIVE', [function() {
+angular.module('ui.directives').directive('uiMYDIRECTIVE', [function() {
   return function(scope, elm, attrs) {
   };
 }]);

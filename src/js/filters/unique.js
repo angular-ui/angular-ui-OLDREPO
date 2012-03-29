@@ -5,7 +5,7 @@
  * @return {array}
  */
 
-angular.module('ui.filters', []).filter('unique', function() {
+angular.module('ui.filters').filter('unique', function() {
 
 	return function(items, key) {
 		var hashCheck = {};

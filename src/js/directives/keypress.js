@@ -5,7 +5,7 @@
  * @param callback {function} The callback function to fire upon keypress. Takes an 'event' param
  **/
 
-angular.module('ui.directives', []).directive('uiKeypress', [function(){
+angular.module('ui.directives').directive('uiKeypress', [function(){
 	return function(scope, elm, attrs) {
 		var params = scope.$eval( '[' + attrs.uiKeypress + ']' );
 		params[1] = params[1] || angular.noop();
