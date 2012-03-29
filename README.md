@@ -12,6 +12,7 @@ Install UglifyJS & LESS:
 ```bash
 $ [sudo] npm install uglify-js -g
 $ [sudo] npm install less -g
+$ [sudo] npm install coffee-script -g
 ```
 
 ## Build/Compress:
