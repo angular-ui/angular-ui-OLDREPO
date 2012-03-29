@@ -14,11 +14,13 @@
 
 angular.module('ui.directives').directive('uiShow', [function() {
 	return function(scope, elm, attrs) {
-		if (scope.$eval(attrs.uiShow)) {
-			elm.addClass('show');
-		} else {
-			elm.removeClass('show');
-		}
+		scope.$watch(attrs.uiShow, function(scope, newVal, oldVal){
+			if (newVal) {
+				elm.addClass('show');
+			} else {
+				elm.removeClass('show');
+			}	
+		});
 	};
 }]);
 
@@ -33,11 +35,13 @@ angular.module('ui.directives').directive('uiShow', [function() {
 
 angular.module('ui.directives').directive('uiHide', [function() {
 	return function(scope, elm, attrs) {
-		if (scope.$eval(attrs.uiShow)) {
-			elm.addClass('hide');
-		} else {
-			elm.removeClass('hide');
-		}
+		scope.$watch(attrs.uiHide, function(scope, newVal, oldVal){
+			if (newVal) {
+				elm.addClass('hide');
+			} else {
+				elm.removeClass('hide');
+			}
+		});
 	};
 }]);
 
@@ -53,10 +57,12 @@ angular.module('ui.directives').directive('uiHide', [function() {
 
 angular.module('ui.directives').directive('uiToggle', [function() {
 	return function(scope, elm, attrs) {
-		if (scope.$eval(attrs.uiShow)) {
-			elm.switchClass('show', 'hide');
-		} else {
-			elm.removeClass('hide', 'show');
-		}
+		scope.$watch(attrs.uiToggle, function(scope, newVal, oldVal){
+			if (newVal) {
+				elm.switchClass('show', 'hide');
+			} else {
+				elm.removeClass('hide', 'show');
+			}
+		});
 	};
 }]);
