@@ -4,7 +4,7 @@
  * @param [offset] {int} optional Y-offset to override the detected offset
  */
 
-angular.module('ui.directives', []).directive('uiScrollfix', [function() {
+angular.module('ui.directives').directive('uiScrollfix', [function() {
   return function(scope, elm, attrs) {
     if (!attrs.jvScrollfix) {
       attrs.jvScrollfix = elm.offset().top;

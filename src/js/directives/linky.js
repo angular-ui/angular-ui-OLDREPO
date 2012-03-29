@@ -4,7 +4,7 @@
  * @param expression {boolean} condition to check if it should be a link or not
  */
 
-angular.module('ui.directives', []).directive('uiLinky', [function() {
+angular.module('ui.directives').directive('uiLinky', [function() {
   return function(scope, elm, attrs) {
     var newElm, isLink = scope.$eval(attrs.uiLinky);
     if (isLink) {
