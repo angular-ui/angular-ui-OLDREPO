@@ -14,7 +14,7 @@
 
 angular.module('ui.directives').directive('uiShow', [function() {
 	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiShow, function(scope, newVal, oldVal){
+		scope.$watch(attrs.uiShow, function(newVal, oldVal){
 			if (newVal) {
 				elm.addClass('show');
 			} else {
@@ -35,7 +35,7 @@ angular.module('ui.directives').directive('uiShow', [function() {
 
 angular.module('ui.directives').directive('uiHide', [function() {
 	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiHide, function(scope, newVal, oldVal){
+		scope.$watch(attrs.uiHide, function(newVal, oldVal){
 			if (newVal) {
 				elm.addClass('hide');
 			} else {
@@ -57,7 +57,7 @@ angular.module('ui.directives').directive('uiHide', [function() {
 
 angular.module('ui.directives').directive('uiToggle', [function() {
 	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiToggle, function(scope, newVal, oldVal){
+		scope.$watch(attrs.uiToggle, function(newVal, oldVal){
 			if (newVal) {
 				elm.switchClass('show', 'hide');
 			} else {

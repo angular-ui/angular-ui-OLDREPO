@@ -13,8 +13,8 @@
 angular.module('ui.directives').directive('uiRemove', [function() {
 	return function(scope, elm, attrs) {
 		var remove, nextElm;
-		scope.$watch(attrs.uiRemove, function(scope, newValue, oldValue) {
-			if (newValue) {
+		scope.$watch(attrs.uiRemove, function(newVal, oldVal) {
+			if (newVal) {
 				nextElm = elm.next();
 				// Checks for jQuery lib usage
 				if (elm['detach']) {
