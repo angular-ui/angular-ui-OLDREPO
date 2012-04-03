@@ -9,4 +9,4 @@ angular.module('ui.directives',[]);
 angular.module('ui', [
   'ui.filters', 
   'ui.directives'
-]);
+]).value('ui.config', {});

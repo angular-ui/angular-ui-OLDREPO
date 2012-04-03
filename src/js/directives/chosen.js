@@ -7,7 +7,7 @@
  * @link https://github.com/jobvite/ajax-chosen/
  */
 
-angular.module('ui.directives').directive('uiChosen', [function() {
+angular.module('ui.directives').directive('uiChosen', ['ui.config', function(uiConfig) {
 	
 	var options = {
 		

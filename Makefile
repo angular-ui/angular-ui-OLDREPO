@@ -1,13 +1,12 @@
 
 JS_SRC_DIR = src/js/
-COFFEE_SCRIPT_SRC_DIR = src/coffee-script/
+COFFEE_SCRIPT_SRC_DIR = src/coffee/
 LESS_SRC_DIR = src/less/
 LIB_DIR = lib/
 
 JS_FILES = \
-	${JS_SRC_DIR}module.js\
-	${JS_SRC_DIR}directives/*.js\
-	${JS_SRC_DIR}filters/*.js
+	${JS_SRC_DIR}*.js\
+	${JS_SRC_DIR}*/*.js
 
 coffee:
 	coffee -co ${JS_SRC_DIR} ${COFFEE_SCRIPT_SRC_DIR}
