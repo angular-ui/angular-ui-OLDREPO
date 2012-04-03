@@ -9,11 +9,11 @@ module.directive 'uiMask', ()->
     # We override the render method to run the jQuery mask plugin
     controller.$render = ()->
       element.val(controller.$viewValue ? '')
-      $(element).mask($scope.uiMask)
+      element.mask($scope.uiMask)
 
     # Add a parser that extracts the masked value into the model but only if the mask is valid
     controller.$parsers.push (value)->
-      isValid = $(element).data('mask-isvalid')
+      isValid = element.data('mask-isvalid')
       controller.$setValidity('mask', isValid)
       if isValid
         element.mask()
@@ -21,6 +21,6 @@ module.directive 'uiMask', ()->
         null
 
     # When the element blurs, update the viewvalue
-    $(element).bind 'blur', ()->
+    element.bind 'blur', ()->
       $scope.$apply ()->
         controller.$setViewValue(element.mask())
