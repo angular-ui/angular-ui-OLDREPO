@@ -1,7 +1,7 @@
 (function() {
   var module;
 
-  module = angular.module('ui.directives');
+  module = angular.module('ui.directives.mask');
 
   module.directive('uiMask', function() {
     return {

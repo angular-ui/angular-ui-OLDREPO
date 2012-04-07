@@ -10,7 +10,7 @@
  * @param remove {boolean} condition to check if the element should be removed form the DOM
  */
 
-angular.module('ui.directives').directive('uiRemove', [function() {
+angular.module('ui.directives.remove').directive('uiRemove', [function() {
 	return function(scope, elm, attrs) {
 		var remove, nextElm;
 		scope.$watch(attrs.uiRemove, function(newVal, oldVal) {

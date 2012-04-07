@@ -12,7 +12,7 @@
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
 
-angular.module('ui.directives').directive('uiShow', [function() {
+angular.module('ui.directives.show').directive('uiShow', [function() {
 	return function(scope, elm, attrs) {
 		scope.$watch(attrs.uiShow, function(newVal, oldVal){
 			if (newVal) {

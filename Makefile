@@ -1,24 +1,33 @@
+MODULE_DIR = modules/
+COMMON_SRC_DIR = ${MODULE_DIR}common/src/
+DIRECTIVES_SRC_DIR = ${MODULE_DIR}directives/*/src/
+FILTERS_SRC_DIR = ${MODULE_DIR}filters/*/src/
 
-JS_SRC_DIR = src/js/
-COFFEE_SCRIPT_SRC_DIR = src/coffee/
+ALL_SRC_DIR = \
+	${COMMON_SRC_DIR}\
+	${DIRECTIVES_SRC_DIR}\
+	${FILTERS_SRC_DIR}
+
 LESS_SRC_DIR = src/less/
-LIB_DIR = lib/
+BUILD_DIR = build/
 
 JS_FILES = \
-	${JS_SRC_DIR}*.js\
-	${JS_SRC_DIR}*/*.js
+	${DIRECTIVES_SRC_DIR}*.js\
+	${FILTERS_SRC_DIR}*.js\
+	${COMMON_SRC_DIR}*.js
+
+all: build
 
 coffee:
-	coffee -co ${JS_SRC_DIR} ${COFFEE_SCRIPT_SRC_DIR}
+	coffee -c ${ALL_SRC_DIR}
 
-js:
-	cat ${JS_FILES} > ${LIB_DIR}angular-ui.js
-	uglifyjs -o ${LIB_DIR}angular-ui.min.js --no-mangle --no-squeeze ${LIB_DIR}angular-ui.js
+js: coffee
+	cat ${JS_FILES} > ${BUILD_DIR}angular-ui.js
+	uglifyjs -o ${BUILD_DIR}angular-ui.min.js --no-mangle --no-squeeze ${BUILD_DIR}angular-ui.js
 	
 css:	
-	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.css
-	lessc ${LESS_SRC_DIR}angular-ui.less ${LIB_DIR}angular-ui.min.css -compress
+	lessc ${LESS_SRC_DIR}angular-ui.less ${BUILD_DIR}angular-ui.css
+	lessc ${LESS_SRC_DIR}angular-ui.less ${BUILD_DIR}angular-ui.min.css -compress
 		
 build: js css
 
-.PHONY: js css
