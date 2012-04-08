@@ -13,7 +13,7 @@
 angular.module('ui.directives').directive('uiRemove', [function() {
 	return function(scope, elm, attrs) {
 		var parent = elm.parent();
-		var expression = attrs.jvDetach;
+		var expression = attrs.uiRemove;
 		elm.data('ui-remove-index', elm.index());
 		scope.$watch(expression, function(newValue, oldvalue) {
 			var index, children, child;
