@@ -5,7 +5,7 @@ describe 'uiDate', ()->
     $.datepicker._selectDate(element)
 
   # Ensure the datepicker angular module is loaded
-  beforeEach module 'WidgetModule'
+  beforeEach module 'ui.directives.date'
 
   describe 'simple use on input element', ()->
 

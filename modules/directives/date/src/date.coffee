@@ -1,4 +1,4 @@
-angular.module('ui.directives.date').directive 'uiDate', ()->
+angular.module('ui.directives.date', []).directive 'uiDate', ()->
   require: '?ngModel'
   scope:
     uiDate: 'evaluate'

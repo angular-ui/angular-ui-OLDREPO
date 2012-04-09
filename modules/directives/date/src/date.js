@@ -1,6 +1,6 @@
 (function() {
 
-  angular.module('ui.directives.date').directive('uiDate', function() {
+  angular.module('ui.directives.date', []).directive('uiDate', function() {
     return {
       require: '?ngModel',
       scope: {
