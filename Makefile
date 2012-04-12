@@ -45,4 +45,7 @@ css:
 		
 build: js css
 
+test: build
+	testacular-run
+
 .PHONY: all coffee js css build
