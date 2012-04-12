@@ -1,0 +1,18 @@
+/**
+ * import components to builds angular-ui.css
+ */
+/* ui-reset */
+.ui-resetwrap {
+  display: inline-block;
+  position: relative;
+}
+.ui-reset {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+}
+.ui-resetwrap:hover .ui-reset {
+  display: block;
+}

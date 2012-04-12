@@ -1,0 +1,12 @@
+angular.module('ui.directives',[
+	'ui.directives.chosen',
+	'ui.directives.date',
+	'ui.directives.jq',
+	'ui.directives.keypress',
+	'ui.directives.linky',
+	'ui.directives.mask',
+	'ui.directives.remove',
+	'ui.directives.reset',
+	'ui.directives.scrollfix',
+	'ui.directives.showhide'
+]);
