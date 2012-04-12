@@ -29,11 +29,11 @@ describe 'uiDate', ()->
         selectDate(element, aDate)
         expect($rootScope.x).toEqual(aDate)
 
-  describe 'use with required directive', ()->
+  describe 'use with ng-required directive', ()->
     it 'should be invalid initially', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope)
+        element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope)
         # Do an apply to ensure that the validation is run
         $rootScope.$apply()
         expect(element.hasClass('ng-invalid')).toBeTruthy()
@@ -41,7 +41,7 @@ describe 'uiDate', ()->
     it 'should be valid if model has been specified', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope)
+        element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope)
         $rootScope.$apply ()->
           $rootScope.x = aDate
         expect(element.hasClass('ng-valid')).toBeTruthy()
@@ -49,7 +49,7 @@ describe 'uiDate', ()->
     it 'should be valid after the date has been picked', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope)
+        element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope)
         selectDate(element, aDate)
         expect(element.hasClass('ng-valid')).toBeTruthy()
 
@@ -75,11 +75,11 @@ describe 'uiDate', ()->
         selectDate(element, aDate)
         expect($rootScope.x).toEqual(aDate)
 
-  describe 'use with required directive', ()->
+  describe 'use with ng-required directive', ()->
     it 'should be invalid initially', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope)
+        element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope)
         # Do an apply to ensure that the validation is run
         $rootScope.$apply()
         expect(element.hasClass('ng-invalid')).toBeTruthy()
@@ -87,7 +87,7 @@ describe 'uiDate', ()->
     it 'should be valid if model has been specified', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope)
+        element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope)
         $rootScope.$apply ()->
           $rootScope.x = aDate
         expect(element.hasClass('ng-valid')).toBeTruthy()
@@ -95,6 +95,6 @@ describe 'uiDate', ()->
     it 'should be valid after the date has been picked', ()->
       inject ($compile, $rootScope)->
         aDate = new Date(2010,12,1)
-        element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope)
+        element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope)
         selectDate(element, aDate)
         expect(element.hasClass('ng-valid')).toBeTruthy()
