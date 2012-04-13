@@ -6,7 +6,7 @@
       element.datepicker('setDate', date);
       return $.datepicker._selectDate(element);
     };
-    beforeEach(module('ui.directives.date'));
+    beforeEach(module('ui.directives'));
     describe('simple use on input element', function() {
       it('should have a date picker attached', function() {
         return inject(function($compile, $rootScope) {

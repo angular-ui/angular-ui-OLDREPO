@@ -15,6 +15,7 @@ files = [
   'test/lib/jquery/jquery-ui-1.8.18.js',
   'test/lib/angular/angular-1.0.0rc5.js',
   'test/lib/angular/angular-mocks.js',
+  'common/src/*.js',
   'modules/directives/date/src/*.js',
   'modules/directives/date/test/*.js'
 ];
