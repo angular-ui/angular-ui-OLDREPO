@@ -1,4 +1,5 @@
-JS_FILES = $(shell find modules -type f -name '*.js')
+JS_SRC_FILES = $(shell find modules -type f -path '*/src/*.js')
+JS_TEST_FILES = $(shell find modules -type f -path '*/test/*.js')
 COFFEE_FILES = $(shell find modules -type f -name '*.coffee')
 
 all: build
@@ -7,7 +8,7 @@ coffee:
 	coffee -c ${COFFEE_FILES}
 
 js: coffee
-	cat ${JS_FILES} > build/angular-ui.js
+	cat ${JS_SRC_FILES} > build/angular-ui.js
 	uglifyjs -o build/angular-ui.min.js --no-mangle --no-squeeze build/angular-ui.js
 	
 css:
