@@ -59,6 +59,7 @@ $ testacular-run
 ```
 
 Or even quicker
+
 ```bash
 $ make test
 ```
