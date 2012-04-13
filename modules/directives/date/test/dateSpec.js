@@ -36,12 +36,12 @@
         });
       });
     });
-    describe('use with required directive', function() {
+    describe('use with ng-required directive', function() {
       it('should be invalid initially', function() {
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope);
           $rootScope.$apply();
           return expect(element.hasClass('ng-invalid')).toBeTruthy();
         });
@@ -50,7 +50,7 @@
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope);
           $rootScope.$apply(function() {
             return $rootScope.x = aDate;
           });
@@ -61,7 +61,7 @@
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          element = $compile("<input ui-date ng-model='x' ng-required='true' ></input>")($rootScope);
           selectDate(element, aDate);
           return expect(element.hasClass('ng-valid')).toBeTruthy();
         });
@@ -96,12 +96,12 @@
         });
       });
     });
-    return describe('use with required directive', function() {
+    return describe('use with ng-required directive', function() {
       it('should be invalid initially', function() {
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope);
           $rootScope.$apply();
           return expect(element.hasClass('ng-invalid')).toBeTruthy();
         });
@@ -110,7 +110,7 @@
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope);
           $rootScope.$apply(function() {
             return $rootScope.x = aDate;
           });
@@ -121,7 +121,7 @@
         return inject(function($compile, $rootScope) {
           var aDate, element;
           aDate = new Date(2010, 12, 1);
-          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope);
           selectDate(element, aDate);
           return expect(element.hasClass('ng-valid')).toBeTruthy();
         });
