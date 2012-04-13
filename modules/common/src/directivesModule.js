@@ -1,5 +1,5 @@
 angular.module('ui.directives',[
-	'ui.directives.chosen',
+	'ui.directives.select2',
 	'ui.directives.date',
 	'ui.directives.jq',
 	'ui.directives.keypress',
