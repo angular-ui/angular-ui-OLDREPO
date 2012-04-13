@@ -1,20 +1,4 @@
-angular.module('ui.directives',[
-	'ui.directives.select2',
-	'ui.directives.date',
-	'ui.directives.jq',
-	'ui.directives.keypress',
-	'ui.directives.linky',
-	'ui.directives.mask',
-	'ui.directives.remove',
-	'ui.directives.reset',
-	'ui.directives.scrollfix',
-	'ui.directives.showhide'
-]);
-angular.module('ui.filters', [
-	'ui.filters.highlight',
-	'ui.filters.length',
-	'ui.filters.unique'
-]);// READ: http://docs-next.angularjs.org/guide/ie
+// READ: http://docs-next.angularjs.org/guide/ie
 (function(){
   
   var getIE = function() {
@@ -49,14 +33,23 @@ angular.module('ui.filters', [
  * @module ui
  * Bind Angular.js modules
  */
-
+angular.module('ui.filters', []);
+angular.module('ui.directives', []);
 angular.module('ui', [
   'ui.filters', 
   'ui.directives'
 ]).value('ui.config', {});
+/*
+ General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
+ 
+ @TODO Devise a way to pass app-wide defined configuration options. Consider global var. 
+ @param [ui-jq] {string} The $elm.[pluginName]() to call.
+ @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
+*/
+
 (function() {
 
-  angular.module('ui.directives.date', []).directive('uiDate', function() {
+  angular.module('ui.directives').directive('uiDate', function() {
     return {
       require: '?ngModel',
       scope: {
@@ -100,8 +93,7 @@ angular.module('ui', [
  * @param [ui-jq] {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
  */
-
-angular.module('ui.directives.jq').directive('uiJq', [function() {
+angular.module('ui.directives').directive('uiJq', [function() {
 	return function(scope, elm, attrs) {
 		if (attrs.uiOptions) {
 			elm[attrs.uiJq](scope.$eval(attrs.uiOptions));
@@ -116,8 +108,7 @@ angular.module('ui.directives.jq').directive('uiJq', [function() {
  * @param keyCode {number} The number keycode to watch (ex: 13 is the return key)
  * @param callback {function} The callback function to fire upon keypress. Takes an 'event' param
  **/
-
-angular.module('ui.directives.keypress').directive('uiKeypress', [function(){
+angular.module('ui.directives').directive('uiKeypress', [function(){
 	return function(scope, elm, attrs) {
 		var params = scope.$eval( '[' + attrs.uiKeypress + ']' );
 		params[1] = params[1] || angular.noop();
@@ -133,8 +124,7 @@ angular.module('ui.directives.keypress').directive('uiKeypress', [function(){
  * Changes the current element from a link to a span tag based on a condition
  * @param expression {boolean} condition to check if it should be a link or not
  */
-
-angular.module('ui.directives.linky').directive('uiLinky', [function() {
+angular.module('ui.directives').directive('uiLinky', [function() {
 	return function(scope, elm, attrs) {	
 		var newElm;
 		scope.$watch(attrs.uiLinky, function(newVal, oldVal){
@@ -159,12 +149,15 @@ angular.module('ui.directives.linky').directive('uiLinky', [function() {
 		});
 	};
 }]);
+
+/*
+ Changes the current element from a link to a span tag based on a condition
+ @param expression {boolean} condition to check if it should be a link or not
+*/
+
 (function() {
-  var module;
 
-  module = angular.module('ui.directives.mask');
-
-  module.directive('uiMask', function() {
+  angular.module('ui.directives').directive('uiMask', function() {
     return {
       require: 'ngModel',
       scope: {
@@ -207,8 +200,7 @@ angular.module('ui.directives.linky').directive('uiLinky', [function() {
  * @todo Add a more resilient solution to injecting removed elements back into the DOM (instead of relying on nextElm)
  * @param remove {boolean} condition to check if the element should be removed form the DOM
  */
-
-angular.module('ui.directives.remove').directive('uiRemove', [function() {
+angular.module('ui.directives').directive('uiRemove', [function() {
 	return function(scope, elm, attrs) {
 		var parent = elm.parent();
 		var expression = attrs.uiRemove;
@@ -239,8 +231,7 @@ angular.module('ui.directives.remove').directive('uiRemove', [function() {
 /**
  * Add a clear button to form inputs to reset their value
  */
-
-angular.module('ui.directives.reset').directive('uiReset', [function() {
+angular.module('ui.directives').directive('uiReset', [function() {
 	return function(scope, elm, attrs) {
 		elm.wrap('<span class="ui-resetwrap" />').after('<a class="ui-reset" />').next().click(function(e){
 			e.preventDefault();
@@ -255,8 +246,7 @@ angular.module('ui.directives.reset').directive('uiReset', [function() {
  * Adds a 'fixed' class to the element when the page scrolls past it's position.
  * @param [offset] {int} optional Y-offset to override the detected offset
  */
-
-angular.module('ui.directives.scrollfix').directive('uiScrollfix', [function() {
+angular.module('ui.directives').directive('uiScrollfix', [function() {
   return function(scope, elm, attrs) {
     if (!attrs.uiScrollfix) {
       attrs.uiScrollfix = elm.offset().top;
@@ -277,7 +267,7 @@ angular.module('ui.directives.scrollfix').directive('uiScrollfix', [function() {
  * @link http://ivaynberg.github.com/select2/
  * @param [uiSelect2] {object} containing configuration options. Merged onto your uiConfig.select2 definition
  */
-directive('uiSelect2', ['uiConfig', function(uiConfig){
+angular.module('ui.directives').directive('uiSelect2', ['uiConfig', function(uiConfig){
 	uiConfig.select2 = uiConfig.select2 || {};
 	return function(scope, elm, attrs) {
 		var options = angular.extend({}, uiConfig.select2, scope.$eval(attrs.uiSelect2));
@@ -301,8 +291,7 @@ directive('uiSelect2', ['uiConfig', function(uiConfig){
  *
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
-
-angular.module('ui.directives.show').directive('uiShow', [function() {
+angular.module('ui.directives').directive('uiShow', [function() {
 	return function(scope, elm, attrs) {
 		scope.$watch(attrs.uiShow, function(newVal, oldVal){
 			if (newVal) {
@@ -312,7 +301,7 @@ angular.module('ui.directives.show').directive('uiShow', [function() {
 			}	
 		});
 	};
-}]);
+}])
 
 /**
  * uiHide Directive
@@ -322,8 +311,7 @@ angular.module('ui.directives.show').directive('uiShow', [function() {
  *
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
-
-angular.module('ui.directives').directive('uiHide', [function() {
+.directive('uiHide', [function() {
 	return function(scope, elm, attrs) {
 		scope.$watch(attrs.uiHide, function(newVal, oldVal){
 			if (newVal) {
@@ -333,7 +321,7 @@ angular.module('ui.directives').directive('uiHide', [function() {
 			}
 		});
 	};
-}]);
+}])
 
 /**
  * uiToggle Directive
@@ -344,8 +332,7 @@ angular.module('ui.directives').directive('uiHide', [function() {
  *
  * @param expression {boolean} evaluated expression to determine if the class should be added
  */
-
-angular.module('ui.directives').directive('uiToggle', [function() {
+.directive('uiToggle', [function() {
 	return function(scope, elm, attrs) {
 		scope.$watch(attrs.uiToggle, function(newVal, oldVal){
 			if (newVal) {
@@ -356,14 +343,11 @@ angular.module('ui.directives').directive('uiToggle', [function() {
 		});
 	};
 }]);
-
 /**
  * Adds a 'fixed' class to the element when the page scrolls past it's position.
  * @param expression {boolean} condition to check if it should be a link or not
  */
- 
-angular.module('ui.filters.highlight', []).filter('highlight', function() {
-
+angular.module('ui.filters').filter('highlight', function() {
   return function(text, filter) {
     if (filter === undefined) {
       return text;
@@ -371,15 +355,11 @@ angular.module('ui.filters.highlight', []).filter('highlight', function() {
       return text.replace(new RegExp(filter, 'gi'), '<span class="match">$&</span>');
     };
   };
-
 });
-
-/* EOF */
 /**
  * Returns the length property of the filtered object
  */
- 
-angular.module('ui.filters.length',[]).filter('length', function() {
+angular.module('ui.filters').filter('length', function() {
 	return function(value) {
 		return value.length;
 	};
@@ -389,9 +369,7 @@ angular.module('ui.filters.length',[]).filter('length', function() {
  * @param key {string} the name of the attribute of each object to compare for uniqueness
  * @return {array}
  */
-
-angular.module('ui.filters.unique',[]).filter('unique', function() {
-
+angular.module('ui.filters').filter('unique', function() {
 	return function(items, key) {
 		var hashCheck = {};
 		for (i in items) {

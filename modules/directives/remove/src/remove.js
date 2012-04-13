@@ -9,8 +9,7 @@
  * @todo Add a more resilient solution to injecting removed elements back into the DOM (instead of relying on nextElm)
  * @param remove {boolean} condition to check if the element should be removed form the DOM
  */
-
-angular.module('ui.directives.remove').directive('uiRemove', [function() {
+angular.module('ui.directives').directive('uiRemove', [function() {
 	return function(scope, elm, attrs) {
 		var parent = elm.parent();
 		var expression = attrs.uiRemove;

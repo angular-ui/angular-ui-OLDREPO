@@ -1,6 +1,15 @@
+
+/*
+ General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
+ 
+ @TODO Devise a way to pass app-wide defined configuration options. Consider global var. 
+ @param [ui-jq] {string} The $elm.[pluginName]() to call.
+ @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
+*/
+
 (function() {
 
-  angular.module('ui.directives.date', []).directive('uiDate', function() {
+  angular.module('ui.directives').directive('uiDate', function() {
     return {
       require: '?ngModel',
       scope: {

@@ -1,9 +1,12 @@
+
+/*
+ Changes the current element from a link to a span tag based on a condition
+ @param expression {boolean} condition to check if it should be a link or not
+*/
+
 (function() {
-  var module;
 
-  module = angular.module('ui.directives.mask');
-
-  module.directive('uiMask', function() {
+  angular.module('ui.directives').directive('uiMask', function() {
     return {
       require: 'ngModel',
       scope: {

@@ -6,8 +6,7 @@
  * @param [ui-jq] {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
  */
-
-angular.module('ui.directives.jq').directive('uiJq', [function() {
+angular.module('ui.directives').directive('uiJq', [function() {
 	return function(scope, elm, attrs) {
 		if (attrs.uiOptions) {
 			elm[attrs.uiJq](scope.$eval(attrs.uiOptions));
