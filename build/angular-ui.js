@@ -1,34 +1,60 @@
+angular.module('ui.directives',[
+	'ui.directives.chosen',
+	'ui.directives.date',
+	'ui.directives.jq',
+	'ui.directives.keypress',
+	'ui.directives.linky',
+	'ui.directives.mask',
+	'ui.directives.remove',
+	'ui.directives.reset',
+	'ui.directives.scrollfix',
+	'ui.directives.showhide'
+]);
+(function() {
+
+  angular.module('ui.filters', ['ui.filters.highlight', 'ui.filters.length', 'ui.filters.unique']);
+
+}).call(this);
+// READ: http://docs-next.angularjs.org/guide/ie
+(function(){
+  
+  var getIE = function() {
+      // Returns the version of Internet Explorer or a -1
+      // (indicating the use of another browser).
+     var rv = -1; // Return value assumes failure.
+     if (navigator.appName == 'Microsoft Internet Explorer') {
+        var ua = navigator.userAgent;
+        var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+        if (re.exec(ua) != null) {
+        	rv = parseFloat( RegExp.$1 );
+        }
+     }
+     return rv;
+  };
+
+  var tags = [ 'ng-include', 'ng-pluralize', 'ng-view', 'ng:include', 'ng:pluralize', 'ng:view' ];
+  var shiv = function() {
+    for(var i = 0, len = tags.length; i < len; i++) {
+      document.createElement(tags[i]);
+    }
+  };
+	
+  var ieVersion = getIE();
+  if (ieVersion > -1 && ieVersion < 9) {
+    shiv();
+  }
+  
+})();
 
 /**
- * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @param [ajaxHandler] {function} optional handler function for using Ajax-Chosen
- * @link http://harvesthq.github.com/chosen/
- * @link https://github.com/harvesthq/chosen/
- * @link https://github.com/jobvite/ajax-chosen/
+ * @module ui
+ * Bind Angular.js modules
  */
 
-angular.module('ui.directives.chosen').directive('uiChosen', ['ui.config', function(uiConfig) {
-	
-	var options = {
-		
-	}, ajaxOptions = {
-			minLength: 3,
-			queryLimit: 10,
-			delay: 100,
-			chosenOptions: options,
-			searchingText: "Searching...",
-			noresultsText: "No results.",
-			initialQuery: false
-	};
-	return function(scope, elm, attrs) {
-		var handler = scope.$eval(attrs.uiChosen);
-		if (angular.isFunction(handler)) {
-			elm.ajaxChosen(ajaxOptions, handler);
-		} else {
-			elm.chosen(options);
-		}
-	};
-}]);
+angular.module('ui', [
+  'ui.filters', 
+  'ui.directives'
+]).value('ui.config', {});
 (function() {
 
   angular.module('ui.directives.date', []).directive('uiDate', function() {
@@ -64,6 +90,138 @@ angular.module('ui.directives.chosen').directive('uiChosen', ['ui.config', funct
         return element.datepicker($scope.uiDate);
       }
     };
+  });
+
+}).call(this);
+(function() {
+
+  describe('uiDate', function() {
+    var selectDate;
+    selectDate = function(element, date) {
+      element.datepicker('setDate', date);
+      return $.datepicker._selectDate(element);
+    };
+    beforeEach(module('ui.directives.date'));
+    describe('simple use on input element', function() {
+      it('should have a date picker attached', function() {
+        return inject(function($compile, $rootScope) {
+          var element;
+          element = $compile("<input ui-date></input>")($rootScope);
+          return expect(element.datepicker()).toBeDefined();
+        });
+      });
+      it('should be able to get the date from the model', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<input ui-date ng-model='x'></input>")($rootScope);
+          $rootScope.$apply(function() {
+            return $rootScope.x = aDate;
+          });
+          return expect(element.datepicker('getDate')).toEqual(aDate);
+        });
+      });
+      return it('should put the date in the model', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<input ui-date ng-model='x'></input>")($rootScope);
+          selectDate(element, aDate);
+          return expect($rootScope.x).toEqual(aDate);
+        });
+      });
+    });
+    describe('use with required directive', function() {
+      it('should be invalid initially', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          $rootScope.$apply();
+          return expect(element.hasClass('ng-invalid')).toBeTruthy();
+        });
+      });
+      it('should be valid if model has been specified', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          $rootScope.$apply(function() {
+            return $rootScope.x = aDate;
+          });
+          return expect(element.hasClass('ng-valid')).toBeTruthy();
+        });
+      });
+      return it('should be valid after the date has been picked', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<input ui-date ng-model='x' required ></input>")($rootScope);
+          selectDate(element, aDate);
+          return expect(element.hasClass('ng-valid')).toBeTruthy();
+        });
+      });
+    });
+    describe('simple use on a div element', function() {
+      it('should have a date picker attached', function() {
+        return inject(function($compile, $rootScope) {
+          var element;
+          element = $compile("<div ui-date></div>")($rootScope);
+          return expect(element.datepicker()).toBeDefined();
+        });
+      });
+      it('should be able to get the date from the model', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<div ui-date ng-model='x'></div>")($rootScope);
+          $rootScope.$apply(function() {
+            return $rootScope.x = aDate;
+          });
+          return expect(element.datepicker('getDate')).toEqual(aDate);
+        });
+      });
+      return it('should put the date in the model', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<div ui-date ng-model='x'></div>")($rootScope);
+          selectDate(element, aDate);
+          return expect($rootScope.x).toEqual(aDate);
+        });
+      });
+    });
+    return describe('use with required directive', function() {
+      it('should be invalid initially', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          $rootScope.$apply();
+          return expect(element.hasClass('ng-invalid')).toBeTruthy();
+        });
+      });
+      it('should be valid if model has been specified', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          $rootScope.$apply(function() {
+            return $rootScope.x = aDate;
+          });
+          return expect(element.hasClass('ng-valid')).toBeTruthy();
+        });
+      });
+      return it('should be valid after the date has been picked', function() {
+        return inject(function($compile, $rootScope) {
+          var aDate, element;
+          aDate = new Date(2010, 12, 1);
+          element = $compile("<div ui-date ng-model='x' required ></div>")($rootScope);
+          selectDate(element, aDate);
+          return expect(element.hasClass('ng-valid')).toBeTruthy();
+        });
+      });
+    });
   });
 
 }).call(this);
@@ -247,6 +405,24 @@ angular.module('ui.directives.scrollfix').directive('uiScrollfix', [function() {
 }]);
 
 /**
+ * An awesome alternative enhancement to the original jQuery Chosen (HarvestHQ)
+ * 
+ * @link http://ivaynberg.github.com/select2/
+ * @param [uiSelect2] {object} containing configuration options. Merged onto your uiConfig.select2 definition
+ */
+directive('uiSelect2', ['uiConfig', function(uiConfig){
+	uiConfig.select2 = uiConfig.select2 || {};
+	return function(scope, elm, attrs) {
+		var options = angular.extend({}, uiConfig.select2, scope.$eval(attrs.uiSelect2));
+		setTimeout(function(){
+			elm.select2(options);
+			scope.$watch(attrs.ngModel, function(newVal, oldVal){
+				elm.select2('val', newVal);
+			});             
+		},0);
+	};
+}]);
+/**
  * NOTE: Only adds classes, you must add the class definition yourself
  */
 
@@ -362,60 +538,4 @@ angular.module('ui.filters.unique',[]).filter('unique', function() {
 		return items;
 	};
 
-});angular.module('ui.directives',[
-	'ui.directives.chosen',
-	'ui.directives.date',
-	'ui.directives.jq',
-	'ui.directives.keypress',
-	'ui.directives.linky',
-	'ui.directives.mask',
-	'ui.directives.remove',
-	'ui.directives.reset',
-	'ui.directives.scrollfix',
-	'ui.directives.showhide'
-]);
-(function() {
-
-  angular.module('ui.filters', ['ui.filters.highlight', 'ui.filters.length', 'ui.filters.unique']);
-
-}).call(this);
-// READ: http://docs-next.angularjs.org/guide/ie
-(function(){
-  
-  var getIE = function() {
-      // Returns the version of Internet Explorer or a -1
-      // (indicating the use of another browser).
-     var rv = -1; // Return value assumes failure.
-     if (navigator.appName == 'Microsoft Internet Explorer') {
-        var ua = navigator.userAgent;
-        var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-        if (re.exec(ua) != null) {
-        	rv = parseFloat( RegExp.$1 );
-        }
-     }
-     return rv;
-  };
-
-  var tags = [ 'ng-include', 'ng-pluralize', 'ng-view', 'ng:include', 'ng:pluralize', 'ng:view' ];
-  var shiv = function() {
-    for(var i = 0, len = tags.length; i < len; i++) {
-      document.createElement(tags[i]);
-    }
-  };
-	
-  var ieVersion = getIE();
-  if (ieVersion > -1 && ieVersion < 9) {
-    shiv();
-  }
-  
-})();
-
-/**
- * @module ui
- * Bind Angular.js modules
- */
-
-angular.module('ui', [
-  'ui.filters', 
-  'ui.directives'
-]).value('ui.config', {});
+});
