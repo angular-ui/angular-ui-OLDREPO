@@ -73,8 +73,7 @@ $ make test
  * @param expression {type} description
  * @example code demo (if possible)
  */
-
-angular.module('ui.directives.MYDIRECTIVE', ['ui.config']).directive('uiMYDIRECTIVE', ['ui.config', function(uiConfig) {
+angular.module('ui.directives').directive('uiMYDIRECTIVE', ['ui.config', function(uiConfig) {
   return function(scope, elm, attrs) {
   };
 }]);
