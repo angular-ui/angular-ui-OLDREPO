@@ -39,65 +39,6 @@ angular.module('ui', [
   'ui.filters', 
   'ui.directives'
 ]).value('ui.config', {});
-/**
- * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @param expression {boolean} condition to check if it should be a link or not
- */
-angular.module('ui.filters').filter('highlight', function() {
-  return function(text, filter) {
-    if (filter === undefined) {
-      return text;
-    } else {
-      return text.replace(new RegExp(filter, 'gi'), '<span class="match">$&</span>');
-    };
-  };
-});
-/**
- * Filters out all duplicate items from an array by checking the specified key
- * @param key {string} the name of the attribute of each object to compare for uniqueness
- * @return {array}
- */
-angular.module('ui.filters').filter('unique', function() {
-	return function(items, key) {
-		var hashCheck = {};
-		for (i in items) {
-			var value = items[i][key];
-			if (typeof(hashCheck[value]) !== 'undefined') {
-				delete items[i];
-			} else {
-				hashCheck[value] = true;
-			}
-		}
-		return items;
-	};
-
-});
-/**
- * Returns the length property of the filtered object
- */
-angular.module('ui.filters').filter('length', function() {
-	return function(value) {
-		return value.length;
-	};
-});
-/**
- * An awesome alternative enhancement to the original jQuery Chosen (HarvestHQ)
- * 
- * @link http://ivaynberg.github.com/select2/
- * @param [uiSelect2] {object} containing configuration options. Merged onto your uiConfig.select2 definition
- */
-angular.module('ui.directives').directive('uiSelect2', ['uiConfig', function(uiConfig){
-	uiConfig.select2 = uiConfig.select2 || {};
-	return function(scope, elm, attrs) {
-		var options = angular.extend({}, uiConfig.select2, scope.$eval(attrs.uiSelect2));
-		setTimeout(function(){
-			elm.select2(options);
-			scope.$watch(attrs.ngModel, function(newVal, oldVal){
-				elm.select2('val', newVal);
-			});             
-		},0);
-	};
-}]);
 /*
  General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
  
@@ -146,89 +87,6 @@ angular.module('ui.directives').directive('uiSelect2', ['uiConfig', function(uiC
 }).call(this);
 
 /**
- * NOTE: Only adds classes, you must add the class definition yourself
- */
-
-/**
- * uiShow Directive
- *
- * Adds a 'ui-show' class to the element instead of display:block
- * Created to allow tighter control  of CSS without bulkier directives
- *
- * @param expression {boolean} evaluated expression to determine if the class should be added
- */
-angular.module('ui.directives').directive('uiShow', [function() {
-	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiShow, function(newVal, oldVal){
-			if (newVal) {
-				elm.addClass('ui-show');
-			} else {
-				elm.removeClass('ui-show');
-			}	
-		});
-	};
-}])
-
-/**
- * uiHide Directive
- *
- * Adds a 'ui-hide' class to the element instead of display:block
- * Created to allow tighter control  of CSS without bulkier directives
- *
- * @param expression {boolean} evaluated expression to determine if the class should be added
- */
-.directive('uiHide', [function() {
-	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiHide, function(newVal, oldVal){
-			if (newVal) {
-				elm.addClass('ui-hide');
-			} else {
-				elm.removeClass('ui-hide');
-			}
-		});
-	};
-}])
-
-/**
- * uiToggle Directive
- *
- * Adds a class 'ui-show' if true, and a 'ui-hide' if false to the element instead of display:block/display:none
- * Created to allow tighter control  of CSS without bulkier directives. This also allows you to override the
- * default visibility of the element using either class.
- *
- * @param expression {boolean} evaluated expression to determine if the class should be added
- */
-.directive('uiToggle', [function() {
-	return function(scope, elm, attrs) {
-		scope.$watch(attrs.uiToggle, function(newVal, oldVal){
-			if (newVal) {
-				elm.removeClass('ui-hide').addClass('ui-show');
-			} else {
-				elm.removeClass('ui-show').addClass('ui-hide');
-			}
-		});
-	};
-}]);
-/**
- * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @param [offset] {int} optional Y-offset to override the detected offset
- */
-angular.module('ui.directives').directive('uiScrollfix', [function() {
-  return function(scope, elm, attrs) {
-    if (!attrs.uiScrollfix) {
-      attrs.uiScrollfix = elm.offset().top;
-    }
-    $(window).scroll(function(){
-      if (!elm.hasClass('fixed') && window.pageYOffset > attrs.uiScrollfix) {
-        elm.addClass('fixed');
-      } else if (elm.hasClass('fixed') && window.pageYOffset < attrs.uiScrollfix) {
-        elm.removeClass('fixed');
-      }
-    });
-  };
-}]);
-
-/**
  * General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
  * 
  * @TODO Devise a way to pass app-wide defined configuration options. Consider global var. 
@@ -245,6 +103,23 @@ angular.module('ui.directives').directive('uiJq', [function() {
 	};
 }]);
 
+/**
+ * Bind an event to the 'return' keypress
+ * @param keyCode {number} The number keycode to watch (ex: 13 is the return key)
+ * @param callback {function} The callback function to fire upon keypress. Takes an 'event' param
+ **/
+angular.module('ui.directives').directive('uiKeypress', [function(){
+	return function(scope, elm, attrs) {
+		var params = scope.$eval( '[' + attrs.uiKeypress + ']' );
+		params[1] = params[1] || angular.noop();
+		elm.bind('keypress', function(event){
+			if (event.keyCode == params[0]){
+				params[1](event);
+				scope.$apply();
+			}
+		});
+	};
+}]);
 /**
  * Changes the current element from a link to a span tag based on a condition
  * @param expression {boolean} condition to check if it should be a link or not
@@ -275,23 +150,6 @@ angular.module('ui.directives').directive('uiLinky', [function() {
 	};
 }]);
 
-/**
- * Bind an event to the 'return' keypress
- * @param keyCode {number} The number keycode to watch (ex: 13 is the return key)
- * @param callback {function} The callback function to fire upon keypress. Takes an 'event' param
- **/
-angular.module('ui.directives').directive('uiKeypress', [function(){
-	return function(scope, elm, attrs) {
-		var params = scope.$eval( '[' + attrs.uiKeypress + ']' );
-		params[1] = params[1] || angular.noop();
-		elm.bind('keypress', function(event){
-			if (event.keyCode == params[0]){
-				params[1](event);
-				scope.$apply();
-			}
-		});
-	};
-}]);
 /*
  Changes the current element from a link to a span tag based on a condition
  @param expression {boolean} condition to check if it should be a link or not
@@ -384,3 +242,145 @@ angular.module('ui.directives').directive('uiReset', [function() {
 		});
 	};
 }]);
+/**
+ * Adds a 'fixed' class to the element when the page scrolls past it's position.
+ * @param [offset] {int} optional Y-offset to override the detected offset
+ */
+angular.module('ui.directives').directive('uiScrollfix', [function() {
+  return function(scope, elm, attrs) {
+    if (!attrs.uiScrollfix) {
+      attrs.uiScrollfix = elm.offset().top;
+    }
+    $(window).scroll(function(){
+      if (!elm.hasClass('fixed') && window.pageYOffset > attrs.uiScrollfix) {
+        elm.addClass('fixed');
+      } else if (elm.hasClass('fixed') && window.pageYOffset < attrs.uiScrollfix) {
+        elm.removeClass('fixed');
+      }
+    });
+  };
+}]);
+
+/**
+ * An awesome alternative enhancement to the original jQuery Chosen (HarvestHQ)
+ * 
+ * @link http://ivaynberg.github.com/select2/
+ * @param [uiSelect2] {object} containing configuration options. Merged onto your uiConfig.select2 definition
+ */
+angular.module('ui.directives').directive('uiSelect2', ['ui.config', function(uiConfig){
+	uiConfig.select2 = uiConfig.select2 || {};
+	return function(scope, elm, attrs) {
+		var options = angular.extend({}, uiConfig.select2, scope.$eval(attrs.uiSelect2));
+		setTimeout(function(){
+			elm.select2(options);
+			scope.$watch(attrs.ngModel, function(newVal, oldVal){
+				elm.select2('val', newVal);
+			});             
+		},0);
+	};
+}]);
+/**
+ * NOTE: Only adds classes, you must add the class definition yourself
+ */
+
+/**
+ * uiShow Directive
+ *
+ * Adds a 'ui-show' class to the element instead of display:block
+ * Created to allow tighter control  of CSS without bulkier directives
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+angular.module('ui.directives').directive('uiShow', [function() {
+	return function(scope, elm, attrs) {
+		scope.$watch(attrs.uiShow, function(newVal, oldVal){
+			if (newVal) {
+				elm.addClass('ui-show');
+			} else {
+				elm.removeClass('ui-show');
+			}	
+		});
+	};
+}])
+
+/**
+ * uiHide Directive
+ *
+ * Adds a 'ui-hide' class to the element instead of display:block
+ * Created to allow tighter control  of CSS without bulkier directives
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+.directive('uiHide', [function() {
+	return function(scope, elm, attrs) {
+		scope.$watch(attrs.uiHide, function(newVal, oldVal){
+			if (newVal) {
+				elm.addClass('ui-hide');
+			} else {
+				elm.removeClass('ui-hide');
+			}
+		});
+	};
+}])
+
+/**
+ * uiToggle Directive
+ *
+ * Adds a class 'ui-show' if true, and a 'ui-hide' if false to the element instead of display:block/display:none
+ * Created to allow tighter control  of CSS without bulkier directives. This also allows you to override the
+ * default visibility of the element using either class.
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+.directive('uiToggle', [function() {
+	return function(scope, elm, attrs) {
+		scope.$watch(attrs.uiToggle, function(newVal, oldVal){
+			if (newVal) {
+				elm.removeClass('ui-hide').addClass('ui-show');
+			} else {
+				elm.removeClass('ui-show').addClass('ui-hide');
+			}
+		});
+	};
+}]);
+/**
+ * Adds a 'fixed' class to the element when the page scrolls past it's position.
+ * @param expression {boolean} condition to check if it should be a link or not
+ */
+angular.module('ui.filters').filter('highlight', function() {
+  return function(text, filter) {
+    if (filter === undefined) {
+      return text;
+    } else {
+      return text.replace(new RegExp(filter, 'gi'), '<span class="match">$&</span>');
+    };
+  };
+});
+/**
+ * Returns the length property of the filtered object
+ */
+angular.module('ui.filters').filter('length', function() {
+	return function(value) {
+		return value.length;
+	};
+});
+/**
+ * Filters out all duplicate items from an array by checking the specified key
+ * @param key {string} the name of the attribute of each object to compare for uniqueness
+ * @return {array}
+ */
+angular.module('ui.filters').filter('unique', function() {
+	return function(items, key) {
+		var hashCheck = {};
+		for (i in items) {
+			var value = items[i][key];
+			if (typeof(hashCheck[value]) !== 'undefined') {
+				delete items[i];
+			} else {
+				hashCheck[value] = true;
+			}
+		}
+		return items;
+	};
+
+});
