@@ -10,8 +10,8 @@ The repository comes with the modules pre-built and compressed into the build di
 
 ```javascript
 angular.module('myApp', ['ui']); // to include everything  
-angular.module('myApp), ['ui.directives']); // to include all the directives only  
-angular.module('myApp'), ['ui.directives.date']); // to include only a single module
+angular.module('myApp', ['ui.directives']); // to include all the directives only  
+angular.module('myApp', ['ui.directives.date']); // to include only a single module
 ```
 The modules can be found in the [Directives](http://github.com/angular-ui/angular-ui/modules/directives) and [Filters](http://github.com/angular-ui/angular-ui/modules/filters) folders. Check out the readme file associated with each module for specific module usage information.
 
