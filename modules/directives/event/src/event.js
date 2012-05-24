@@ -1,4 +1,3 @@
-
 /**
  * General-purpose Event binding. Bind any event not natively supported by Angular
  * Both ui-event-call is used when a string is passed to ui-event
@@ -18,7 +17,7 @@ angular.module('ui.directives').directive('uiEvent', [function() {
 		if (attrs.uiEventData) {
 			data = scope.$eval(attrs.uiEventData);
 		}
-		if (angular.isString(event)) {
+		if (angular.isString(events)) {
 			elm.bind(events, data, scope.$eval(attrs.uiEventCall));
 		} else {
 			elm.bind(events, data);
