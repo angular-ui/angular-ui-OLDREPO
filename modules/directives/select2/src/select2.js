@@ -62,7 +62,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 		},0);
 
 		// Watch the model for programmatic changes
-		scope.$watch(model, function(scope, newVal, oldVal) {
+		scope.$watch(model, function(newVal, oldVal) {
 			if (newVal === prevVal) {
 				return;
 			}
@@ -73,7 +73,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 		});
 		// If you want you can watch the options dataset for changes
 		if (angular.isString(opts.watch)) {
-			scope.$watch(opts.watch, function(scope, newVal, oldVal){
+			scope.$watch(opts.watch, function(newVal, oldVal){
 				if (loaded && prevVal) {
 					setTimeout(function(){
 						elm.select2('val', prevVal);
