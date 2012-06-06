@@ -9,9 +9,12 @@
 .ui-reset {
   display: none;
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 0;
+  right: 0;
   z-index: 2;
+  height: 100%;
+  width: 20px;
+  background: red;
 }
 .ui-resetwrap:hover .ui-reset {
   display: block;
