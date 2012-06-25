@@ -1,29 +1,40 @@
 
 ###
- Changes the current element from a link to a span tag based on a condition
- @param expression {boolean} condition to check if it should be a link or not
+A masked input widget - allows you to specify a mask of what characters you can enter into the input element.
 ###
 angular.module('ui.directives').directive 'uiMask', ()->
   require: 'ngModel'
-  scope:
-    uiMask: 'evaluate'
   link: ($scope, element, attrs, controller)->
+    mask = null
 
-    # We override the render method to run the jQuery mask plugin
+    # Update the placeholder attribute from the mask
+    updatePlaceholder = ()->
+      if not attrs.placeholder?
+        element.attr('placeholder', mask.replace(/9/g, '_'))
+
+    # Render the mask widget after changes to either the model value or the mask
     controller.$render = ()->
-      element.val(controller.$viewValue ? '')
-      element.mask($scope.uiMask)
-
-    # Add a parser that extracts the masked value into the model but only if the mask is valid
+      value = controller.$viewValue ? ''
+      element.val(value)
+      if mask?
+        element.mask(mask)
+      updatePlaceholder()
+    
+    # Keep watch for changes to the mask
+    attrs.$observe 'uiMask', (maskValue)->
+      mask = maskValue
+      controller.$render()
+    
+    # Check the validity of the masked value
     controller.$parsers.push (value)->
       isValid = element.data('mask-isvalid')
       controller.$setValidity('mask', isValid)
-      if isValid
+      if (isValid)
         element.mask()
       else
         null
-
-    # When the element blurs, update the viewvalue
-    element.bind 'blur', ()->
+    
+    # Update the model value everytime a key is pressed on the mask widget
+    element.bind 'keyup', ()->
       $scope.$apply ()->
         controller.$setViewValue(element.mask())
