@@ -1,4 +1,3 @@
-
 /**
  * Enhanced Select2 Dropmenus
  *
@@ -27,7 +26,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 
 
 		opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
-		if (attrs.multiple !== undefined) {
+		if (!elm.is('select') && attrs.multiple !== undefined) {
 			opts.multiple = true;
 			// Set the view and model value and update the angular template manually for the ajax/multiple select2.
 		     elm.bind("change", function(){
