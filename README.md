@@ -13,14 +13,14 @@
 
 The repository comes with the modules pre-built and compressed into the build directory.
 
+0. _Coming Soon_ Generate a custom build of angular-ui containing only the components you want and nothing more
 1. Include the javascript files - angular-ui.js or angular-ui.min.js  
-2. Add a dependency to one or more ui modules onto your angular application module:  
+2. Add a dependency to the ui module in your angular application module:
 
 ```javascript
-angular.module('myApp', ['ui']); // to include everything  
-angular.module('myApp', ['ui.directives']); // to include all the directives only  
-angular.module('myApp', ['ui.directives.date']); // to include only a single module
+angular.module('myApp', ['ui']);
 ```
+
 The modules can be found in the [Directives](http://github.com/angular-ui/angular-ui/modules/directives) and [Filters](http://github.com/angular-ui/angular-ui/modules/filters) folders. Check out the readme file associated with each module for specific module usage information.
 
 ## Building
@@ -75,6 +75,8 @@ $ make test
 ```
 
 # Template
+
+The `ui.config` dependency is optional, however it is **highly** recommended that you leverage this so that developers may set app-wide defaults instead of passing the same parameters to every directive.
 
 ```javascript
 
