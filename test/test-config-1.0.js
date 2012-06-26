@@ -19,7 +19,8 @@ files = [
  // 'modules/directives/date/src/*.js',
  // 'modules/directives/date/test/*.js',
   'modules/directives/currency/src/*.js',
-  'modules/directives/currency/test/*.js'
+  'modules/directives/currency/test/*.js',
+
 ];
 
 // list of files to exclude

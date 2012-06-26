@@ -3,9 +3,10 @@
 ###
 angular.module('ui.directives',[]).directive 'uiCurrency', (currencyFilter)->
   restrict: 'AC'
-  link: ($scope, element, attrs)->
+  require: '?ngModel'
+  link: ($scope, element, attrs, controller)->
 
-    controllerOptions = $scope[attrs.options] || {}
+    controllerOptions = $scope[attrs.options] || $scope.uiCurrencyOptions | {}
     
     ## I don't care for this, the angular.extend is not working the way i expect it to
     options =
@@ -16,26 +17,38 @@ angular.module('ui.directives',[]).directive 'uiCurrency', (currencyFilter)->
     
     ## first check for controller, then for element level
 
-    value = $scope[attrs.num]
-    num = value * 1 
-
-    if num > 0
-      element.addClass options.pos 
-    else 
-      element.removeClass options.pos
-      
-    if num < 0 
-      element.addClass options.neg 
-    else 
-      element.removeClass options.neg
-      
-    if num == 0
-      element.addClass options.zero 
-    else 
-      element.removeClass options.zero
+    renderview = (viewvalue)->
     
-    if value is ''
-      element.text '' 
-    else 
-      element.text (currencyFilter num, options.symbol)
+      num = viewvalue * 1 
+
+      if num > 0
+        element.addClass options.pos 
+      else 
+        element.removeClass options.pos
+      
+      if num < 0 
+        element.addClass options.neg 
+      else 
+        element.removeClass options.neg
+      
+      if num == 0
+        element.addClass options.zero 
+      else 
+        element.removeClass options.zero
+    
+      if viewvalue is ''
+        element.text '' 
+      else 
+        element.text (currencyFilter num, options.symbol)
+      true
+      
+    if controller?
+       controller.$render = ()->
+          value = controller.$viewValue
+          element.val(value)
+          renderview(value)
+          true
+    else
+       renderview $scope[attrs.num]
+    true
     
