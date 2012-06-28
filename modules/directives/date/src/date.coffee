@@ -5,10 +5,8 @@
  @param [ui-jq] {string} The $elm.[pluginName]() to call.
  @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
 ###
-angular.module('ui.directives').directive 'uiDate', ()->
-  require: '?ngModel'
-  scope:
-    uiDate: 'evaluate'
+angular.module('ui.directives').directive 'uiDate', [()->
+  require: '?ngModel',
   link: ($scope, element, attrs, controller)->
     $scope.uiDate ?= {}
 
@@ -37,3 +35,4 @@ angular.module('ui.directives').directive 'uiDate', ()->
     # Create the datepicker widget
     element.datepicker($scope.uiDate)
 
+]

@@ -13,13 +13,15 @@ files = [
   JASMINE_ADAPTER,
   'test/lib/jquery/jquery-1.7.2.js',
   'test/lib/jquery/jquery-ui-1.8.18.js',
-  'test/lib/angular/angular-1.0.0rc5.js',
-  'test/lib/angular/angular-mocks.js',
+  'test/lib/angular-1.0.1/angular.js',
+  'test/lib/angular-1.0.1/angular-mocks.js',
   'common/src/*.js',
   'modules/directives/date/src/*.js',
   'modules/directives/date/test/*.js',
+  'modules/directives/template/src/*.js',
+  'modules/directives/template/test/*.js',
   'modules/directives/currency/src/*.js',
-  'modules/directives/currency/test/*.js'
+  'modules/directives/currency/test/*.js',
 ];
 
 // list of files to exclude

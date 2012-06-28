@@ -3,7 +3,7 @@
  Changes the current element from a link to a span tag based on a condition
  @param expression {boolean} condition to check if it should be a link or not
 ###
-angular.module('ui.directives').directive 'uiMask', ()->
+angular.module('ui.directives').directive 'uiMask', [()->
   require: 'ngModel'
   scope:
     uiMask: 'evaluate'
@@ -27,3 +27,4 @@ angular.module('ui.directives').directive 'uiMask', ()->
     element.bind 'blur', ()->
       $scope.$apply ()->
         controller.$setViewValue(element.mask())
+]
