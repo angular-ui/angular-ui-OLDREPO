@@ -2,9 +2,9 @@
 
 ## Important!
 
-If not installed properly, the ie-shiv WILL throw an exception. 
+If not installed properly, angular WILL throw an exception. 
 
-    "unable to shiv ie, no module found 'ui.directives'"
+    "No module: ui.directives"
 
 Which means you have not included the angular-ui library in the file, or the shiv is in the wrong place.
 
