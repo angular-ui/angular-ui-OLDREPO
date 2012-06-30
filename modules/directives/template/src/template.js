@@ -32,6 +32,10 @@
           // NOTE: you must call controller.$render 
           if (controller != null) {
             controller.$render = function() {
+              // ensure element has the controller's view value
+              // TODO: find out from Pete what cases this is needed (see uiMask)
+              var modelValue = controller.$viewValue;
+              element.val(modelValue != null ? modelValue: ''); 
               renderView(controller.$viewValue);
             };
           } else {

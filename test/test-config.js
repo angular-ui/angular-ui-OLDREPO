@@ -22,6 +22,8 @@ files = [
   'modules/directives/template/test/*.js',
   'modules/directives/currency/src/*.js',
   'modules/directives/currency/test/*.js',
+  'modules/directives/mask/src/*.js',
+  'modules/directives/mask/test/*.js',
 ];
 
 // list of files to exclude
