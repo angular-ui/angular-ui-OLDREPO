@@ -3,16 +3,12 @@
 /*
  Gives the ability to style currency based on its sign.
 */
-
-
-(function() {
-
-  angular.module('ui.directives', []).directive('uiCurrency', function(currencyFilter) {
+  angular.module('ui.directives').directive('uiCurrency', function(currencyFilter) {
     return {
-      restrict: 'AC',
+      restrict: 'EAC',
       require: '?ngModel',
       link: function($scope, element, attrs, controller) {
-        var controllerOptions, options, renderview;
+        var controllerOptions, options, renderview, value;
         controllerOptions = $scope[attrs.options] || $scope.uiCurrencyOptions | {};
         options = {
           pos: attrs.pos || controllerOptions.pos || 'ui-currency-pos',
@@ -45,20 +41,19 @@
           }
           return true;
         };
+        value = '';
         if (controller != null) {
           controller.$render = function() {
-            var value;
             value = controller.$viewValue;
             element.val(value);
             renderview(value);
-            return true;
           };
         } else {
-          renderview($scope[attrs.num]);
+          if (attrs.num != null) {
+            value = $scope[attrs.num];
+          }
+          renderview(value);
         }
-        return true;
       }
     };
   });
-
-}).call(this);
