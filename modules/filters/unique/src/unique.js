@@ -1,35 +1,30 @@
 
 /**
  * Filters out all duplicate items from an array by checking the specified key
- * @param key {string} the name of the attribute of each object to compare for uniqueness
+ * @param [key] {string} the name of the attribute of each object to compare for uniqueness
+	if the key is empty, the entire object will be compared
+	if the key === false then no filtering will be performed
  * @return {array}
  */
 angular.module('ui.filters').filter('unique', function() {
 	return function(items, key) {
-		if (key) {
-			var hashCheck = {};
-			for (i in items) {
-				var value = items[i][key];
-				if (typeof(hashCheck[value]) !== 'undefined') {
-					delete items[i];
+		if (key && angular.isArray(items)) {
+			var hashCheck = {},
+				newItems = [];
+			angular.forEach(items, function(item, key){
+				var value;
+				if (angular.isString(key)) {
+					value = item[key];
 				} else {
-					hashCheck[value] = true;
+					value = item;
 				}
-			}
-		} else {
-			var o = {},
-				i, 
-				l = items.length, 
-				r = [];
-			for (i=0; i<l;i+=1) {
-				o[items[i]] = items[i];
-			}
-			for (i in o) {
-				r.push(o[i]);
-			}
-			items = r;
+				if (hashCheck[value] === undefined) {
+					hashCheck[value] = true;
+					newItems.push(item);
+				}
+			});
+			items = newItems;
 		}
 		return items;
 	};
-
 });

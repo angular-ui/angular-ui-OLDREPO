@@ -4,11 +4,11 @@
  * @param expression {boolean} condition to check if it should be a link or not
  */
 angular.module('ui.filters').filter('highlight', function() {
-  return function(text, filter) {
-    if (filter === undefined) {
-      return text;
-    } else {
-      return text.replace(new RegExp(filter, 'gi'), '<span class="match">$&</span>');
-    };
-  };
+	return function(text, filter) {
+		if (filter === undefined) {
+			return text;
+		} else {
+			return text.replace(new RegExp(filter, 'gi'), '<span class="ui-match">$&</span>');
+		}
+	};
 });
