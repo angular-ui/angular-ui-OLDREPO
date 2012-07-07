@@ -9,14 +9,6 @@ This directive allows you to add a date-picker to your form elements.
 
 ## Usage
 
-Load the script file: currency.js in your application:
-
-    <script type="text/javascript" src="modules/directives/currency/src/currency.js"></script>
-
-Add the currency module as a dependency to your application module:
-
-    var myAppModule = angular.module('MyApp', ['ui.directives.currency'])
-
 Apply the directive to your html elements:
 
     <span ui-currency num="SomeNumber"></span>
