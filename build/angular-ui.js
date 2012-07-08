@@ -235,7 +235,25 @@ angular.module('ui.directives').directive('uiKeypress', [function(){
   ]);
 
 }).call(this);
-
+angular.module('ui.directives')
+.directive('uiModal', [function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, model) {
+      scope.$watch(attrs.ngModel, function(value) {
+          elm.modal(value && 'show' || 'hide');
+      });
+      elm.on('show.ui', function() {
+        model.$setViewValue(true);
+        if (!scope.$$phase) scope.$apply();
+      });
+      elm.on('hide.ui', function() {
+        model.$setViewValue(false);
+        if (!scope.$$phase) scope.$apply();
+      });
+    }
+  };
+}]);
 /**
  * Actually removes html from the DOM instead of hiding it for assistance with 
  * CSS3 selectors such as :first-child, :last-child, etc
