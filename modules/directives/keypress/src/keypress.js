@@ -26,27 +26,26 @@ angular.module('ui.directives').directive('uiKeypress', [function(){
       };
 
       elm.bind('keydown', function(event) {
-        // By default no code to execute
-        var evalCode = '';
+        var params, paramsParsed, expression, keys;
         try {
-          var params = scope.$eval(attrs.uiKeypress);
-          var paramsParsed = true;
+          params = scope.$eval(attrs.uiKeypress);
+          paramsParsed = true;
         } catch (error) {
-          var params = attrs.uiKeypress.split(/\s+and\s+/i);
-          var paramsParsed = false;
+          params = attrs.uiKeypress.split(/\s+and\s+/i);
+          paramsParsed = false;
         }
 
         // First of all we split binding of multiple keys
         angular.forEach(params, function(v, k) {
           if(paramsParsed) {
             // An object passed
-            var expression = v;
-            var keys = k;
+            expression = v;
+            keys = k;
           } else {
             // A string passed
             v = v.split(/\s+on\s+/i);
-            var expression = v[0];
-            var keys = v[1];
+            expression = v[0];
+            keys = v[1];
           }
 
           keys = keys.split('-');
@@ -66,11 +65,10 @@ angular.module('ui.directives').directive('uiKeypress', [function(){
               ( ctrlRequired  == ctrlPressed  ) &&
               ( shiftRequired == shiftPressed )
             ) {
-            evalCode = expression;
+		        // Run the function
+		        scope.$eval(expression);
           }
         });
-        // Run the function
-        scope.$eval(evalCode);
       });
     }
   };
