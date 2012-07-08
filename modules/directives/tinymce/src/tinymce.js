@@ -31,7 +31,7 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function(ui
 						ed.onSetContent.add(function(ed, o) {
 							if (ed.isDirty()) {
 								ed.save();
-								ngModel.$setViewValue(element.val());
+								ngModel.$setViewValue(elm.val());
 								scope.$apply();
 							}
 						});
