@@ -1,5 +1,5 @@
 angular.module('ui.directives')
-.directive('uiModal', ['$timeout', function() {
+.directive('uiModal', [function() {
   return {
     require: 'ngModel',
     link: function(scope, elm, attrs, model) {
