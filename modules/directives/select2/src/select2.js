@@ -1,4 +1,3 @@
-
 /**
  * Enhanced Select2 Dropmenus
  *
@@ -21,19 +20,28 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 	return {
 		require: '?ngModel',
 		link: function(scope, elm, attrs, controller) {
-			var init = true, // Only query the selected value's data when the plugin loads
+		    // Indicates if the widget has been initialized atleast once or not. Please read default init above
+			var init = true, 
 				opts, // instance-specific options
 				prevVal = '',
-				loaded = false;
+				loaded = false,
+				multiple = false;
+			
+			if(typeof attrs.multiple !== 'undefined'){
+			    multiple = true;
+			}
 
 			opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
-			if (!elm.is('select') && attrs.multiple !== undefined) {
-				opts.multiple = true;
+			
+			if (!elm.is('select') && opts.ajax) {
+				if(multiple){
+					opts.multiple = true;
+				}
 				// Set the view and model value and update the angular template manually for the ajax/multiple select2.
-			     elm.bind("change", function(){
-			         controller.$setViewValue(elm.val());
-			         scope.$apply();
-			     });
+				elm.bind("change", function(){
+					controller.$setViewValue(elm.val());
+					scope.$apply();
+				});
 			}
 
 			function initialize(newVal) {
