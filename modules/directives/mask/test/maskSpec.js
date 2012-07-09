@@ -1,5 +1,4 @@
 (function() {
-
   describe('uiMask', function() {
     beforeEach(module('ui.directives'));
     return describe('simple use on input element', function() {
@@ -15,5 +14,4 @@
       });
     });
   });
-
 }).call(this);

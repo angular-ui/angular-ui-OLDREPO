@@ -1,5 +1,4 @@
 (function() {
-
   describe('uiDate', function() {
     var selectDate;
     selectDate = function(element, date) {
@@ -128,5 +127,4 @@
       });
     });
   });
-
 }).call(this);

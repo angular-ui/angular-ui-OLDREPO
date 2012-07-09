@@ -5,71 +5,77 @@
  * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
 angular.module('ui.directives').directive('uiKeypress', [function(){
-	return {
-		link: function(scope, elm, attrs) {
-			var keysByCode = {
-				8:  'backspace',
-				9:  'tab',
-				13: 'enter',
-				27: 'esc',
-				32: 'space',
-				33: 'pageup',
-				34: 'pagedown',
-				35: 'end',
-				36: 'home',
-				37: 'left',
-				38: 'up',
-				39: 'right',
-				40: 'down',
-				45: 'insert',
-				46: 'delete'
-			};
+  return {
+    link: function(scope, elm, attrs) {
+      var keysByCode = {
+        8:  'backspace',
+        9:  'tab',
+        13: 'enter',
+        27: 'esc',
+        32: 'space',
+        33: 'pageup',
+        34: 'pagedown',
+        35: 'end',
+        36: 'home',
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down',
+        45: 'insert',
+        46: 'delete'
+      };
 
-			elm.bind('keydown', function(event) {
-				var params, paramsParsed, expression, keys;
-				try {
-					params = scope.$eval(attrs.uiKeypress);
-					paramsParsed = true;
-				} catch (error) {
-					params = attrs.uiKeypress.split(/\s+and\s+/i);
-					paramsParsed = false;
-				}
+      var params, paramsParsed, expression, keys, combinations = [];
+      try {
+        params = scope.$eval(attrs.uiKeypress);
+        paramsParsed = true;
+      } catch (error) {
+        params = attrs.uiKeypress.split(/\s+and\s+/i);
+        paramsParsed = false;
+      }
 
-				// First of all we split binding of multiple keys
-				angular.forEach(params, function(v, k) {
-					if(paramsParsed) {
-						// An object passed
-						expression = v;
-						keys = k;
-					} else {
-						// A string passed
-						v = v.split(/\s+on\s+/i);
-						expression = v[0];
-						keys = v[1];
-					}
+      // Prepare combinations for simple checking
+      angular.forEach(params, function(v, k) {
+        var combination = {};
+        if(paramsParsed) {
+          // An object passed
+          combination.expression = v;
+          combination.keys = k;
+        } else {
+          // A string passed
+          v = v.split(/\s+on\s+/i);
+          combination.expression = v[0];
+          combination.keys = v[1];
+        }
+        combination.keys = combination.keys.split('-');
+        combinations.push(combination);
+      });
 
-					keys = keys.split('-');
+      // Check only mathcing of pressed keys one of the conditions
+      elm.bind('keydown', function(event) {
+        // No need to do that inside the cycle
+        var altPressed   = event.metaKey || event.altKey;
+        var ctrlPressed  = event.ctrlKey;
+        var shiftPressed = event.shiftKey;
 
-					var mainKeyPressed = keys.indexOf( keysByCode[event.keyCode] ) > -1 || keys.indexOf( event.keyCode.toString() ) > -1
+        // Iterate over prepared combinations
+        angular.forEach(combinations, function(combination) {
+          var mainKeyPressed = combination.keys.indexOf( keysByCode[event.keyCode] ) > -1 || combination.keys.indexOf( event.keyCode.toString() ) > -1
 
-					var altPressed   = event.metaKey || event.altKey;
-					var ctrlPressed  = event.ctrlKey;
-					var shiftPressed = event.shiftKey;
+          var altRequired   =  combination.keys.indexOf('alt')   > -1;
+          var ctrlRequired  =  combination.keys.indexOf('ctrl')  > -1;
+          var shiftRequired =  combination.keys.indexOf('shift') > -1;
 
-					var altRequired   = keys.indexOf('alt')   > -1;
-					var ctrlRequired  = keys.indexOf('ctrl')  > -1;
-					var shiftRequired = keys.indexOf('shift') > -1;
-
-					if( mainKeyPressed &&
-							( altRequired   == altPressed   ) &&
-							( ctrlRequired  == ctrlPressed  ) &&
-							( shiftRequired == shiftPressed )
-						) {
-						// Run the function
-						scope.$eval(expression);
-					}
-				});
-			});
-		}
-	};
+          if( mainKeyPressed &&
+              ( altRequired   == altPressed   ) &&
+              ( ctrlRequired  == ctrlPressed  ) &&
+              ( shiftRequired == shiftPressed )
+            ) {
+            // Run the function
+            scope.$eval(combination.expression);
+          }
+        });
+      });
+    }
+  };
 }]);

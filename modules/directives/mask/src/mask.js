@@ -1,11 +1,7 @@
-
-/*
- Attaches jquery-ui input mask onto input element
-*/
-
 (function() {
-
-  angular.module('ui.directives').directive('uiMask', [
+  /*
+   Attaches jquery-ui input mask onto input element
+  */  angular.module('ui.directives').directive('uiMask', [
     function() {
       return {
         require: 'ngModel',
@@ -34,5 +30,4 @@
       };
     }
   ]);
-
 }).call(this);
