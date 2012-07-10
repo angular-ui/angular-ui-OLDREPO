@@ -16,14 +16,10 @@ files = [
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
   'common/src/*.js',
-  'modules/directives/date/src/*.js',
-  'modules/directives/date/test/*.js',
-  'modules/directives/template/src/*.js',
-  'modules/directives/template/test/*.js',
-  'modules/directives/currency/src/*.js',
-  'modules/directives/currency/test/*.js',
-  'modules/directives/mask/src/*.js',
-  'modules/directives/mask/test/*.js',
+  'modules/*/*/*/*.js',
+  'modules/*/*/*.js',
+  'modules/*/*.js',
+  'modules/*.js',
 ];
 
 // list of files to exclude
@@ -50,7 +46,7 @@ colors = true;
 logLevel = LOG_DEBUG;
 
 // enable / disable watching file and executing tests whenever any file changes
-autoWatch = false;
+autoWatch = true;
 
 // polling interval in ms (ignored on OS that support inotify)
 autoWatchInterval = 0;

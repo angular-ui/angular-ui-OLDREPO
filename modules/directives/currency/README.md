@@ -1,28 +1,21 @@
 # ui-currency directive
 
-This directive allows you to add a date-picker to your form elements.
-
-## Requirements
-
-- JQuery
-- JQueryUI
-
+In angular, you are able to specify what the currency symbol is (however, you might not want to change it for localization). 
+This directive gives greater control over your currency elements by allowing you to set CSS styles based on the number's sign. 
+						
 ## Usage
-
-Load the script file: currency.js in your application:
-
-    <script type="text/javascript" src="modules/directives/currency/src/currency.js"></script>
-
-Add the currency module as a dependency to your application module:
-
-    var myAppModule = angular.module('MyApp', ['ui.directives.currency'])
 
 Apply the directive to your html elements:
 
-    <span ui-currency num="SomeNumber"></span>
+	myAppModule.controller('MyController', function($scope) {
+	    $scope.SomeNumber = 123;
+	});
+
+    <span ui-currency num="SomeNumber"></span> <!-- one way binding -->
+    <span ui-currency ng-model="SomeModel"></span> <!-- two way binding -->
 
 Default styles are in angular-ui.css and are pretty boring, you could just override these in your
-stylesheet and make things more interesting (e.g. increasing size for negatives )
+stylesheet and make things most excellent (e.g. increasing size for negatives, doing a hover sorta thingy )
 
   .ui-currency-pos {
     color: green;
@@ -36,26 +29,14 @@ stylesheet and make things more interesting (e.g. increasing size for negatives 
 
 ### Options
 
-All the options can be passed through the directive or set on the html element. 
-NOTE: attributes override controller options
+All the options can be controlled by ui.config (see Global Defaults) or passed in the ui-currency attribute on the declaration. 
+The symbol attribute defaults to null and is then controlled by the default locale settings. 
 
-	myAppModule.controller('MyController', function($scope) {
-	    $scope.SomeNumber = 123;
-		$scope.uiCurrencyOptions = {
-
-		};
-	});
-
-    <span ui-currency options="uiCurrencyOptions" num="SomeNumber"></span>
-    <span ui-currency num="SomeNumber" pos="pstyle" neg="nstyle" zero="zstyle" symbol="USD$"></span>
+    <span ui-currency="{ pos='pstyle' neg='nstyle' zero='zstyle' symbol='USD$' }" num="SomeNumber" ></span>
+    <span ui-currency="{ pos='pstyle' neg='nstyle' zero='zstyle' symbol='USD$' }" ng-model="SomeNumber" ></span>
 
 ### Notes
 
-ui-currency
-    - one-way binding unless you have in an ng-repeat
-    - does not currently work with ng-model. 
-    - is supported only for attribute style elements
+This directive wraps angular's currency filter. If that changes, you are on your own.
     
-### Todo
-    - support ng-model
     
