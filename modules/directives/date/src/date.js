@@ -13,14 +13,14 @@
     'ui.config', function(uiConfig) {
       var options;
       options = {};
-      if (uiConfig.select2 != null) {
-        angular.extend(options, uiConfig.select2);
+      if (uiConfig.date != null) {
+        angular.extend(options, uiConfig.date);
       }
       return {
         require: '?ngModel',
         link: function(scope, element, attrs, controller) {
           var opts, originalRender, updateModel, usersOnSelectHandler;
-          opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
+          opts = angular.extend({}, options, scope.$eval(attrs.uiDate));
           if (controller != null) {
             updateModel = function(value, picker) {
               return scope.$apply(function() {

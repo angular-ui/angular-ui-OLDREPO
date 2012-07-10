@@ -5,12 +5,12 @@
 ###
 angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
   options = {};
-  if uiConfig.select2?
-    angular.extend(options, uiConfig.select2)
+  if uiConfig.date?
+    angular.extend(options, uiConfig.date)
 
   require: '?ngModel',
   link: (scope, element, attrs, controller)->
-    opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
+    opts = angular.extend({}, options, scope.$eval(attrs.uiDate));
 
     # If we have a controller (i.e. ngModelController) then wire it up
     if controller?
