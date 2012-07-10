@@ -2,6 +2,8 @@ fs = require('fs')
 ### @HACK : Shim existsSync (since it was moved from path to fs between NodeJS 0.6 and 0.8) ###
 fs.existsSync ?= require('path').existsSync
 
+async = require('async')
+
 FILE_ENCODING = 'utf8'
 EOL = '\n'
 
@@ -38,7 +40,18 @@ compile = (files, filenameConverter, compiler)->
     out = compiler(src)
     fs.writeFileSync(filenameConverter(file), out, FILE_ENCODING)
 
-
+compileAsync = (files, filenameConverter, compiler, callback)->
+  files = ensureFileList(files)
+  files.exclude (srcFile)->
+    not needsUpdating(filenameConverter(srcFile), srcFile)
+  async.forEach files.toArray(), (f)->
+    jake.logger.log 'Compiling: ' + f + ' -> ' + filenameConverter(f)
+    async.waterfall([
+      (callback)-> fs.readFile(f, FILE_ENCODING, callback),
+      (src, callback)-> compiler(src, callback),
+      (out, callback)-> fs.writeFile(filenameConverter(f), out, FILE_ENCODING, callback)
+    ], callback)
+    
 ### File concatenation helper ###
 concatenateFiles = (files, target)->
   files = ensureFileList(files)
@@ -64,7 +77,11 @@ coffeeFilenameConverter = (file)-> file.replace('.coffee', '.js')
 
 ### Less css compiler helper ###
 less = require('less')
-lessCompiler = (file, filenameConverter)
+lessFilenameConverter = (file)-> file.replace('.less', '.css')
+lessCompiler = (src, callback)->
+  parser = new less.Parser(paths: ['common/stylesheets']) # HACK
+  parser.parse src, (e, tree)->
+    callback(tree.toCSS())
 
 ### TASKS ###
 task 'default', ['build']
@@ -79,6 +96,10 @@ task 'coffee', ()->
   compile '*/**/*.coffee', coffeeFilenameConverter, coffeeScript.compile
 
 task 'css', ()->
+  compileAsync('common/stylesheets/angular-ui.less', ()->
+    'build/angular-ui.css'
+  , lessCompiler, complete)
+, { async: true }
 
 task 'ieshiv', ()->
   if needsUpdating('build/angular-ui-ieshiv.js', 'common/ieshiv/src/ieshiv.js')
@@ -86,5 +107,4 @@ task 'ieshiv', ()->
     uglifyFile 'build/angular-ui-ieshiv.js', 'build/angular-ui-ieshiv.min.js', noMangle: true,  noSqueeze: true
 
 task 'test', ['build'], ()->
-  noop = ()->
-  jake.exec 'testacular-run', noop, printStdout: true, printStderr: true
+  jake.exec 'testacular-run', complete, printStdout: true, printStderr: true
