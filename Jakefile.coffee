@@ -1,110 +1,54 @@
 fs = require('fs')
-### @HACK : Shim existsSync (since it was moved from path to fs between NodeJS 0.6 and 0.8) ###
-fs.existsSync ?= require('path').existsSync
+util = require('./jake/util')
+concatenateFiles = require('./jake/concat')
+lessCompiler = require('./jake/less')
+coffeeCompiler = require('./jake/coffee')
+uglifyFile = require('./jake/uglify')
 
-async = require('async')
-
-FILE_ENCODING = 'utf8'
-EOL = '\n'
-
-### Ensure that the files are wrapped in a FileList object ###
-ensureFileList = (files)->
-  if files instanceof jake.FileList
-    files
-  else
-    new jake.FileList(files) 
-  
-### Check whether a target needs updating - i.e. does it not exist or is at least one of its dependencies newer? ###
-needsUpdating = (target, dependencies)->
-  if not fs.existsSync(target)
-    return true
-  else
-    targetTime = fs.statSync(target).mtime
-    dependencies = ensureFileList(dependencies).toArray()
-    for dependency in dependencies
-      return true if fs.statSync(dependency).mtime > targetTime
-  return false
-
-### Generic compiler helper
-@param {FileList|String} files Either a glob string (e.g. "*.coffee") or a FileList object of files to compile
-@param {function} filenameConverter Function to convert the name of the source file to the name of the target file
-@param {function} compiler Function to actually do the compilation, receives, as params, the file to compile and the filenameConverter function.
-###
-compile = (files, filenameConverter, compiler)->
-  files = ensureFileList(files)
-  files.exclude (srcFile)->
-    not needsUpdating(filenameConverter(srcFile), srcFile)
-  for f in files.toArray()
-    jake.logger.log 'Compiling: ' + f + ' -> ' + filenameConverter(f)
-    src = fs.readFileSync(f, FILE_ENCODING)
-    out = compiler(src)
-    fs.writeFileSync(filenameConverter(file), out, FILE_ENCODING)
-
-compileAsync = (files, filenameConverter, compiler, callback)->
-  files = ensureFileList(files)
-  files.exclude (srcFile)->
-    not needsUpdating(filenameConverter(srcFile), srcFile)
-  async.forEach files.toArray(), (f)->
-    jake.logger.log 'Compiling: ' + f + ' -> ' + filenameConverter(f)
-    async.waterfall([
-      (callback)-> fs.readFile(f, FILE_ENCODING, callback),
-      (src, callback)-> compiler(src, callback),
-      (out, callback)-> fs.writeFile(filenameConverter(f), out, FILE_ENCODING, callback)
-    ], callback)
-    
-### File concatenation helper ###
-concatenateFiles = (files, target)->
-  files = ensureFileList(files)
-  if needsUpdating(target, files)
-    jake.logger.log 'Updating ' + target
-    filesContent = files.toArray().map (file)->
-      fs.readFileSync(file, FILE_ENCODING)
-    fs.writeFileSync(target, filesContent.join(EOL), FILE_ENCODING)
-
-jsParser = require('uglify-js').parser
-uglify = require('uglify-js').uglify
-uglifyFile = (file, target, opts = {})->
-  if needsUpdating(target, file)
-    tokens = jsParser.parse(fs.readFileSync(file, FILE_ENCODING))
-    tokens = uglify.ast_mangle(tokens) unless opts.noMangle
-    tokens = uglify.ast_squeeze(tokens) unless opts.noSqueeze
-    jake.logger.log 'Minimizing: ' + file + ' -> ' + target
-    fs.writeFileSync(target, uglify.gen_code(tokens), FILE_ENCODING)
-
-### Coffee script compiler helper ###
-coffeeScript = require('coffee-script')
-coffeeFilenameConverter = (file)-> file.replace('.coffee', '.js')
-
-### Less css compiler helper ###
-less = require('less')
-lessFilenameConverter = (file)-> file.replace('.less', '.css')
-lessCompiler = (src, callback)->
-  parser = new less.Parser(paths: ['common/stylesheets']) # HACK
-  parser.parse src, (e, tree)->
-    callback(tree.toCSS())
+### Files ###
+jsFiles = new jake.FileList('common/src/*.js', 'modules/**/src/*.js').toArray()
+coffeeFiles = new jake.FileList('common/**/*.coffee', 'modules/**/*.coffee').toArray()
+jsBuildFile = 'build/angular-ui.js'
+jsBuildFileMin = 'build/angular-ui.min.js'
+lessFiles = new jake.FileList('common/**/*.less', 'modules/**/*.less').toArray()
+lessMainFile = 'common/stylesheets/angular-ui.less'
+cssBuildFile = 'build/angular-ui.css'
 
 ### TASKS ###
 task 'default', ['build']
+
+desc('Build the project')
 task 'build', ['js', 'css', 'ieshiv']
 
-task 'js', ['coffee'], ()->
-  jsFiles = new jake.FileList ['common/src/*.js', 'modules/**/src/*.js']
-  concatenateFiles jsFiles, 'build/angular-ui.js'
-  uglifyFile 'build/angular-ui.js', 'build/angular-ui.min.js', noMangle: true, noSqueeze: true
 
-task 'coffee', ()->
-  compile '*/**/*.coffee', coffeeFilenameConverter, coffeeScript.compile
+desc('Concat all the js files together and minimize')
+task 'js', ['coffee', jsBuildFileMin, jsBuildFile]
+file jsBuildFile, jsFiles, ()->
+  concatenateFiles jsFiles, jsBuildFile
+file jsBuildFileMin, jsBuildFile, ()->
+  uglifyFile jsBuildFile, jsBuildFileMin, noMangle: true, noSqueeze: true
 
-task 'css', ()->
-  compileAsync('common/stylesheets/angular-ui.less', ()->
-    'build/angular-ui.css'
-  , lessCompiler, complete)
+
+desc('Generate the js files from the coffee-script files.')
+task 'coffee', coffeeFiles, ()->
+  coffeeCompiler coffeeFiles
+
+
+desc('Generate the css files from the less files.')
+task 'css', [cssBuildFile], ()->
+file cssBuildFile, lessFiles, ()->
+  lessCompiler lessMainFile, cssBuildFile, complete
 , { async: true }
 
-task 'ieshiv', ()->
-  if needsUpdating('build/angular-ui-ieshiv.js', 'common/ieshiv/src/ieshiv.js')
-    jake.cpR 'common/ieshiv/src/ieshiv.js', 'build/angular-ui-ieshiv.js'
-    uglifyFile 'build/angular-ui-ieshiv.js', 'build/angular-ui-ieshiv.min.js', noMangle: true,  noSqueeze: true
 
+desc('Copy over and minify the ieshiv helper file.')
+task 'ieshiv', ['build/angular-ui-ieshiv.js', 'common/ieshiv/src/ieshiv.js']
+file 'build/angular-ui-ieshiv.js', ['common/ieshiv/src/ieshiv.js'], ()->
+  jake.cpR 'common/ieshiv/src/ieshiv.js', 'build/angular-ui-ieshiv.js'
+file 'build/angular-ui-ieshiv.min.js', ['build/angular-ui-ieshiv.js'], ()->
+  uglifyFile 'build/angular-ui-ieshiv.js', 'build/angular-ui-ieshiv.min.js', noMangle: true,  noSqueeze: true
+
+
+desc('Run the tests - needs testacular to be running.')
 task 'test', ['build'], ()->
   jake.exec 'testacular-run', complete, printStdout: true, printStderr: true
