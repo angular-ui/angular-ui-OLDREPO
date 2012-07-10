@@ -1,7 +1,8 @@
 # ui-currency directive
 
-This directive allows you to give greater control over your currency elements by setting styles based on the pos/neg/zero value 
-
+In angular, you are able to specify what the currency symbol is (however, you might not want to change it for localization). 
+This directive gives greater control over your currency elements by allowing you to set CSS styles based on the number's sign. 
+						
 ## Usage
 
 Apply the directive to your html elements:
