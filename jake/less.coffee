@@ -4,7 +4,7 @@ async = require('async')
 less = require('less')
 util = require('./util')
 
-lessCompiler = (source, target, callback)->
+lessCompiler = (source, target, callback, opts = {})->
   jake.logger.log 'Compiling: ' + source + ' -> ' + target
   async.waterfall([
     (callback)-> fs.readFile(source, util.FILE_ENCODING, callback)
@@ -15,7 +15,7 @@ lessCompiler = (source, target, callback)->
       parser.parse src, callback
   ,
     (tree, callback)-> 
-      fs.writeFile(target, tree.toCSS(), util.FILE_ENCODING, callback)
+      fs.writeFile(target, tree.toCSS(opts), util.FILE_ENCODING, callback)
   ], callback)
     
 module.exports = lessCompiler

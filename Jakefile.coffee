@@ -13,21 +13,20 @@ jsBuildFileMin = 'build/angular-ui.min.js'
 lessFiles = new jake.FileList('common/**/*.less', 'modules/**/*.less').toArray()
 lessMainFile = 'common/stylesheets/angular-ui.less'
 cssBuildFile = 'build/angular-ui.css'
+cssBuildFileMin = 'build/angular-ui.min.css'
 
 ### TASKS ###
-task 'default', ['build']
-
 desc('Build the project')
-task 'build', ['js', 'css', 'ieshiv']
+task 'default', ['js', 'css', 'ieshiv']
 
+directory 'build'
 
 desc('Concat all the js files together and minimize')
-task 'js', ['coffee', jsBuildFileMin, jsBuildFile]
+task 'js', ['build','coffee', jsBuildFileMin, jsBuildFile]
 file jsBuildFile, jsFiles, ()->
   concatenateFiles jsFiles, jsBuildFile
-file jsBuildFileMin, jsBuildFile, ()->
+file jsBuildFileMin, [jsBuildFile], ()->
   uglifyFile jsBuildFile, jsBuildFileMin, noMangle: true, noSqueeze: true
-
 
 desc('Generate the js files from the coffee-script files.')
 task 'coffee', coffeeFiles, ()->
@@ -35,14 +34,16 @@ task 'coffee', coffeeFiles, ()->
 
 
 desc('Generate the css files from the less files.')
-task 'css', [cssBuildFile], ()->
+task 'css', ['build', cssBuildFileMin], ()->
 file cssBuildFile, lessFiles, ()->
   lessCompiler lessMainFile, cssBuildFile, complete
 , { async: true }
-
+file cssBuildFileMin, [cssBuildFile], ()->
+  lessCompiler lessMainFile, cssBuildFileMin, complete, compress: true
+, { async: true }
 
 desc('Copy over and minify the ieshiv helper file.')
-task 'ieshiv', ['build/angular-ui-ieshiv.js', 'common/ieshiv/src/ieshiv.js']
+task 'ieshiv', ['build','build/angular-ui-ieshiv.min.js']
 file 'build/angular-ui-ieshiv.js', ['common/ieshiv/src/ieshiv.js'], ()->
   jake.cpR 'common/ieshiv/src/ieshiv.js', 'build/angular-ui-ieshiv.js'
 file 'build/angular-ui-ieshiv.min.js', ['build/angular-ui-ieshiv.js'], ()->
@@ -50,5 +51,5 @@ file 'build/angular-ui-ieshiv.min.js', ['build/angular-ui-ieshiv.js'], ()->
 
 
 desc('Run the tests - needs testacular to be running.')
-task 'test', ['build'], ()->
+task 'test', ['default'], ()->
   jake.exec 'testacular-run', complete, printStdout: true, printStderr: true
