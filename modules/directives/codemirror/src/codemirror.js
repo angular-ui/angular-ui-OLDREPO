@@ -5,27 +5,22 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', function
     uiConfig.codemirror = uiConfig.codemirror || {};
     return {
         require: 'ngModel',
-        link: {
-            post: function (scope, elm, attrs, ngModel) {
-
-                var expression,
-                    options = {
-                        onChange: function (ed) {
-                            elm.val(ed.getValue());
-                            ngModel.$setViewValue(elm.val());
-                            scope.$apply();
-                        },
-                        value: scope.$eval(attrs.ngModel)
-                    };
-
-                expression = attrs.uiCodemirror ? scope.$eval(attrs.uiCodemirror) : {};
-
-                angular.extend(options, uiConfig.codemirror, expression);
-
-                CodeMirror(function (elt) {
-                    elm[0].parentNode.replaceChild(elt, elm[0]);
-                }, options);
-            }
-        }
+        link: function (scope, elm, attrs, ngModel) {
+            var defaults = {
+                onChange: function (ed) {
+                    newValue = ed.getValue();
+                    if ( newValue !== ngModel.$viewValue ) {
+                        ngModel.$setViewValue(ed.getValue());
+                        scope.$apply();
+                    }
+                }
+            };
+            var options = angular.extend(defaults, scope.$eval(attrs.uiCodemirror), uiConfig.codemirror);
+            console.log(options);
+            var codemirror = CodeMirror.fromTextArea(elm[0], options);
+            ngModel.$render = function() {
+                codemirror.setValue(ngModel.$viewValue);
+            };
+       }
     };
 }]);
