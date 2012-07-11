@@ -10,15 +10,15 @@ coffee:
 js: coffee
 	cat common/src/*.js ${JS_SRC_FILES} > build/angular-ui.js
 	uglifyjs -o build/angular-ui.min.js --no-mangle --no-squeeze build/angular-ui.js
-	
+
 ieshiv:
 	cp common/ieshiv/src/*.js build/angular-ui-ieshiv.js
 	uglifyjs -o build/angular-ui-ieshiv.min.js --no-mangle --no-squeeze build/angular-ui-ieshiv.js
-	
+
 css:
 	lessc common/stylesheets/angular-ui.less build/angular-ui.css
 	lessc common/stylesheets/angular-ui.less build/angular-ui.min.css -compress
-		
+
 build: js css ieshiv
 
 test: build
