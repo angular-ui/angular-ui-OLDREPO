@@ -5,7 +5,7 @@ COFFEE_FILES = $(shell find modules -type f -name '*.coffee')
 all: build
 
 coffee:
-	coffee -c ${COFFEE_FILES}
+	coffee -c --bare ${COFFEE_FILES}
 
 js: coffee
 	cat common/src/*.js ${JS_SRC_FILES} > build/angular-ui.js
