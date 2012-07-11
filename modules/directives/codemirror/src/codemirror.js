@@ -8,7 +8,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', function
         link: function (scope, elm, attrs, ngModel) {
             var defaults = {
                 onChange: function (ed) {
-                    newValue = ed.getValue();
+                    var newValue = ed.getValue();
                     // We only update the model if the value has changed - this helps get around a little problem where $render triggers a change despite already being inside a $apply loop.
                     if ( newValue !== ngModel.$viewValue ) {
                         ngModel.$setViewValue(ed.getValue());
