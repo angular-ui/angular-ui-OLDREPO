@@ -8,7 +8,7 @@ coffeeScript = require('coffee-script')
 @param {function} compiler Function to actually do the compilation, receives, as params, the file to compile and the filenameConverter function.
 ###
 coffeeFilenameConverter = (file)-> file.replace('.coffee', '.js')
-coffeeCompiler = (files)->
+coffeeCompiler = (files, opts)->
   files = util.ensureFileList(files)
   files.exclude (srcFile)->
     not util.needsUpdating(coffeeFilenameConverter(srcFile), srcFile)
@@ -16,7 +16,7 @@ coffeeCompiler = (files)->
     targetFilename = coffeeFilenameConverter(f)
     jake.logger.log 'Compiling: ' + f + ' -> ' + targetFilename
     src = fs.readFileSync(f, util.FILE_ENCODING)
-    out = coffeeScript.compile(src)
+    out = coffeeScript.compile(src, filename: f, bare: true)
     fs.writeFileSync(targetFilename, out, util.FILE_ENCODING)
 
 module.exports = coffeeCompiler
