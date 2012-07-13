@@ -1,5 +1,5 @@
 describe('modal', function() {
-  var elm, scope;
+  var elm, scope, $timeout;
 
   beforeEach(module('ui.directives'));
   
