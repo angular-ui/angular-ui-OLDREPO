@@ -1,4 +1,4 @@
-//READ: http://docs-next.angularjs.org/guide/ie
+// READ: http://docs-next.angularjs.org/guide/ie
 (function(exports){
   
   var debug = window.ieShivDebug || false;
