@@ -72,7 +72,7 @@ angular.module('ui.directives').directive('uiKeypress', [function(){
               ( shiftRequired == shiftPressed )
             ) {
             // Run the function
-            scope.$eval(combination.expression);
+            scope.$apply(combination.expression, { '$event' : event });
           }
         });
       });
