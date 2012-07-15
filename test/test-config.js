@@ -29,7 +29,6 @@ exclude = [];
 // possible values: 'dots' || 'progress'
 reporter = 'dots';
 
-
 // these are default values, just to show available options
 
 // web server port
@@ -49,4 +48,4 @@ logLevel = LOG_DEBUG;
 autoWatch = true;
 
 // polling interval in ms (ignored on OS that support inotify)
-autoWatchInterval = 0;
+autoWatchInterval = 100;
