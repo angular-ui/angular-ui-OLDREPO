@@ -1,5 +1,5 @@
 angular.module('ui.directives')
-.directive('uiModal', [function() {
+.directive('uiModal', ['$timeout', function($timeout) {
   return {
     require: 'ngModel',
     link: function(scope, elm, attrs, model) {
@@ -7,12 +7,14 @@ angular.module('ui.directives')
           elm.modal(value && 'show' || 'hide');
       });
       elm.on('show.ui', function() {
-        model.$setViewValue(true);
-        if (!scope.$$phase) scope.$apply();
+		$timeout(function() {
+    		 model.$setViewValue(true);
+    	});
       });
       elm.on('hide.ui', function() {
-        model.$setViewValue(false);
-        if (!scope.$$phase) scope.$apply();
+        $timeout(function() {
+        	model.$setViewValue(false);
+        });
       });
     }
   };
