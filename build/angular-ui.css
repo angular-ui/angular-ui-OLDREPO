@@ -28,3 +28,7 @@
 .ui-currency-zero {
   color: blue;
 }
+/* highlight */
+.ui-match {
+  background: yellow;
+}
