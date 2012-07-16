@@ -37,10 +37,10 @@ desc('Generate the css files from the less files.')
 task 'css', ['build', cssBuildFileMin], ()->
 file cssBuildFile, lessFiles, ()->
   lessCompiler lessMainFile, cssBuildFile, complete
-, { async: true }
+, async: true
 file cssBuildFileMin, [cssBuildFile], ()->
   lessCompiler lessMainFile, cssBuildFileMin, complete, compress: true
-, { async: true }
+, async: true
 
 desc('Copy over and minify the ieshiv helper file.')
 task 'ieshiv', ['build','build/angular-ui-ieshiv.min.js']
@@ -53,3 +53,9 @@ file 'build/angular-ui-ieshiv.min.js', ['build/angular-ui-ieshiv.js'], ()->
 desc('Run the tests - needs testacular to be running.')
 task 'test', ['default'], ()->
   jake.exec 'testacular-run', complete, printStdout: true, printStderr: true
+, async: true
+
+desc('Start the test server')
+task 'test-server', ['default'], ()->
+  jake.exec 'testacular test/test-config.js', printStdout: true, printStderr: true
+, async: true
