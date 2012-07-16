@@ -7,9 +7,13 @@ describe('modal', function() {
     scope = $rootScope;
     $timeout = $injector.get('$timeout');
     elm = $compile(
-      '<div class="modal hide" ui-modal ng-model="modalShown">'
+      '<div ui-modal ng-model="modalShown">'
     )($rootScope);
   }));
+
+  it('should add "modal hide" class for you', function() {
+    expect(elm.hasClass("modal hide")).toBe(true);
+  });
   
   describe('model change', function() {
     it('should open modal', function() {
