@@ -6,7 +6,7 @@
 
 ### Requirements
 
-* **AngularJs v1.0.0rc?** is currently required. **TODO:** Narrow down to specific RC version
+* **AngularJs v1.0.0+** is currently required.
 * **jQuery / Plugins** _(depends on directive)._ Check specific directive dependencies for more information
 
 ### Installation
