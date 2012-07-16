@@ -1,3 +1,4 @@
+
 /**
  * Binds a TinyMCE widget to <textarea> elements.
  */

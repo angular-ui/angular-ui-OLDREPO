@@ -16,7 +16,7 @@ files = [
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
   'build/angular-ui.js',
-  '**/test/*.js'
+  'modules/*/*/test/*.js'
 ];
 
 // list of files to exclude

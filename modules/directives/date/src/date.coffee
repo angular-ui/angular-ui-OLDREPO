@@ -1,3 +1,4 @@
+
 ###
  jQuery UI Datepicker plugin wrapper
  
@@ -12,29 +13,29 @@ angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
   link: (scope, element, attrs, controller)->
     opts = angular.extend({}, options, scope.$eval(attrs.uiDate));
 
-    # If we have a controller (i.e. ngModelController) then wire it up
+    ### If we have a controller (i.e. ngModelController) then wire it up ###
     if controller?
       updateModel = (value, picker)->
         scope.$apply ()->
           controller.$setViewValue(element.datepicker("getDate"))
 
       if opts.onSelect?
-        # Caller has specified onSelect to call this as well as updating the model
+        ### Caller has specified onSelect to call this as well as updating the model ###
         usersOnSelectHandler = opts.onSelect
         opts.onSelect = (value, picker)->
           updateModel(value)
           usersOnSelectHandler(value, picker)
       else
-        # No onSelect already specified so just update the model
+        ### No onSelect already specified so just update the model ###
         opts.onSelect = updateModel
 
-      # Update the date picker when the model changes
+      ### Update the date picker when the model changes ###
       originalRender = controller.$render
       controller.$render = ()->
         originalRender()
         element.datepicker("setDate", controller.$viewValue)
 
-    # Create the datepicker widget
+    ### Create the datepicker widget ###
     element.datepicker(opts)
 
 ]
