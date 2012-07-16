@@ -15,11 +15,8 @@ files = [
   'test/lib/jquery/jquery-ui-1.8.18.js',
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
-  'common/src/*.js',
-  'modules/*/*/*/*.js',
-  'modules/*/*/*.js',
-  'modules/*/*.js',
-  'modules/*.js',
+  'build/angular-ui.js',
+  '**/test/*.js'
 ];
 
 // list of files to exclude
@@ -28,7 +25,6 @@ exclude = [];
 // use dots reporter, as travis terminal does not support escaping sequences
 // possible values: 'dots' || 'progress'
 reporter = 'dots';
-
 
 // these are default values, just to show available options
 
@@ -49,4 +45,4 @@ logLevel = LOG_DEBUG;
 autoWatch = true;
 
 // polling interval in ms (ignored on OS that support inotify)
-autoWatchInterval = 0;
+autoWatchInterval = 100;
