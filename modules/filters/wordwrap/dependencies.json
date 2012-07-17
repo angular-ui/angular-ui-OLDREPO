@@ -1,0 +1,7 @@
+{
+  "common": [],
+  "internal": ["filters/wordwrap"],
+  "external": {
+
+  }
+}
