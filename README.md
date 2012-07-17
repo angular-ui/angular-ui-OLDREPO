@@ -1,4 +1,4 @@
-# Angular.js - UI Contributions
+# AngularUI
 
 ***
 
@@ -6,7 +6,7 @@
 
 ### Requirements
 
-* **AngularJs v1.0.0+** is currently required.
+* **AngularJS v1.0.0+** is currently required.
 * **jQuery / Plugins** _(depends on directive)._ Check specific directive dependencies for more information
 
 ### Installation
