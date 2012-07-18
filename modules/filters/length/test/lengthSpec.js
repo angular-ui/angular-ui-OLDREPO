@@ -14,6 +14,6 @@ describe('length', function() {
     expect(lengthFilter({a:'b',b:'c',c:'d'})).toBe(3);
   });
   it('should return length of a string', function() {
-    expect('abcde'.length).toBe(5);
+    expect(lengthFilter('abcde')).toBe(5);
   });
 })

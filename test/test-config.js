@@ -16,7 +16,7 @@ files = [
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
   'build/angular-ui.js',
-  '**/test/*.js'
+  'modules/*/*/test/*.js'
 ];
 
 // list of files to exclude
@@ -46,3 +46,12 @@ autoWatch = true;
 
 // polling interval in ms (ignored on OS that support inotify)
 autoWatchInterval = 100;
+
+// Start these browsers, currently available:
+// - Chrome
+// - ChromeCanary
+// - Firefox
+// - Opera
+// - Safari
+// - PhantomJS
+browsers = [];

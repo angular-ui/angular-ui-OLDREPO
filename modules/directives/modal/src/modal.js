@@ -1,8 +1,11 @@
+
 angular.module('ui.directives')
 .directive('uiModal', ['$timeout', function($timeout) {
   return {
     require: 'ngModel',
     link: function(scope, elm, attrs, model) {
+      //helper so you don't have to type class="modal hide"
+      elm.addClass('modal hide'); 
       scope.$watch(attrs.ngModel, function(value) {
           elm.modal(value && 'show' || 'hide');
       });

@@ -1,9 +1,5 @@
 
 /**
- * NOTE: Only adds classes, you must add the class definition yourself
- */
-
-/**
  * uiShow Directive
  *
  * Adds a 'ui-show' class to the element instead of display:block
