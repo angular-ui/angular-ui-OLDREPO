@@ -53,20 +53,17 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$parse'
             // Now watch to see if the codemirror attribute gets updated
             scope.$watch(uiCodemirrorGet, updateCodeMirror, true);
 
+            ngModel.$formatters.push(function(value) {
+                if(!angular.isString(value)) {
+                    return '';
+                }
+                return value;
+            });
+
             // Override the ngModelController $render method, which is what gets called when the model is updated.
             // This takes care of the synchronizing the codeMirror element with the underlying model, in the case that it is changed by something else.
             ngModel.$render = function() {
-                if(angular.isString(ngModel.$viewValue)) {
-                    codemirror.setValue(ngModel.$viewValue);
-                } else {
-                    // momentarily stub out the change handler.  we want to keep the model
-                    // value, but CodeMirror wants a string, so we pass it an empty string
-                    // and keep the model the same.
-                    var changeHandler = codemirror.getOption('onChange');
-                    codemirror.setOption('onChange', angular.noop);
-                    codemirror.setValue('');
-                    codemirror.setOption('onChange', changeHandler);
-                }
+                codemirror.setValue(ngModel.$viewValue);
             };
        }
     };
