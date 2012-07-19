@@ -89,7 +89,7 @@ module.exports = function(grunt) {
     var done = this.async();
     grunt.utils.spawn({
       cmd: 'coffee',
-      args: ['-c', 'modules']
+      args: ['-cb', 'modules']
     }, function(error, result, code) {
       if (error) grunt.warn(error.stderr);
       else grunt.log.write(result.stdout);
