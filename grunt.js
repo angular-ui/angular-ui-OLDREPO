@@ -72,8 +72,9 @@ module.exports = function(grunt) {
       args: ['test/test-config.js'],
     }, function(error, result, code) {
       if (error) {
-        grunt.warn(error + "\n" + "Make sure the testacular server is online: run `grunt server`.\n"+
-          "Also make sure you have a browser open to http://localhost:8080/.\n");
+        grunt.warn("Make sure the testacular server is online: run `grunt server`.\n"+
+          "Also make sure you have a browser open to http://localhost:8080/.\n"+
+          error.stdout+error.stderr);
         //the testacular runner somehow modifies the files if it errors(??).
         //this causes grunt's watch task to re-fire itself constantly,
         //unless we wait for a sec
