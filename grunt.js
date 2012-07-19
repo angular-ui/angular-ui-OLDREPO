@@ -57,7 +57,7 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'coffee concat min recess test');
+  grunt.registerTask('default', 'coffee concat min recess:basic recess:min test');
 
   grunt.registerTask('server', 'start testacular server', function() {
     //Mark the task as async but never call done, so the server stays up
