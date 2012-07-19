@@ -53,6 +53,8 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$parse'
             // Now watch to see if the codemirror attribute gets updated
             scope.$watch(uiCodemirrorGet, updateCodeMirror, true);
 
+            // CodeMirror expects a string, so make sure it gets one.
+            // This does not change the model.
             ngModel.$formatters.push(function(value) {
                 if(!angular.isString(value)) {
                     return '';
