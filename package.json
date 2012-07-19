@@ -3,7 +3,7 @@
   "name": "angular-ui",
   "description": "Angular.js - Angular-UI",
   "version": "0.0.0",
-  "homepage": "http://angular-ui.github.com/",
+  "homepage": "http://angular-ui.github.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/angular-ui/angular-ui.git"
@@ -12,10 +12,7 @@
     "node": ">= 0.6.11"
   },
   "dependencies": {
-    "async": "0.1.x",
-    "coffee-script": "1.3.x",
-    "less": "1.3.x",
-    "uglify-js": "1.3.x"
-    },
+    "grunt-recess": "~0.1.0"
+  },
   "devDependencies": {}
 }

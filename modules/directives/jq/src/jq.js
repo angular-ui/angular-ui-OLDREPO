@@ -29,12 +29,10 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function(uiConfi
 				if (attrs.uiOptions) {
 					evalOptions = scope.$eval('['+attrs.uiOptions+']');
 					if (angular.isObject(options) && angular.isObject(evalOptions[0])) {
-						angular.extend(options, evalOptions[0]);
-					} else {
-						options = evalOptions[0];
+						evalOptions[0] = angular.extend(options, evalOptions[0]);
 					}
 				}
-				elm[attrs.uiJq](options);
+				elm[attrs.uiJq].apply(elm, evalOptions);
 			}
 		}
 	};

@@ -15,6 +15,7 @@ files = [
   'test/lib/jquery/jquery-ui-1.8.18.js',
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
+  'test/lib/codemirror/codemirror.js',
   'build/angular-ui.js',
   'modules/*/*/test/*.js'
 ];
@@ -42,10 +43,10 @@ colors = true;
 logLevel = LOG_DEBUG;
 
 // enable / disable watching file and executing tests whenever any file changes
-autoWatch = true;
+autoWatch = false;
 
 // polling interval in ms (ignored on OS that support inotify)
-autoWatchInterval = 100;
+autoWatchInterval = 0;
 
 // Start these browsers, currently available:
 // - Chrome
