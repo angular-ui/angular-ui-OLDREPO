@@ -74,12 +74,16 @@ describe('uiCodemirror', function () {
             });
         });
     });
-    describe('when the model is falsy', function () {
+    describe('when the model is undefined/null', function () {
         it('should update the IDE with an empty string', function () {
             inject(function ($compile) {
                 var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
                 scope.$apply();
                 expect(scope.foo).toBe(undefined);
+                expect(element.siblings().text().trim()).toBe('');
+                scope.foo = null;
+                scope.$apply();
+                expect(scope.foo).toBe(null);
                 expect(element.siblings().text().trim()).toBe('');
             });
         });

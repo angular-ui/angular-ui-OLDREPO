@@ -56,7 +56,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$parse'
             // CodeMirror expects a string, so make sure it gets one.
             // This does not change the model.
             ngModel.$formatters.push(function(value) {
-                if(!angular.isString(value)) {
+                if(angular.isUndefined(value) || value === null) {
                     return '';
                 }
                 return value;
