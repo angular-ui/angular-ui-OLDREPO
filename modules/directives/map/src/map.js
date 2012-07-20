@@ -76,7 +76,7 @@
         }
       }
     };
-  }]);
+  }])
 
   //ui-marker directive
   //This finds a marker on the scope matching the ui-marker given.
