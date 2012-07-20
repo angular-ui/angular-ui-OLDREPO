@@ -15,12 +15,10 @@ module.exports = function(grunt) {
       basic: {
         src: ['<banner:meta.banner>', 'common/*.js', 'modules/*/*/*.js'],
         dest: 'build/<%= pkg.name %>.js',
-        exclude: 'modules/**/test/*.js'
       },
       ieshiv: {
         src: ['<banner:meta.banner>', 'common/ieshiv/*.js'],
         dest: 'build/<%= pkg.name %>-ieshiv.js',
-        exclude: 'modules/**/test/*.js'
       }
     },
     min: {
