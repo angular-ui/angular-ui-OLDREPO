@@ -9,16 +9,8 @@ describe('uiEvent', function() {
 
   //helper for creating event elements
   function eventElement(scope, eventObject) {
-    function uiEventAttrs() {
-      var str = '', first = true;
-      angular.forEach(eventObject, function(val, key) {
-        if (first) first = false;
-        else str += ', ';
-        str += "'"+key+"': '"+val+"'";
-      });
-      return '{'+str+'}';
-    };
-    return $compile('<span ui-event="'+uiEventAttrs()+'">')(scope);
+    scope._uiEvent = eventObject || {};
+    return $compile('<span ui-event="_uiEvent">')(scope);
   };
 
   describe('test', function() {
@@ -61,11 +53,15 @@ describe('uiEvent', function() {
     it('should allow passing of $event object', function() {
       $scope = $rootScope.$new();
       $scope.clicky = function(par1, $event, par2) {
-        expect($event).toBeTruthy();
-        expect(par1 + par2).toBe(3);
+        expect($event.foo).toBe('bar');
+        expect(par1).toBe(1);
+        expect(par2).toBe(2);
       };
       var elm = eventElement($scope, {'click': 'clicky(1, $event, 2)'});
-      $(elm).trigger('click');
+      $(elm).trigger({
+        type: 'click',
+        foo: 'bar'
+      });
     });
   });
 

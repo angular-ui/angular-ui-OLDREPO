@@ -74,4 +74,36 @@ describe('uiCodemirror', function () {
             });
         });
     });
+    describe('when the model is undefined/null', function () {
+        it('should update the IDE with an empty string', function () {
+            inject(function ($compile) {
+                var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+                scope.$apply();
+                expect(scope.foo).toBe(undefined);
+                expect(element.siblings().text().trim()).toBe('');
+                scope.foo = null;
+                scope.$apply();
+                expect(scope.foo).toBe(null);
+                expect(element.siblings().text().trim()).toBe('');
+            });
+        });
+    });
+    describe('when the model is an object or an array', function() {
+        it('should throw an error', function() {
+            inject(function ($compile) {
+                function compileWithObject() {
+                    $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+                    scope.foo = {};
+                    scope.$apply();
+                }
+                function compileWithArray() {
+                    $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+                    scope.foo = [];
+                    scope.$apply();
+                }
+                expect(compileWithObject).toThrow();
+                expect(compileWithArray).toThrow();
+            });
+        });
+    });
 });
