@@ -18,7 +18,7 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function(uiConfi
 	return {
 		link: function(scope, elm, attrs) {
 			if (!elm[attrs.uiJq]) {
-				Error('ui-jq: The "'+attrs.uiJq+'" function does not exist');
+				throw new Error('ui-jq: The "'+attrs.uiJq+'" function does not exist');
 				return;
 			}
 			var evalOptions;
