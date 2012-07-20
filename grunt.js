@@ -13,12 +13,12 @@ module.exports = function(grunt) {
     },
     concat: {
       basic: {
-        src: ['<banner:meta.banner>', 'common/src/*.js', 'modules/**/src/*.js'],
-        dest: 'build/<%= pkg.name %>.js'
+        src: ['<banner:meta.banner>', 'common/*.js', 'modules/*/*/*.js'],
+        dest: 'build/<%= pkg.name %>.js',
       },
       ieshiv: {
-        src: ['<banner:meta.banner>', 'common/ieshiv/src/*.js'],
-        dest: 'build/<%= pkg.name %>-ieshiv.js'
+        src: ['<banner:meta.banner>', 'common/ieshiv/*.js'],
+        dest: 'build/<%= pkg.name %>-ieshiv.js',
       }
     },
     min: {
