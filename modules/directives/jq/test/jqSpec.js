@@ -8,9 +8,9 @@ describe('uiJq', function() {
   describe('function or plugin isn\'t found', function() {
     it('should throw an error', function() {
       inject(function($compile) {
-        var element;
-        element = $compile("<div ui-jq='failure'></div>")(scope);
-        expect(element.text()).toThrow('ui-jq: The "failure" function does not exist');
+        expect(function(){
+          $compile("<div ui-jq='failure'></div>")(scope);
+        }).toThrow('ui-jq: The "failure" function does not exist');
       });
     });
   });
