@@ -10,7 +10,7 @@ describe('uiJq', function() {
       inject(function($compile) {
         expect(function(){
           $compile("<div ui-jq='failure'></div>")(scope);
-        }).toThrow('ui-jq: The "failure" function does not exist');
+        }).toThrow();
       });
     });
   });
