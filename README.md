@@ -1,4 +1,4 @@
-# angular-ui
+# AngularUI - The companion suite for AngularJS
 
 ***
 
@@ -55,7 +55,17 @@ First, start the testacular server:
 ```bash
 $ grunt server
 ```
-Then, open your browser to `http://localhost:8080` and run the watch command to re-run tests on every save:
+Then, open your browser to http://localhost:8080 and run the watch command to re-run tests on every save:
 ```bash
 $ grunt watch
 ```
+
+### Publishing
+
+For core team: if you wish to publish a new version follow these steps:
+
+1. Bump the version number inside `package.json`
+2. Build and test
+3. Commit the updated `package.json` and `build/` folder on their own commit
+4. Tag the commit: `git tag v[maj].[min].[patch]`
+5. Push the tag: `git push [angular-ui] master --tags`
