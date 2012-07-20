@@ -16,6 +16,7 @@ files = [
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
   'test/lib/codemirror/codemirror.js',
+  'test/lib/googlemaps/googlemaps.js',
   'build/angular-ui.js',
   'modules/*/*/test/*.js'
 ];
