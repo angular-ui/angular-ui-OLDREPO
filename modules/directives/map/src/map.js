@@ -63,12 +63,18 @@
 
         bindMapEvents(scope, infoWindowEvents, infoWindow, elm);
 
+        /* The info window's contents dont' need to be on the dom anymore,
+         google maps has them stored.  So we just replace the infowindow element
+         with an empty div. (we don't just straight remove it from the dom because
+         straight removing things from the dom can mess up angular) */
         elm.replaceWith('<div></div>');
+
+        //Decorate infoWindow.open to $compile contents before opening
         var _open = infoWindow.open;
-        infoWindow.open = function(map,marker) {
+        infoWindow.open = function open(a1,a2,a3,a4,a5,a6) {
           $compile(elm.contents())(scope);
-          _open.call(infoWindow, map, marker); 
-        }
+          _open.call(infoWindow, a1,a2,a3,a4,a5,a6);
+        };
       }
     };
   }]);
