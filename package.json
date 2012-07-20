@@ -1,8 +1,8 @@
 {
-  "author": "",
+  "author": "https://github.com/angular-ui/angular-ui/graphs/contributors",
   "name": "angular-ui",
-  "description": "Angular.js - Angular-UI",
-  "version": "0.0.0",
+  "description": "AngularUI - The companion suite for AngularJS",
+  "version": "0.1.0",
   "homepage": "http://angular-ui.github.com",
   "repository": {
     "type": "git",
