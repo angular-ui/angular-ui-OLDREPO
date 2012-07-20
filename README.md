@@ -36,7 +36,7 @@ $ npm install
 2. Install global dependencies `grunt`, `coffee-script`, and `testacular`:
 
 ```bash
-$ npm install -g testacular coffee-script grunt`
+$ npm install -g testacular coffee-script grunt
 ```
 
 ### Build Files & Run Tests
