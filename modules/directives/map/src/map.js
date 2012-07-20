@@ -41,7 +41,8 @@
     };
   }])
 
-  .directive('uiMapInfoWindow', ['ui.config', '$parse', function(uiConfig, $parse) {
+  .directive('uiMapInfoWindow', 
+  ['ui.config', '$parse', '$compile', function(uiConfig, $parse, $compile) {
     
     var infoWindowEvents = 'closeclick content_change domready '+
     'position_changed zindex_changed';
@@ -49,6 +50,7 @@
     
     return {
       link: function(scope, elm, attrs) {
+        var _open;
         var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
         opts.content = elm[0];
         var model = $parse(attrs.uiMapInfoWindow);
@@ -61,12 +63,20 @@
 
         bindMapEvents(scope, infoWindowEvents, infoWindow, elm);
         
-        //Remove the element from the dom, replacing with an empty element
-        //so angular doesn't panic
+        //The info window element doesn't need to stay in the DOM, 
+        //so we take it out. but we can't just remove an element from the dom
+        //or angular will mess up. so we replace it with an empty div
         elm.replaceWith('<div></div>');
+
+        //Each time info window opens, re-$compile the contents
+        _open = infoWindow.open;
+        infoWindow.open = function(arg1,arg2,arg3,arg4,arg5,arg6) {
+          $compile(elm.contents())(scope);
+          _open.call(infoWindow, arg1,arg2,arg3,arg4,arg5,arg6); 
+        }
       }
     };
-  }])
+  }]);
 
   //ui-marker directive
   //This finds a marker on the scope matching the ui-marker given.
