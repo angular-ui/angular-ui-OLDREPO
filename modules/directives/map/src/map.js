@@ -7,8 +7,7 @@
     angular.forEach(eventsStr.split(' '), function(eventName) {
       var $event = { type: 'map-'+eventName };
       google.maps.event.addListener(googleObject, eventName, function(evt) {
-        angular.extend($event, evt);
-        element.trigger($event);
+        element.trigger(angular.extend({}, $event, evt));
         //We create an $apply if it isn't happening. we need better support for this
         //We don't want to use timeout because tons of these events fire at once,
         //and we only need one $apply
