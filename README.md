@@ -1,4 +1,4 @@
-# angular-ui
+# AngularUI - The companion suite for AngularJS
 
 ***
 
@@ -25,7 +25,9 @@ You do not need to build the project to use it - see above - but if you are work
 
 ### Requirements
 
-1. Install local dependencies: 
+0. Install [Node.js](http://nodejs.org/) and NPM (should come with)
+
+1. Install local dependencies:
 
 ```bash
 $ npm install
@@ -34,7 +36,7 @@ $ npm install
 2. Install global dependencies `grunt`, `coffee-script`, and `testacular`:
 
 ```bash
-$ npm install -g testacular coffee-script grunt`
+$ npm install -g testacular coffee-script grunt
 ```
 
 ### Build Files & Run Tests
@@ -51,9 +53,19 @@ The modules come with unit tests that should be run on any changes and certainly
 
 First, start the testacular server:
 ```bash
-$ grunt server 
+$ grunt server
 ```
-Then, open your browser to `http://localhost:8080` and run the watch command to re-run tests on every save:
+Then, open your browser to http://localhost:8080 and run the watch command to re-run tests on every save:
 ```bash
 $ grunt watch
 ```
+
+### Publishing
+
+For core team: if you wish to publish a new version follow these steps:
+
+1. Bump the version number inside `package.json`
+2. Build and test
+3. Commit the updated `package.json` and `build/` folder on their own commit
+4. Tag the commit: `git tag v[maj].[min].[patch]`
+5. Push the tag: `git push [angular-ui] master --tags`
