@@ -25,16 +25,18 @@ You do not need to build the project to use it - see above - but if you are work
 
 ### Requirements
 
-1. Install local dependencies: 
+0. Install [Node.js](http://nodejs.org/) and NPM (should come with)
+
+1. Install local dependencies:
 
 ```bash
 $ npm install
 ```
 
-2. Install global dependencies `grunt`, `coffee-script`, and `testacular`:
+2. Install global dependencies `grunt`, `coffee-script`, and `less`:
 
 ```bash
-$ npm install -g testacular coffee-script grunt`
+$ npm install -g less coffee-script grunt`
 ```
 
 ### Build Files & Run Tests
@@ -51,7 +53,7 @@ The modules come with unit tests that should be run on any changes and certainly
 
 First, start the testacular server:
 ```bash
-$ grunt server 
+$ grunt server
 ```
 Then, open your browser to `http://localhost:8080` and run the watch command to re-run tests on every save:
 ```bash
