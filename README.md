@@ -33,10 +33,10 @@ You do not need to build the project to use it - see above - but if you are work
 $ npm install
 ```
 
-2. Install global dependencies `grunt`, `coffee-script`, and `less`:
+2. Install global dependencies `grunt`, `coffee-script`, and `testacular`:
 
 ```bash
-$ npm install -g less coffee-script grunt`
+$ npm install -g testacular coffee-script grunt`
 ```
 
 ### Build Files & Run Tests
