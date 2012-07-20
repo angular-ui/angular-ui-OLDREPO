@@ -14,4 +14,14 @@ describe('uiJq', function() {
       });
     });
   });
+  describe('calling a jQuery element function', function() {
+    it('should just like, sort of work and junk', function() {
+      inject(function($compile) {
+        $.fn.success = function(){};
+        spyOn($.fn, 'success');
+        $compile("<div ui-jq='success'></div>")(scope);
+        expect($.fn.success).toHaveBeenCalled();
+      });
+    });
+  });
 });
