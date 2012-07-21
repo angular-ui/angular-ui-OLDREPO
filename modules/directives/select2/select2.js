@@ -3,7 +3,7 @@
  * Enhanced Select2 Dropmenus
  *
  * @AJAX Mode - When in this mode, your value will be an object (or array of objects) of the data used by Select2
- * 		This change is so that you do not have to do an additional query yourself on top of Select2's own query
+ *   	This change is so that you do not have to do an additional query yourself on top of Select2's own query
  * @params [options] {object} The configuration options passed to $.fn.select2(). Refer to the documentation
  */
 angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', function(uiConfig, $http){
@@ -39,11 +39,12 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 
 				if (controller) {
 					// Watch the model for programmatic changes
-					controller.$render = function(value) {
-						if (isSelect) {
-							elm.select2('val', scope.$eval(attrs.ngModel));
+					controller.$render = function() {
+						var value = scope.$eval(attrs.ngModel);
+						if (isSelect || angular.isString(value)) {
+							elm.select2('val', value);
 						} else {
-							elm.select2('data', scope.$eval(attrs.ngModel));
+							elm.select2('data', value);
 						}
 					};
 
