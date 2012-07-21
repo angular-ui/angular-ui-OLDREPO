@@ -12,9 +12,11 @@ describe('uiCodemirror', function () {
         scope = _$rootScope_.$new();
         $compile = _$compile_;
     }));
+
     afterEach(function() {
         angular.module('ui.config').value('ui.config', {}); // cleanup
     });
+
     describe('compiling this directive', function () {
         it('should throw an error if used against a non-textarea', function () {
             function compile() {
@@ -22,34 +24,40 @@ describe('uiCodemirror', function () {
             }
             expect(compile).toThrow();
         });
+
         it('should not throw an error when used against a textarea', function () {
             function compile() {
                 $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
             }
             expect(compile).not.toThrow();
         });
+
         it('should throw an error when no ngModel attribute defined', function () {
             function compile() {
                 $compile('<textarea ui-codemirror></textarea>')(scope);
             }
             expect(compile).toThrow();
         });
+
         it('should watch the uiCodemirror attribute', function () {
             spyOn(scope, '$watch');
             $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
             expect(scope.$watch).toHaveBeenCalled();
         });
+
         it('should include the passed options', function () {
             spyOn(CodeMirror, 'fromTextArea');
             $compile('<textarea ui-codemirror="{foo: \'bar\'}" ng-model="foo"></textarea>')(scope);
             expect(CodeMirror.fromTextArea.mostRecentCall.args[1].foo).toEqual('bar');
         });
+
         it('should include the default options', function () {
             spyOn(CodeMirror, 'fromTextArea');
             $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
             expect(CodeMirror.fromTextArea.mostRecentCall.args[1].bar).toEqual('baz');
         });
     });
+
     describe('when the model changes', function () {
         it('should update the IDE', function () {
             var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
@@ -58,6 +66,7 @@ describe('uiCodemirror', function () {
             expect(element.siblings().text().trim()).toBe(scope.foo);
         });
     });
+
     describe('when the IDE changes', function () {
         it('should update the model', function () {
             var codemirror,
@@ -74,6 +83,7 @@ describe('uiCodemirror', function () {
             expect(scope.foo).toBe(value);
         });
     });
+
     describe('when the model is undefined/null', function () {
         it('should update the IDE with an empty string', function () {
             var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
@@ -86,6 +96,7 @@ describe('uiCodemirror', function () {
             expect(element.siblings().text().trim()).toBe('');
         });
     });
+
     describe('when the model is an object or an array', function () {
         it('should throw an error', function () {
             function compileWithObject() {
