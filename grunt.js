@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     },
     coffee: {
       build: {
-        src: ['common/src/*.coffee', 'modules/**/src/*.coffee'],
+        src: ['common/*.coffee', 'modules/**/*.coffee'],
         extension: ".coffee.js"
       }
     },
