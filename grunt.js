@@ -4,12 +4,19 @@ var testacular = require('testacular');
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-coffee');
 
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
     meta: {
       banner: '/**\n' + ' * <%= pkg.description %>\n' + ' * @version v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n' + ' * @link <%= pkg.homepage %>\n' + ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
+    },
+    coffee: {
+      build: {
+        src: ['common/src/*.coffee', 'modules/**/src/*.coffee'],
+        extension: ".coffee.js"
+      }
     },
     concat: {
       basic: {
@@ -53,7 +60,7 @@ module.exports = function(grunt) {
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js'],
       tasks: 'coffee concat:basic test'
-    },
+    }
   });
 
   // Default task.
@@ -69,7 +76,7 @@ module.exports = function(grunt) {
     var done = this.async();
     grunt.utils.spawn({
       cmd: 'testacular-run',
-      args: ['test/test-config.js'],
+      args: ['test/test-config.js']
     }, function(error, result, code) {
       if (error) {
         grunt.warn("Make sure the testacular server is online: run `grunt server`.\n"+
@@ -86,7 +93,7 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('coffee', 'compile coffee files', function() {
+ /* grunt.registerTask('coffee', 'compile coffee files', function() {
     var done = this.async();
     grunt.utils.spawn({
       cmd: 'coffee',
@@ -96,5 +103,5 @@ module.exports = function(grunt) {
       else grunt.log.write(result.stdout);
       done();
     });
-  });
+  });*/
 };
