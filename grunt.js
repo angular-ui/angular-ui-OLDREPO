@@ -92,16 +92,4 @@ module.exports = function(grunt) {
       }
     });
   });
-
- /* grunt.registerTask('coffee', 'compile coffee files', function() {
-    var done = this.async();
-    grunt.utils.spawn({
-      cmd: 'coffee',
-      args: ['-cb', 'modules']
-    }, function(error, result, code) {
-      if (error) grunt.warn(error.stderr);
-      else grunt.log.write(result.stdout);
-      done();
-    });
-  });*/
 };
