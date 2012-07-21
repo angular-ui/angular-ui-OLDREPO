@@ -2,16 +2,19 @@
 describe('uiCodemirror', function () {
     'use strict';
 
-    // put some crap in the codemirror options to make sure it's coming through
-    // is there an easier way to do this?
-    angular.module('ui.config').value('ui.config', {codemirror: {bar: 'baz'}});
-
     var scope, $compile;
+    beforeEach(function() {
+        // throw some garbage in the codemirror cfg to be sure it's getting thru to the directive
+        angular.module('ui.config').value('ui.config', {codemirror: {bar: 'baz'}});
+    });
     beforeEach(module('ui'));
     beforeEach(inject(function (_$rootScope_, _$compile_) {
         scope = _$rootScope_.$new();
         $compile = _$compile_;
     }));
+    afterEach(function() {
+        angular.module('ui.config').value('ui.config', {}); // cleanup
+    });
     describe('compiling this directive', function () {
         it('should throw an error if used against a non-textarea', function () {
             function compile() {
