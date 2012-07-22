@@ -1,4 +1,4 @@
-
+/*global angular */
 /**
  * Actually removes html from the DOM instead of hiding it for assistance with 
  * CSS3 selectors such as :first-child, :last-child, etc
@@ -10,6 +10,7 @@
  * @param remove {boolean} condition to check if the element should be removed form the DOM
  */
 angular.module('ui.directives').directive('uiRemove', [function() {
+    'use strict';
 	return {
 		link: function(scope, elm, attrs) {
 			var parent = elm.parent();
@@ -18,13 +19,13 @@ angular.module('ui.directives').directive('uiRemove', [function() {
 			scope.$watch(expression, function(newValue, oldvalue) {
 				var index, children, child;
 				if (newValue) {
-					elm.detach(); 
-				} else if (!$.contains(parent, elm)) {
+					elm.detach();
+				} else if (parent.find(elm).size() === 0) {
 					index = elm.data('ui-remove-index');
-					children = elm.parent().children();
+					children = parent.children();
 					if (children.length > 0) {
 						for (var i = 0; i < children.length; i++) {
-							child = children[i];
+							child = angular.element(children[i]);
 							if (index > child.index() && i === children.length-1) {
 								child.after(elm);
 							} else {
