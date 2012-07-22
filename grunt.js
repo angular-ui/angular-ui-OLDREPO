@@ -55,10 +55,10 @@ module.exports = function(grunt) {
       }
     },
     test: {
-      files: ['modules/**/test/*.js']
+      files: ['modules/**/test/*.js', 'templates/**/test/*.js']
     },
     watch: {
-      files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js'],
+      files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
       tasks: 'coffee concat:basic test'
     }
   });
