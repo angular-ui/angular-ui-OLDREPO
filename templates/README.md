@@ -1,50 +1,46 @@
 # ui-template directives
 
-These directives are boilerplates for creating your own directives. 
+These are boilerplates for creating filters and directives. They use uiConfig so that you can globally assign config options (see uiConfig doc). 
+Currently there are only two templates, one for filter and one for directive along with simple a implementation of each.
 
 ## Usage
 
-Load the script file: template.js in your application:
+Here's how the two sample impls could be used
+<html> 
+    <head>
+        <!-- your angular and other library imports here -->
+        <script>
+        // create global prefix/suffix for elements using wrap filter
+        var myApp = angular.module('myApp',['ui'])
+            .value('ui.config', { 'wrapFilter': { 'prefix' : 'foo-', 'suffix' : '-bar' }});
+         
+        function MyCtrl($scope) {
+            $scope.alpha = "some words here";
+            $scope.num = " 123 ";
+        } 
+        </script>
 
-    <script type="text/javascript" src="modules/directives/template/src/template.js"></script>
+        <style>
+        .ui-alpha {
+            font-size: 150%;
+            color: red;
+        }
+        .ui-numeric {
+            font-size: 180%;
+            color: green;
+        }
+        </style>
 
-Add the template module as a dependency to your application module:
+    </head>
 
-    var myAppModule = angular.module('MyApp', ['ui.directives.template'])
+    <body ng-controller="MyCtrl">
+        <div>
+            <span>{{alpha | wrap}}</span>
+            <span ui-stylize ng-model="alpha"></span>
+            <span ui-stylize ng-model="num"></span>
+        </div>
+    </body>
 
-Apply the directive to your html elements:
-
-    <span ui-template num="SomeNumber"></span>
-
-Default styles are in angular-ui.css and are pretty boring, you could just override these in your
-stylesheet and make things more interesting
-
-### Options
-
-All the options can be passed through the directive or set on the html element. 
-NOTE: attributes override controller options
-
-	myAppModule.controller('MyController', function($scope) {
-	    $scope.SomeNumber = 123;
-		$scope.uiTemplateOptions = {
-
-		};
-	});
-
-    // two-way binding with default for scoped.options uiTemplateOptions
-    <span ui-template ng-model="SomeNumber"></span> 
-    
-    // one way binding with your own name for scoped options
-    <span ui-template options="myOptions" num="SomeNumber"></span>
-    
-
-### Notes
-
-ui-template
-    - one-way binding unless you have in an ng-repeat
-    - does not currently work with ng-model. 
-    - is supported only for attribute style elements
-    
+</html>
 ### Todo
-    - support ng-model
-    
+    - sample wrapping third party lib
