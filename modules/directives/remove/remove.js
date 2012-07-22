@@ -16,7 +16,7 @@ angular.module('ui.directives').directive('uiRemove', [function() {
 			var parent = elm.parent();
 			var expression = attrs.uiRemove;
 			elm.data('ui-remove-index', elm.index());
-			scope.$watch(expression, function(newValue, oldvalue) {
+			scope.$watch(expression, function(newValue) {
 				var index, children, child;
 				if (newValue) {
 					elm.detach();
