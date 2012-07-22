@@ -1,12 +1,10 @@
 # ui-template directives
 
+#### NOTE: This template is going to be replaced in very near future ###
+
 These directives are boilerplates for creating your own directives. 
 
 ## Usage
-
-Load the script file: template.js in your application:
-
-    <script type="text/javascript" src="modules/directives/template/src/template.js"></script>
 
 Add the template module as a dependency to your application module:
 
