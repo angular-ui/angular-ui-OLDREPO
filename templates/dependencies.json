@@ -1,0 +1,9 @@
+{
+    "core": [ "jquery", "jquery-ui", "bootstrap" ],
+    "internal": [ "directives/showHide", "filters/highlight" ],
+    "external": {
+        "select2": [
+            "https://github.com/ivaynberg/select2"
+        ]
+    }
+}
