@@ -9,9 +9,8 @@ describe('uiTemplates', function() {
   // override uiConfig for testing purposes, this definition will clobber anything already predefined ... so be careful
   angular.module('ui.config', [])
     .value('ui.config', {
-      'tmplFilter' : { 'someopt' : 'foo' }, 
-      'wrapFilter' : { 'prefix' : 'cfoo-', 'suffix' : '-cbar' },
-      'stylize' : {}
+      'filterTmpl' : { 'somefilteropt' : 'foo' },
+      'directiveTmpl' : { 'somedirectiveopt' : 'bar' }
     });
 
   beforeEach(module('ui.directives'));
@@ -33,106 +32,36 @@ describe('uiTemplates', function() {
 	  }));
 	  
     // very simple boilerplate setup of test for a custom filter
-    describe('tmplFilter', function() {
+    describe('filterTmpl should', function() {
       var tmpl;
       beforeEach(function() {
-        tmpl = $filter('tmpl');
+        tmpl = $filter('filterTmpl');
       });
 
-      it('prove exists when provided', function() {
+      it('exist when provided', function() {
         expect(tmpl).toBeDefined();
       });
       
-      it('should return exactly what interesting thing (or not) the filter is doing to input', function() {
+      it('return exactly what interesting thing the filter is doing to input', function() {
         expect(tmpl('text')).toEqual('text');
       });
 
     });
-
-    // a test suite for a custom filter that does something
-	  describe('wrapFilter', function() {
-	    var wrap;
-	    beforeEach(function() {
-	    	wrap = $filter('wrap');
-	    });
-	    
-      // this is a good test to always have make sure it has been properly defined, no reason to bother with the rest
-  		it('prove exists when provided', function() {
-  			expect(wrap).toBeDefined();
-  		});
-  		
-  		it('should return empty string for undefined/null/empty/missing values', function() {
-  		  expect(wrap('')).toEqual('');
-  		  expect(wrap(null)).toEqual('');
-  		  expect(wrap(undefined)).toEqual('');
-  		  expect(wrap()).toEqual('');
-  		});
-  		it('should properly wrap non-empty string without providing prefix/suffix', function() {
-  		  expect(wrap('text')).toEqual('cfoo-text-cbar');
-  		});
-      it('should properly prefix non-empty string with prefix', function() {
-        expect(wrap('text','foo-')).toEqual('foo-text');
-      });
-      it('should properly wrap non-empty string with both prefix and suffix', function() {
-        expect(wrap('text','foo-','-bar')).toEqual('foo-text-bar');
-      });
-	  });
   });
 
   describe('directive tests', function() {
     var element;
-    describe('uiTmpl', function() {
-      it('should create an element if using Element-style', function() {
-        var element = $compile('<ui-tmpl ng-model="a"></ui-tmpl>')($rootScope);
+    describe('uiDirectiveTmpl should', function() {
+      it('create an element if using element-style', function() {
+        var element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
         expect(element).toBeDefined();
       });
-      it('should render the models value in element', function() {
-        var element = $compile('<div ui-tmpl ng-model="a"></div>')($rootScope);
+      it('render the models value in element', function() {
+        var element = $compile('<div ui-directive-tmpl ng-model="a"></div>')($rootScope);
         expect(element.text()).toEqual('');
         $rootScope.a = 'foo';
         $rootScope.$digest();
         expect(element.text()).toEqual('foo');
-      });
-    });
-
-    describe('uiStylize', function() {
-      it('should create an element if using Element-style', function() {
-        var element = $compile('<ui-stylize ng-model="a"></ui-stylize>')($rootScope);
-        expect(element).toBeDefined();
-      });
-      
-      it('should render the  alphabetic model value in element and assign ui-alpha class', function() {
-        var element = $compile('<div ui-stylize ng-model="a"></div>')($rootScope);
-        expect(element.text()).toEqual('');
-        $rootScope.a = 'foo';
-        $rootScope.$digest();
-        expect(element.text()).toEqual('foo');
-        expect(element.hasClass('ui-alpha')).toBeTruthy('ui-alpha');
-        expect(element.hasClass('ui-numeric')).toBeFalsy('ui-numeric');
-      });
-      it('should handle integer model value in element and assign ui-numeric class', function() {
-        var element = $compile('<div ui-stylize ng-model="a"></div>')($rootScope);
-        expect(element.text()).toEqual('');
-        $rootScope.a = '123';
-        $rootScope.$digest();
-        expect(element.hasClass('ui-numeric')).toBeTruthy('ui-numeric');
-        expect(element.hasClass('ui-alpha')).toBeFalsy('ui-alpha');
-      });
-      it('should handle float model value in element and assign ui-numeric class', function() {
-        var element = $compile('<div ui-stylize ng-model="a"></div>')($rootScope);
-        expect(element.text()).toEqual('');
-        $rootScope.a = '123.000123';
-        $rootScope.$digest();
-        expect(element.hasClass('ui-numeric')).toBeTruthy('ui-numeric');
-        expect(element.hasClass('ui-alpha')).toBeFalsy('ui-alpha');
-      });
-      it('should handle mixed alpha/numeric model value in element and assign ui-alpha class', function() {
-        var element = $compile('<div ui-stylize ng-model="a"></div>')($rootScope);
-        expect(element.text()).toEqual('');
-        $rootScope.a = '123.000ABC';
-        $rootScope.$digest();
-        expect(element.hasClass('ui-numeric')).toBeFalsy('ui-numeric');
-        expect(element.hasClass('ui-alpha')).toBeTruthy('ui-alpha');
       });
     });
 
