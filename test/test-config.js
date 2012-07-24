@@ -18,7 +18,9 @@ files = [
   'test/lib/codemirror/codemirror.js',
   'test/lib/googlemaps/googlemaps.js',
   'build/angular-ui.js',
-  'modules/*/*/test/*.js'
+  'modules/*/*/test/*.js',
+  'templates/*.js',
+  'templates/*/test/*.js'
 ];
 
 // list of files to exclude
