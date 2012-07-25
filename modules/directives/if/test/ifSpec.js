@@ -31,6 +31,15 @@ describe('ui-if', function() {
     expect(elm.children().length).toBe(0);
   });
 
+  it('should create a new scope', function() {
+    scope.$apply('value = true');
+    elm.append($compile(
+      '<div ui-if="value"><span ng-init="value=false"></span></div>'
+    )(scope));
+    scope.$apply();
+    expect(elm.children('div').length).toBe(1);
+  });
+
   it('should play nice with other elements beside it', function() {
     scope.values = [1,2,3,4];
     elm.append($compile(
