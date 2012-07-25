@@ -34,15 +34,15 @@ describe('ui-if', function() {
   it('should play nice with other elements beside it', function() {
     scope.values = [1,2,3,4];
     elm.append($compile(
+      '<div ng-repeat="i in values"></div>'+
       '<div ui-if="values.length==4"></div>'+
       '<div ng-repeat="i in values"></div>'
     )(scope));
     scope.$apply();
-    expect(elm.children().length).toBe(5);
+    expect(elm.children().length).toBe(9);
     scope.$apply('values.splice(0,1)');
-    //values.length isn't 4 and we removed 1: only 3 elements now
-    expect(elm.children().length).toBe(3);
+    expect(elm.children().length).toBe(6);
     scope.$apply('values.push(1)');
-    expect(elm.children().length).toBe(5);
+    expect(elm.children().length).toBe(9);
   });
 });
