@@ -17,7 +17,7 @@ The repository comes with the modules pre-built and compressed into the `build/`
 angular.module('myApp', ['ui']);
 ```
 
-The modules can be found in the [Directives](http://github.com/angular-ui/angular-ui/modules/directives) and [Filters](http://github.com/angular-ui/angular-ui/modules/filters) folders. Check out the readme file associated with each module for specific module usage information.
+The modules can be found in the [Directives](https://github.com/angular-ui/angular-ui/tree/master/modules/directives) and [Filters](https://github.com/angular-ui/angular-ui/tree/master/modules/filters) folders. Check out the readme file associated with each module for specific module usage information.
 
 ## Development
 
