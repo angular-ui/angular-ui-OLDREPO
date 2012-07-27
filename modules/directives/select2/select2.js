@@ -30,23 +30,29 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 			return function(scope, elm, attrs, controller) {
 				// instance-specific options
 				var opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
-				
+
 				if (isSelect) {
 					// Use <select multiple> instead
 					delete opts.multiple;
 					delete opts.initSelection;
+				} else if (isMultiple) {
+					opts.multiple = true;
 				}
 
 				if (controller) {
 					// Watch the model for programmatic changes
 					controller.$render = function() {
-						var value = scope.$eval(attrs.ngModel);
-						if (isSelect || angular.isString(value)) {
-							elm.select2('val', value);
+						if (isSelect) {
+							elm.select2('val', controller.$modelValue);
 						} else {
-							elm.select2('data', value);
+							if (isMultiple && !controller.$modelValue) {
+								elm.select2('data', []);
+							} else {
+								elm.select2('data', controller.$modelValue);
+							}
 						}
 					};
+
 
 					// Watch the options dataset for changes
 					if (watch) {
