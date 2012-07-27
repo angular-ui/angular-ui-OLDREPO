@@ -7,7 +7,9 @@
  */
 angular.module('ui.filters').filter('highlight', function() {
 	return function(text, search, caseSensitive) {
-		if (search && search !== '') {
+		if (search || angular.isNumber(search)) {
+			text = text.toString();
+			search = search.toString();
 			if (caseSensitive) {
 				return text.split(search).join('<span class="ui-match">'+search+'</span>');
 			} else {
