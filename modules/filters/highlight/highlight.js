@@ -1,14 +1,20 @@
 
 /**
- * Adds a 'fixed' class to the element when the page scrolls past it's position.
- * @param expression {boolean} condition to check if it should be a link or not
+ * Wraps the 
+ * @param text {string} haystack to search through
+ * @param search {string} needle to search for
+ * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
  */
 angular.module('ui.filters').filter('highlight', function() {
-	return function(text, filter) {
-    if (filter === undefined || filter === '') {
-			return text;
+	return function(text, search, caseSensitive) {
+		if (search && search !== '') {
+			if (caseSensitive) {
+				return text.split(search).join('<span class="ui-match">'+search+'</span>');
+			} else {
+				return text.replace(new RegExp(search, 'gi'), '<span class="ui-match">$&</span>');
+			}
 		} else {
-			return text.replace(new RegExp(filter, 'gi'), '<span class="ui-match">$&</span>');
+			return text;
 		}
 	};
 });
