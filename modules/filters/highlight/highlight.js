@@ -5,7 +5,7 @@
  */
 angular.module('ui.filters').filter('highlight', function() {
 	return function(text, filter) {
-		if (filter === undefined) {
+    if (filter === undefined || filter === '') {
 			return text;
 		} else {
 			return text.replace(new RegExp(filter, 'gi'), '<span class="ui-match">$&</span>');
