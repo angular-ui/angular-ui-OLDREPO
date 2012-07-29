@@ -1,5 +1,5 @@
 /*global describe, beforeEach, module, inject, it, spyOn, expect, $ */
-describe('uiRemove', function () {
+describe('uiScrollfix', function () {
     'use strict';
 
     var scope, $compile, $window;
@@ -12,10 +12,10 @@ describe('uiRemove', function () {
 
     describe('compiling this directive', function () {
         it('should bind to window "scroll" event with a ui-scrollfix namespace', function () {
-            spyOn($.fn, 'bind');
+            spyOn($.fn, 'on');
             $compile('<div ui-scrollfix="100"></div>')(scope);
-            expect($.fn.bind).toHaveBeenCalled();
-            expect($.fn.bind.mostRecentCall.args[0]).toBe('scroll.ui-scrollfix');
+            expect($.fn.on).toHaveBeenCalled();
+            expect($.fn.on.mostRecentCall.args[0]).toBe('scroll.ui-scrollfix');
         });
     });
     describe('scrolling the window', function () {
