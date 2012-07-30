@@ -9,29 +9,35 @@
  *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
  */ 
 angular.module('ui.filters').filter('inflector', function () {
-    
+	function ucwords(text) {
+		return text.replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+			return $1.toUpperCase();
+		});
+	}
+	function breakup(text, separator) {
+		return text.replace(/[A-Z]/g, function(match){
+			return separator + match;
+		});
+	}
     var inflectors = {
         humanize: function(value) {
-            return value
-            //replace all _ and spaces and first characters in a word with upper case character
-            .replace(/(?:_| |\b)(\w)/g, function(str, p1) { return p1.toUpperCase();})
-            // insert a space between lower & upper
-            .replace(/([a-z])([A-Z])/g, '$1 $2')
-            // space before last upper in a sequence followed by lower
-            .replace(/\b([A-Z]+)([A-Z])([a-z])/, '$1 $2$3');
+            return ucwords(breakup(value, ' ').split('_').join(' '));
         },
         underscore: function(value) {
-            // TODO
-            return value;
+            return value.substr(0,1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
         },
         variable: function(value) {
-            // TODO
+			value = value.substr(0,1).toLowerCase() + ucwords(value.split('_').join(' ')).substr(1).split(' ').join('');
             return value;
         }
     };
     
-    return function (text, inflector) {
-        inflector = inflector || 'humanize';
-        return inflectors[inflector](text);
+    return function (text, inflector, separator) {
+		if (inflector !== false && angular.isString(text)) {
+	        inflector = inflector || 'humanize';
+			return inflectors[inflector](text);
+		} else {	
+			return text;
+		}
     };
 });
