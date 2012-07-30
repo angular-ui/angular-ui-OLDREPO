@@ -2,6 +2,7 @@
 
 ## master
 * **Prettifier** renamed to **inflector**
+  * Added 2 alternative modes, now contains: humanize, underscore and variable
 * Unit tests
 
 ## v0.1.0
