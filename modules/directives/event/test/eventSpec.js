@@ -63,6 +63,17 @@ describe('uiEvent', function() {
         foo: 'bar'
       });
     });
+
+    it('should allow passing of $params object', function() {
+      $scope = $rootScope.$new();
+      $scope.onStuff = function($event, $params) {
+        expect($event.type).toBe('stuff');
+        expect($params[0]).toBe('foo');
+        expect($params[1]).toBe('bar');
+      };
+      var elm = eventElement($scope, {'stuff': 'onStuff($event, $params)'});
+      $(elm).trigger('stuff', ['foo','bar']);
+    })
   });
 
 });
