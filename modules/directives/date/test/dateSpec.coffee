@@ -29,6 +29,16 @@ describe 'uiDate', ()->
         selectDate(element, aDate)
         expect($rootScope.x).toEqual(aDate)
 
+   it 'should parse the date correctly from a string', ()->
+      inject ($compile, $rootScope)->
+        aDateString = "2012-07-30T17:59:16.395Z"
+        aDate = new Date(aDateString)
+        element = $compile("<input ui-date ng-model='x'></input>")($rootScope)
+        $rootScope.$apply ()->
+          $rootScope.x = aDateString
+        expect(element.datepicker('getDate').toDateString()).toEqual(aDate.toDateString())
+        expect(element.datepicker('getDate').toTimeString()).not.toEqual(aDate.toTimeString())
+
   describe 'use with ng-required directive', ()->
     it 'should be invalid initially', ()->
       inject ($compile, $rootScope)->
