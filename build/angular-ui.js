@@ -201,7 +201,7 @@ angular.module('ui.directives').directive('uiDate', [
           */
 
           controller.$render = function() {
-            return element.datepicker("setDate", new Date(controller.$viewValue));
+            return element.datepicker("setDate", controller.$viewValue);
           };
         }
         /* Create the datepicker widget
