@@ -13,7 +13,7 @@
 	}
     return {
       restrict: 'EAC',
-      require: '?ngModel',
+      require: 'ngModel',
       link: function(scope, element, attrs, controller) {
         var opts, // instance-specific options
           renderview, 
@@ -46,19 +46,13 @@
           }
           return true;
         };
-        value = '';
-        if (controller != null) {
-          controller.$render = function() {
-            value = controller.$viewValue;
-            element.val(value);
-            renderview(value);
-          };
-        } else {
-          if (attrs.num != null) {
-            value = scope[attrs.num];
-          }
+        
+        controller.$render = function() {
+          value = controller.$viewValue;
+          element.val(value);
           renderview(value);
-        }
+        };
+        
       }
     };
   }]);
