@@ -10,7 +10,7 @@
  * @param ui-validate {string} The name of a function to be used as a validator. The function will get a value to be
  * validates as its argument and should return true/false indicating a validation result.
  */
-angular.module('ui.directives').directive('uiValidate', function ($parse) {
+angular.module('ui.directives').directive('uiValidate', function () {
 
   return {
     restrict:'A',
@@ -22,8 +22,8 @@ angular.module('ui.directives').directive('uiValidate', function ($parse) {
         return;
       }
 
-      if (!angular.isFunction(scope[validateExpr])){
-        throw Error('uiValidate expression "'+validateExpr+'" is not a function.');
+      if (!angular.isFunction(scope[validateExpr])) {
+        throw Error('uiValidate expression "' + validateExpr + '" is not a function.');
       }
 
       var validateFn = function (valueToValidate) {
@@ -39,10 +39,8 @@ angular.module('ui.directives').directive('uiValidate', function ($parse) {
         }
       };
 
-      if (ctrl) {
-        ctrl.$formatters.push(validateFn);
-        ctrl.$parsers.push(validateFn);
-      }
+      ctrl.$formatters.push(validateFn);
+      ctrl.$parsers.push(validateFn);
     }
   }
 });
