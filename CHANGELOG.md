@@ -3,6 +3,7 @@
 ## master
 * **Prettifier** renamed to **inflector**
 * Unit tests
+* Passthrough now fixes common ngModel problems due to trigger(change). Can be disabled
 
 ## v0.1.0
 * New folder structure
