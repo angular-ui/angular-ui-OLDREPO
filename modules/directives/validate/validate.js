@@ -2,13 +2,15 @@
  * General-purpose validator for ngModel.
  * angular.js comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using
  * an arbitrary validation function requires creation of a custom formatters and / or parsers.
- * The ui-validate directive makes it easy to use any function defined in scope as a validator function. The validator
- * function will trigger validation on both model and input changes.
+ * The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).
+ * A validator function will trigger validation on both model and input changes.
  *
  * @example <input ui-validate="myValidatorFunction">
+ * @example <input ui-validate="{foo : validateFoo, bar : validateBar}">
  *
- * @param ui-validate {string} The name of a function to be used as a validator. The function will get a value to be
- * validates as its argument and should return true/false indicating a validation result.
+ * @param ui-validate {string|object literal} If strings is passed it should be a scope's function to be used as a validator.
+ * If an object literal is passed a key denotes a validation error key while a value should be a validator function.
+ * In both cases validator function should take a value to validate as its argument and should return true/false indicating a validation result.
  */
 angular.module('ui.directives').directive('uiValidate', function () {
 
@@ -18,9 +20,8 @@ angular.module('ui.directives').directive('uiValidate', function () {
     link:function (scope, elm, attrs, ctrl) {
 
       var validateFn, validateExpr = attrs.uiValidate;
-      
+
       validateExpr = scope.$eval(validateExpr);
-      
       if (!validateExpr) {
         return;
       }
@@ -29,14 +30,12 @@ angular.module('ui.directives').directive('uiValidate', function () {
         validateExpr = { validator: validateExpr };
       }
 
-      angular.forEach(validateExpr, function(validator, key){
+      angular.forEach(validateExpr, function(validatorFn, key){
         validateFn = function (valueToValidate) {
-          if (validateExpr(valueToValidate)) {
-            // it is valid
+          if (validatorFn(valueToValidate)) {
             ctrl.$setValidity(key, true);
             return valueToValidate;
           } else {
-            // it is invalid, return undefined (no model update)
             ctrl.$setValidity(key, false);
             return undefined;
           }
@@ -45,5 +44,5 @@ angular.module('ui.directives').directive('uiValidate', function () {
         ctrl.$parsers.push(validateFn);
       });
     }
-  }
+  };
 });
