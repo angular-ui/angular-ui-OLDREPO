@@ -24,7 +24,7 @@ angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout',
       if (attrs.uiAnimate) {
         opts = $scope.$eval(attrs.uiAnimate);
         if (angular.isString(opts)) {
-          opts.class = opts;
+          opts = {'class':  opts};
         }
       }
       opts = angular.extend({}, options, opts);

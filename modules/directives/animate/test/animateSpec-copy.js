@@ -10,7 +10,7 @@ describe('uiAnimate', function() {
 
   // inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
   // otherwise, you would need to inject these into each test
-  beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_) {
+  beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_, _$injector_) {
 	  $rootScope = _$rootScope_;
     $compile = _$compile_;
     $timeout = _$timeout_;
@@ -26,23 +26,21 @@ describe('uiAnimate', function() {
       $timeout.flush();
       expect(element.hasClass('ui-animate')).toBeFalsy();
     });
-
   });
   
   describe('options', function() {
+
     describe('passed', function() {
-      
       it('should use a string as the class', function() {
-        var element = $compile('<div ui-animate=" \'ui-hide\' "></div>')($rootScope);
+        var element = $compile('<div ui-animate="\'ui-hide\'"></div>')($rootScope);
         expect(element.hasClass('ui-hide')).toBeTruthy();
       });
       it('should use an object\'s class attribute as the class', function() {
         var element = $compile('<div ui-animate=" { \'class\' : \'ui-hide\' } "></div>')($rootScope);
         expect(element.hasClass('ui-hide')).toBeTruthy();
       });
-    
     });
-    xdescribe('global', function() {
+    describe('global', function() {
       
       it('should use a string as the class', function() {
         uiConfig.value('ui.config', {
@@ -52,12 +50,12 @@ describe('uiAnimate', function() {
         expect(element.hasClass('ui-hide-global')).toBeTruthy();
       });
       
-      it('should use an object\'s class attribute as the class', function() {
+      xit('should use an object\'s class attribute as the class', function() {
         uiConfig.value('ui.config', {
           'animate' : { 'class' : 'ui-hide-global' }
         });
         var element = $compile('<div ui-animate></div>')($rootScope);
-        expect(element.hasClass('ui-hide-global')).toBeTruthy();
+        expect(element.attr('class')).toEqual('ui-hide-global');
       });
     
     });
