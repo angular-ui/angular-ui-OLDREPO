@@ -1,7 +1,7 @@
 /*
  * sample unit testing for sample templates and implementations
 */
-describe('uiTemplates', function() {
+describe('uiTemplate', function() {
 
   // declare these up here to be global to all tests
   var $rootScope, $compile;
@@ -23,7 +23,8 @@ describe('uiTemplates', function() {
     $compile = _$compile_;
   }));
   
-  describe('filter tests', function() {
+  // optional grouping of tests
+  describe('filter', function() {
 
 	  // we're doing filter tests so globally define here for this subset of tests
 	  var $filter;
@@ -32,37 +33,34 @@ describe('uiTemplates', function() {
 	  }));
 	  
     // very simple boilerplate setup of test for a custom filter
-    describe('filterTmpl should', function() {
-      var tmpl;
-      beforeEach(function() {
-        tmpl = $filter('filterTmpl');
-      });
-
-      it('exist when provided', function() {
-        expect(tmpl).toBeDefined();
-      });
-      
-      it('return exactly what interesting thing the filter is doing to input', function() {
-        expect(tmpl('text')).toEqual('text');
-      });
-
+    var tmpl;
+    beforeEach(function() {
+      tmpl = $filter('filterTmpl');
     });
+
+    it('should exist when provided', function() {
+      expect(tmpl).toBeDefined();
+    });
+    
+    it('should return exactly what interesting thing the filter is doing to input', function() {
+      expect(tmpl('text')).toEqual('text');
+    });
+
   });
 
-  describe('directive tests', function() {
+  // optional grouping of tests
+  describe('directive', function() {
     var element;
-    describe('uiDirectiveTmpl should', function() {
-      it('create an element if using element-style', function() {
-        var element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
-        expect(element).toBeDefined();
-      });
-      it('render the models value in element', function() {
-        var element = $compile('<div ui-directive-tmpl ng-model="a"></div>')($rootScope);
-        expect(element.text()).toEqual('');
-        $rootScope.a = 'foo';
-        $rootScope.$digest();
-        expect(element.text()).toEqual('foo');
-      });
+    it('should create an element if using element-style', function() {
+      var element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
+      expect(element).toBeDefined();
+    });
+    it('should render the models value in element', function() {
+      var element = $compile('<div ui-directive-tmpl ng-model="a"></div>')($rootScope);
+      expect(element.text()).toEqual('');
+      $rootScope.a = 'foo';
+      $rootScope.$digest();
+      expect(element.text()).toEqual('foo');
     });
 
   });
