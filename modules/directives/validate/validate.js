@@ -17,30 +17,33 @@ angular.module('ui.directives').directive('uiValidate', function () {
     require:'ngModel',
     link:function (scope, elm, attrs, ctrl) {
 
-      var validateExpr = attrs.uiValidate || '';
-      if (validateExpr.length === 0) {
+      var validateFn, validateExpr = attrs.uiValidate;
+      
+      validateExpr = scope.$eval(validateExpr);
+      
+      if (!validateExpr) {
         return;
       }
 
-      if (!angular.isFunction(scope[validateExpr])) {
-        throw Error('uiValidate expression "' + validateExpr + '" is not a function.');
+      if (angular.isFunction(validateExpr)) {
+        validateExpr = { validator: validateExpr };
       }
 
-      var validateFn = function (valueToValidate) {
-
-        if (scope[validateExpr](valueToValidate)) {
-          // it is valid
-          ctrl.$setValidity('validator', true);
-          return valueToValidate;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ctrl.$setValidity('validator', false);
-          return undefined;
-        }
-      };
-
-      ctrl.$formatters.push(validateFn);
-      ctrl.$parsers.push(validateFn);
+      angular.forEach(validateExpr, function(validator, key){
+        validateFn = function (valueToValidate) {
+          if (validateExpr(valueToValidate)) {
+            // it is valid
+            ctrl.$setValidity(key, true);
+            return valueToValidate;
+          } else {
+            // it is invalid, return undefined (no model update)
+            ctrl.$setValidity(key, false);
+            return undefined;
+          }
+        };
+        ctrl.$formatters.push(validateFn);
+        ctrl.$parsers.push(validateFn);
+      });
     }
   }
 });
