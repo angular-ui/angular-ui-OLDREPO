@@ -21,11 +21,11 @@ module.exports = function(grunt) {
     concat: {
       basic: {
         src: ['<banner:meta.banner>', 'common/*.js', 'modules/*/*/*.js'],
-        dest: 'build/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.js'
       },
       ieshiv: {
         src: ['<banner:meta.banner>', 'common/ieshiv/*.js'],
-        dest: 'build/<%= pkg.name %>-ieshiv.js',
+        dest: 'build/<%= pkg.name %>-ieshiv.js'
       }
     },
     min: {
@@ -56,6 +56,9 @@ module.exports = function(grunt) {
     },
     test: {
       files: ['modules/**/test/*.js', 'templates/**/test/*.js']
+    },
+    lint: {
+      files: ['grunt.js', 'common/**/*.js', 'modules/**/*.js']
     },
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
