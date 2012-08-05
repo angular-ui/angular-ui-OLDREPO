@@ -4,21 +4,16 @@
 describe('uiAnimate', function() {
 
   // declare these up here to be global to all tests
-  var $rootScope, $compile;
-
-  // override uiConfig for testing purposes, this definition will clobber anything already predefined ... so be careful
-  angular.module('ui.config', [])
-    .value('ui.config', {
-      'animate' : { 'somedirectiveopt' : 'bar' }
-    });
+  var $rootScope, $compile, $timeout, uiConfig = angular.module('ui.config');
 
   beforeEach(module('ui.directives'));
 
   // inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
   // otherwise, you would need to inject these into each test
-  beforeEach(inject(function(_$rootScope_, _$compile_, _$filter_) {
+  beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_) {
 	  $rootScope = _$rootScope_;
     $compile = _$compile_;
+    $timeout = _$timeout_;
   }));
   
   describe('behavior', function() {
@@ -28,6 +23,7 @@ describe('uiAnimate', function() {
     });
     it('should remove the ui-animate class immediately after injection', function() {
       var element = $compile('<div ui-animate></div>')($rootScope);
+      $timeout.flush();
       expect(element.attr('class')).toEqual('');
     });
 
@@ -49,12 +45,19 @@ describe('uiAnimate', function() {
     describe('global', function() {
       
       it('should use a string as the class', function() {
+        uiConfig.value('ui.config', {
+          'animate' : 'ui-hide-global'
+        });
         var element = $compile('<div ui-animate></div>')($rootScope);
-        expect(element.attr('class')).toEqual('ui-hide');
+        expect(element.attr('class')).toEqual('ui-hide-global');
       });
+      
       it('should use an object\'s class attribute as the class', function() {
+        uiConfig.value('ui.config', {
+          'animate' : { 'class' : 'ui-hide-global' }
+        });
         var element = $compile('<div ui-animate></div>')($rootScope);
-        expect(element.attr('class')).toEqual('ui-hide');
+        expect(element.attr('class')).toEqual('ui-hide-global');
       });
     
     });

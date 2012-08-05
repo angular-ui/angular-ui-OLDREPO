@@ -4,14 +4,13 @@
 describe('uiTemplate', function() {
 
   // declare these up here to be global to all tests
-  var $rootScope, $compile;
+  var $rootScope, $compile, uiConfig = angular.module('ui.config');
 
   // override uiConfig for testing purposes, this definition will clobber anything already predefined ... so be careful
-  angular.module('ui.config', [])
-    .value('ui.config', {
-      'filterTmpl' : { 'somefilteropt' : 'foo' },
-      'directiveTmpl' : { 'somedirectiveopt' : 'bar' }
-    });
+  uiConfig.value('ui.config', {
+    'filterTmpl' : { 'somefilteropt' : 'foo' },
+    'directiveTmpl' : { 'somedirectiveopt' : 'bar' }
+  });
 
   beforeEach(module('ui.directives'));
   beforeEach(module('ui.filters'));

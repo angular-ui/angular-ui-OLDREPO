@@ -14,6 +14,7 @@
 * **Keypress directive** has been refactored / improved
 * New **if-directive** instead of **remove directive** (removed)
 * New **google maps directive**
+* New **animate directive** that transitions the injection of new DOM elements (transitioning the removal of DOM is still not supported yet)
 * Improvements to **scrollfix directive**
 
 ## v0.1.0
