@@ -11,7 +11,7 @@ describe('uiAnimate', function() {
   // inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
   // otherwise, you would need to inject these into each test
   beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_) {
-	  $rootScope = _$rootScope_;
+    $rootScope = _$rootScope_;
     $compile = _$compile_;
     $timeout = _$timeout_;
   }));
@@ -42,24 +42,25 @@ describe('uiAnimate', function() {
       });
     
     });
-    xdescribe('global', function() {
+    describe('global', function() {
+
+      var uiConfig;
+      beforeEach(inject(function($injector){
+        uiConfig = $injector.get('ui.config');
+      }));
       
-      it('should use a string as the class', function() {
-        uiConfig.value('ui.config', {
-          'animate' : 'ui-hide-global'
-        });
+      it('should use a string as the class', function(){
+        uiConfig.animate = 'ui-hide-global';
         var element = $compile('<div ui-animate></div>')($rootScope);
         expect(element.hasClass('ui-hide-global')).toBeTruthy();
       });
-      
+
       it('should use an object\'s class attribute as the class', function() {
-        uiConfig.value('ui.config', {
-          'animate' : { 'class' : 'ui-hide-global' }
-        });
+        uiConfig.animate = { 'class' : 'ui-hide-global' };
         var element = $compile('<div ui-animate></div>')($rootScope);
         expect(element.hasClass('ui-hide-global')).toBeTruthy();
       });
-    
+
     });
   });
 

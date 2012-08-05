@@ -18,16 +18,14 @@ angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout',
   return {
     restrict: 'A', // supports using directive as element, attribute and class
     link: function($scope, element, attrs) {
-      var opts = {
-        'class': 'ui-animate' // the CSS class to add during animation
-      };
+      var opts = {};
       if (attrs.uiAnimate) {
         opts = $scope.$eval(attrs.uiAnimate);
         if (angular.isString(opts)) {
           opts = {'class':  opts};
         }
       }
-      opts = angular.extend({}, options, opts);
+      opts = angular.extend({'class': 'ui-animate'}, options, opts);
       
       element.addClass(opts['class']);
       $timeout(function(){
