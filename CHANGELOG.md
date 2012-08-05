@@ -2,6 +2,7 @@
 
 ## master
 * **Prettifier** renamed to **inflector**
+  * Added 2 alternative modes, now contains: humanize, underscore and variable
 * Unit tests
 * Passthrough now fixes common ngModel problems due to trigger(change). Can be disabled
 
