@@ -11,7 +11,7 @@
 angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout', function(uiConfig, $timeout) {
   var options = {};
   if (angular.isString(uiConfig.animate)) {
-    options.class = uiConfig.animate;
+    options['class'] = uiConfig.animate;
   } else if (uiConfig.animate) {
     options = uiConfig.animate;
   }
@@ -29,9 +29,9 @@ angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout',
       }
       opts = angular.extend({}, options, opts);
       
-      element.addClass(opts.class);
+      element.addClass(opts['class']);
       $timeout(function(){
-        element.removeClass(opts.class);
+        element.removeClass(opts['class']);
       }, false);
     }
   };
