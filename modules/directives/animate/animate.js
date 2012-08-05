@@ -8,7 +8,7 @@
  *    class {string} the CSS class(es) to use. For example, 'ui-hide' might be an excellent alternative class.
  * @example <li ng-repeat="item in items" ui-animate=" 'ui-hide' ">{{item}}</li>
  */
-angular.module('ui.directives').directive('uiAnimate', ['uiConfig', '$timeout', function(uiConfig, $timeout) {
+angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout', function(uiConfig, $timeout) {
   var options = {};
   if (angular.isString(uiConfig.animate)) {
     options.class = uiConfig.animate;

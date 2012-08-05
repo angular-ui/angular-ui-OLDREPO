@@ -1,4 +1,4 @@
-angular.module('ui.directives').directive('uiTemplate', ['uiConfig', function(uiConfig) {
+angular.module('ui.directives').directive('uiTemplate', ['ui.config', function(uiConfig) {
   return {
     restrict: 'EAC', // supports using directive as element, attribute and class
     require: '?ngModel', // supports hanging optional ng-model as attribute for two-way data binding   
