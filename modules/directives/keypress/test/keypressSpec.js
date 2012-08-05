@@ -15,7 +15,7 @@ describe('uiKeypress', function () {
 
   var createElement = function (elementDef) {
     var elementStr = angular.isString(elementDef) ? elementDef : angular.toJson(elementDef);
-    return $compile("<span ui-keypress='" + elementStr + "'>")($scope);
+    return $compile("<span ui-keypress='" + elementStr + "'></span>")($scope);
   };
 
   beforeEach(module('ui.directives'));
