@@ -16,7 +16,7 @@ angular.module('ui.directives').directive('uiScrollfix', ['$window', function ($
                 if (attrs.uiScrollfix.charAt(0) === '-') {
                     attrs.uiScrollfix = top - attrs.uiScrollfix.substr(1);
                 } else if (attrs.uiScrollfix.charAt(0) === '+') {
-                    attrs.uiScrollfix = top + attrs.uiScrollfix.substr(1);
+                    attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.substr(1));
                 }
             }
             angular.element($window).on('scroll.ui-scrollfix', function () {
