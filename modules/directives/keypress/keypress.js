@@ -47,7 +47,12 @@ angular.module('ui.directives').directive('uiKeypress', ['$parse', function($par
           combination.expression = $parse(v[0]);
           combination.keys = v[1];
         }
-        combination.keys = combination.keys.split('-');
+
+        keys = {};
+        angular.forEach(combination.keys.split('-'), function(value) {
+          keys[value] = true;
+        });
+        combination.keys = keys;
         combinations.push(combination);
       });
 
@@ -60,11 +65,12 @@ angular.module('ui.directives').directive('uiKeypress', ['$parse', function($par
 
         // Iterate over prepared combinations
         angular.forEach(combinations, function(combination) {
-          var mainKeyPressed = combination.keys.indexOf( keysByCode[event.keyCode] ) > -1 || combination.keys.indexOf( event.keyCode.toString() ) > -1
 
-          var altRequired   =  combination.keys.indexOf('alt')   > -1;
-          var ctrlRequired  =  combination.keys.indexOf('ctrl')  > -1;
-          var shiftRequired =  combination.keys.indexOf('shift') > -1;
+          var mainKeyPressed = (combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()]) || false;
+
+          var altRequired   =  combination.keys.alt || false;
+          var ctrlRequired  =  combination.keys.ctrl || false;
+          var shiftRequired =  combination.keys.shift || false;
 
           if( mainKeyPressed &&
               ( altRequired   == altPressed   ) &&

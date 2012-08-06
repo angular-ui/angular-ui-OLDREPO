@@ -20,7 +20,7 @@ files = [
   'build/angular-ui.js',
   'modules/*/*/test/*.js',
   'templates/*.js',
-  'templates/*/test/*.js'
+  'templates/test/*.js'
 ];
 
 // list of files to exclude

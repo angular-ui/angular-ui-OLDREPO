@@ -10,7 +10,7 @@
  * @param ui-jq {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
  *   	Multiple parameters can be separated by commas
- *    Set {ngChange:false} to disable passthrough support for change events
+ *    Set {ngChange:false} to disable passthrough support for change events ( since angular watches 'input' events, not 'change' events )
  * 
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter">
  */
@@ -18,7 +18,7 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function(uiConfi
 	return {
 		restrict: 'A',
 		compile: function(tElm, tAttrs) {  
-			if (!tElm[tAttrs.uiJq]) {
+			if (!angular.isFunction(tElm[tAttrs.uiJq])) {
 				throw new Error('ui-jq: The "'+tAttrs.uiJq+'" function does not exist');
 				return;
 			}
