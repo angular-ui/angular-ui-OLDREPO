@@ -62,7 +62,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
-      tasks: 'coffee concat:basic test'
+      tasks: 'coffee test'
     }
   });
 
