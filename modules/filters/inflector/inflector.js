@@ -19,25 +19,25 @@ angular.module('ui.filters').filter('inflector', function () {
 			return separator + match;
 		});
 	}
-    var inflectors = {
-        humanize: function(value) {
-            return ucwords(breakup(value, ' ').split('_').join(' '));
-        },
-        underscore: function(value) {
-            return value.substr(0,1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
-        },
-        variable: function(value) {
+	var inflectors = {
+		humanize: function(value) {
+			return ucwords(breakup(value, ' ').split('_').join(' '));
+		},
+		underscore: function(value) {
+			return value.substr(0,1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
+		},
+		variable: function(value) {
 			value = value.substr(0,1).toLowerCase() + ucwords(value.split('_').join(' ')).substr(1).split(' ').join('');
-            return value;
-        }
-    };
-    
-    return function (text, inflector, separator) {
+			return value;
+		}
+	};
+
+	return function (text, inflector, separator) {
 		if (inflector !== false && angular.isString(text)) {
-	        inflector = inflector || 'humanize';
+			inflector = inflector || 'humanize';
 			return inflectors[inflector](text);
-		} else {	
+		} else {
 			return text;
 		}
-    };
+	};
 });

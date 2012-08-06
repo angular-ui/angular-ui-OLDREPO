@@ -4,23 +4,22 @@
 describe('uiTemplate', function() {
 
   // declare these up here to be global to all tests
-  var $rootScope, $compile, uiConfig = angular.module('ui.config');
-
-  // override uiConfig for testing purposes, this definition will clobber anything already predefined ... so be careful
-  uiConfig.value('ui.config', {
-    'filterTmpl' : { 'somefilteropt' : 'foo' },
-    'directiveTmpl' : { 'somedirectiveopt' : 'bar' }
-  });
+  var $rootScope, $compile;
 
   beforeEach(module('ui.directives'));
   beforeEach(module('ui.filters'));
 
   // inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
   // otherwise, you would need to inject these into each test
-  beforeEach(inject(function(_$rootScope_, _$compile_, _$filter_) {
+  beforeEach(inject(function(_$rootScope_, _$compile_) {
 	  $rootScope = _$rootScope_;
     $compile = _$compile_;
   }));
+  
+  // reset the ui.config after each test
+  afterEach(function(){
+    angular.module('ui.config').value('ui.config', {});
+  });
   
   // optional grouping of tests
   describe('filter', function() {
@@ -54,14 +53,6 @@ describe('uiTemplate', function() {
       var element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
       expect(element).toBeDefined();
     });
-    it('should render the models value in element', function() {
-      var element = $compile('<div ui-directive-tmpl ng-model="a"></div>')($rootScope);
-      expect(element.text()).toEqual('');
-      $rootScope.a = 'foo';
-      $rootScope.$digest();
-      expect(element.text()).toEqual('foo');
-    });
-
   });
 
 });

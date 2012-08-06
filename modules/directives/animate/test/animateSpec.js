@@ -16,6 +16,10 @@ describe('uiAnimate', function() {
     $timeout = _$timeout_;
   }));
   
+  afterEach(function() {
+    uiConfig.value('ui.config', {});
+  });
+  
   describe('behavior', function() {
     it('should add a ui-animate class when the dom is compiled', function() {
       var element = $compile('<div ui-animate></div>')($rootScope);
