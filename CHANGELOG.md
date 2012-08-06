@@ -1,6 +1,8 @@
 # [Cha Cha Cha Changes](http://www.youtube.com/watch?v=pl3vxEudif8&t=0m53s)
 
 ## master
+
+## v0.2.0
 * Unit tests. Unit tests. Unit tests.
 * New **inflector** filter (previously named **prettifier**)
   * Added 2 alternative modes, now contains: humanize, underscore and variable
