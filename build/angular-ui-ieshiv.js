@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.1.0 - 2012-07-20
+ * @version v0.2.0 - 2012-08-06
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
