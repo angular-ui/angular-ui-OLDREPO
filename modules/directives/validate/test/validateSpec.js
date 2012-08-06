@@ -1,12 +1,23 @@
 describe('uiValidate', function ($compile) {
   var scope, compileAndDigest;
 
+  var trueValidator = function () {
+    return true;
+  };
+
+  var falseValidator = function () {
+    return false;
+  };
+
+  var passedValueValidator = function (valueToValidate) {
+    return valueToValidate;
+  };
+
   beforeEach(module('ui'));
   beforeEach(inject(function ($rootScope, $compile) {
     
     scope = $rootScope.$new();
     compileAndDigest = function (inputHtml, scope) {
-
       var inputElm = angular.element(inputHtml);
       var formElm =  angular.element('<form name="form"></form>');
       formElm.append(inputElm);
@@ -21,9 +32,7 @@ describe('uiValidate', function ($compile) {
 
     it('should mark input as valid if initial model is valid', inject(function () {
 
-      scope.validate = function () {
-        return true
-      };
+      scope.validate = trueValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeTruthy();
       expect(scope.form.input.$error).toEqual({validator : false});
@@ -31,9 +40,7 @@ describe('uiValidate', function ($compile) {
 
     it('should mark input as invalid if initial model is invalid', inject(function () {
 
-      scope.validate = function () {
-        return false
-      };
+      scope.validate = falseValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeFalsy();
       expect(scope.form.input.$error).toEqual({ validator : true });
@@ -45,9 +52,7 @@ describe('uiValidate', function ($compile) {
     it('should change valid state in response to model changes', inject(function () {
 
       scope.value = false;
-      scope.validate = function (valueToValidate) {
-        return valueToValidate;
-      };
+      scope.validate = passedValueValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeFalsy();
 
@@ -63,12 +68,10 @@ describe('uiValidate', function ($compile) {
       sniffer = $sniffer;
     }));
 
-    it('should change valid state in response to element events', inject(function () {
+    it('should change valid state in response to element events', function () {
 
       scope.value = false;
-      scope.validate = function (valueToValidate) {
-        return valueToValidate;
-      };
+      scope.validate = passedValueValidator;
       var inputElm = compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeFalsy();
 
@@ -76,7 +79,21 @@ describe('uiValidate', function ($compile) {
       inputElm.trigger((sniffer.hasEvent('input') ? 'input' : 'change'));
 
       expect(scope.form.input.$valid).toBeTruthy();
-    }));
+    });
+  });
+
+  describe('multiple validators with custom keys', function(){
+
+    it('should support multiple validators with custom keys', function(){
+
+      scope.validate1 = trueValidator;
+      scope.validate2 = falseValidator;
+
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="{key1 : validate1, key2 : validate2}">', scope);
+      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.form.input.$error.key1).toBeFalsy();
+      expect(scope.form.input.$error.key2).toBeTruthy();
+    });
   });
 
   describe('error cases', function () {
@@ -85,13 +102,6 @@ describe('uiValidate', function ($compile) {
         compileAndDigest('<input name="input" ui-validate="validate">', scope);
       }).toThrow(new Error('No controller: ngModel'));
     }));
-
-    it('should fail with an exception if validate expression is not a function', inject(function () {
-      expect(function () {
-        compileAndDigest('<input name="input" ng-model="value" ui-validate="value">', scope);
-      }).toThrow(new Error('uiValidate expression "value" is not a function.'));
-    }));
-
     it('should have no effect if validate expression is empty', inject(function () {
       compileAndDigest('<input ng-model="value" ui-validate="">', scope);
     }));
