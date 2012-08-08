@@ -1,4 +1,3 @@
-
 /**
  * Animates the injection of new DOM elements by simply creating the DOM with a class and then immediately removing it
  * Animations must be done using CSS3 transitions, but provide excellent flexibility
@@ -30,7 +29,7 @@ angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout',
       element.addClass(opts['class']);
       $timeout(function(){
         element.removeClass(opts['class']);
-      }, false);
+      }, 20, false);
     }
   };
 }]);
