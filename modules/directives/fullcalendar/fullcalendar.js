@@ -1,5 +1,5 @@
 /*
-*  Implimentation of JQuiery FullCalendar inspired by http://arshaw.com/fullcalendar/
+*  Implimentation of JQuery FullCalendar inspired by http://arshaw.com/fullcalendar/
 *
 *  Calendar Directive that takes in live events as attributes and then calls fullCalendar(attrs) to render the events correctly. 
 *  fullCalendar.js is refrenced in ../../common/fullcalendar.js 
