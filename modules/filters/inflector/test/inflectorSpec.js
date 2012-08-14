@@ -10,9 +10,12 @@ describe('inflector', function() {
 		it('should default to humanize', function() {
 			expect(inflectorFilter(testPhrase)).toEqual('Here Is My Phone Number');
 		});
-		it('should remove extra separator characters', function() {
-			expect(inflectorFilter(' Here  Is my__phoneNumber_')).toEqual('Here Is My Phone Number');
-		});
+    it('should fail gracefully for invalid input', function() {
+      expect(inflectorFilter(undefined)).toBeUndefined();
+    });
+    it('should do nothing for empty input', function() {
+      expect(inflectorFilter('')).toEqual('');
+    });
 	});
 
 	describe('humanize', function() {
@@ -29,5 +32,8 @@ describe('inflector', function() {
 		it('should remove all separators and camelHump the phrase', function() {
 			expect(inflectorFilter(testPhrase, 'variable')).toEqual('hereIsMyPhoneNumber');
 		});
+    it('should do nothing if already formatted properly', function() {
+      expect(inflectorFilter("hereIsMyPhoneNumber", 'variable')).toEqual('hereIsMyPhoneNumber');
+    });
 	});
 });
