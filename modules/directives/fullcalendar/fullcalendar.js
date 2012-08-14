@@ -25,7 +25,7 @@ angular.module('ui.directives').directive('fullCalendar',['ui.config', '$parse',
                 link : function( scope,$element, $attrs ) {
                        
                        var model = $parse($attrs.fullCalendar);
-                       alert(modelEvents)
+                     
                        //render the urls for the events. Adds a link to the event object inserted into the attribute. 
                        //This is where the events can be manipulated if need be. 
                        for(var i = 0;i < scope.events.length;i++){
