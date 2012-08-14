@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.0 - 2012-08-11
+ * @version v0.2.0 - 2012-08-14
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -709,6 +709,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$parse'
     };
 }]);
 
+
 /**
  * Binds a TinyMCE widget to <textarea> elements.
  */
@@ -960,7 +961,7 @@ angular.module('ui.directives').directive('uiShow', [function() {
   }]);
 
 /*
-*  Implimentation of JQuiery FullCalendar inspired by http://arshaw.com/fullcalendar/
+*  Implimentation of JQuery FullCalendar inspired by http://arshaw.com/fullcalendar/
 *
 *  Calendar Directive that takes in live events as attributes and then calls fullCalendar(attrs) to render the events correctly. 
 *  fullCalendar.js is refrenced in ../../common/fullcalendar.js 

@@ -4,6 +4,10 @@
     "external": {
         "select2": [
             "https://github.com/ivaynberg/select2"
+        ],
+        "fullCalendar" : [
+            "http://dl.dropbox.com/u/1510510/temp/demo/fullcalendar.min.js"
         ]
+
     }
 }

@@ -49,22 +49,22 @@ describe('fullCalendar', function () {
             allDay: false}
             ]
 
-
+        //These tests pass, but they are not using the correct event object. I need the object inside the isolated scope the fullcaledar has created. 
         it('should excpect to load 4 events to scope', function () {
-            spyOn(scope, '$watch');
+            
             $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
             expect(events.length).toBe(4);
         });
 
         it('should excpect to load 4 events to scope', function () {
-            spyOn(scope, '$watch');
+            
             $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
             expect(events[0].title).toBe('All Day Event');
         });
 
          //The url is set in the directive. Needs to be tested to make sure its there.   //Fails because the events object that is inserted into the directive is still not being tested on. Could use some help here. 
          it('should expect the url to = http://www.angularjs.org', function () {
-            spyOn(scope, '$watch');
+           
             $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
             expect(events[0].url).toBe('http://www.angularjs.org');
         });
