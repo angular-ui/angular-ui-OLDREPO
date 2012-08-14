@@ -35,7 +35,7 @@
 
         //Set scope variable for the map
         model.assign(scope, map); 
-
+        alert(scope.map)
         bindMapEvents(scope, mapEvents, map, elm);
       }
     };

@@ -2,13 +2,13 @@
 *  Implimentation of JQuery FullCalendar inspired by http://arshaw.com/fullcalendar/
 *
 *  Calendar Directive that takes in live events as attributes and then calls fullCalendar(attrs) to render the events correctly. 
-*  fullCalendar.js is refrenced in ../../common/fullcalendar.js 
+*  fullCalendar.js
 */
 
-angular.module('ui.directives').directive('fullCalendar',['ui.config', function (uiConfig) {
+angular.module('ui.directives').directive('fullCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
     'use strict';
 
-    uiConfig.fullcalendar = uiConfig.fullcalendar || {};
+    uiConfig.fullCalendar = uiConfig.fullCalendar || {};
     //returns the fullcalendar
     return {
                 restrict : "A",
@@ -23,7 +23,9 @@ angular.module('ui.directives').directive('fullCalendar',['ui.config', function 
                 "<div id=\"calendar\" style=\"height:550px;width:100%\"></div>",
                 
                 link : function( scope,$element, $attrs ) {
-
+                       
+                       var model = $parse($attrs.fullCalendar);
+                       alert(modelEvents)
                        //render the urls for the events. Adds a link to the event object inserted into the attribute. 
                        //This is where the events can be manipulated if need be. 
                        for(var i = 0;i < scope.events.length;i++){
@@ -31,8 +33,9 @@ angular.module('ui.directives').directive('fullCalendar',['ui.config', function 
                          scope.events[i].url =  "http://www.angularjs.org";
                          
                         } 
+                      
                         //Call the fullCalendar method with whatever attributes needed. 
-                        scope.calendar = $('#calendar').fullCalendar({
+                        $('#calendar').fullCalendar({
                             theme: true,
                             header: {
                                 left: 'prev,next today',
@@ -49,10 +52,14 @@ angular.module('ui.directives').directive('fullCalendar',['ui.config', function 
                                     $(jsEvent.target).attr('title', event.title);
                                 }
                             },
-
+                            
                             // Calling the events from the scope.  :)
                             events: scope.events,
                         });
+
+                         //Set events to the scope. 
+                         model.assign(scope, scope.events); 
+
                     }
                 }
             }]);

@@ -20,6 +20,12 @@ describe('fullCalendar', function () {
         angular.module('ui.config').value('ui.config', {}); // cleanup
     });
 
+    function createFullCalendar(events) {
+    scope.events = events || {};
+    console.log(angular.toJson(events));
+    $compile("<div full-calendar='calendarEvents' events='events'></div>")(scope);
+  };
+
     describe('compiling this directive and checking for the events', function () {
 
         //Date Objects needed for events
@@ -49,25 +55,30 @@ describe('fullCalendar', function () {
             allDay: false}
             ]
 
-        //These tests pass, but they are not using the correct event object. I need the object inside the isolated scope the fullcaledar has created. 
+        //These tests fail because the scope.calendarEvents object that is supposed to be created is comming up as undefined.  
         it('should excpect to load 4 events to scope', function () {
             
-            $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
-            expect(events.length).toBe(4);
+            createFullCalendar(events);
+            console.log('hello   :   ' + scope.calendarEvents)
+            expect(scope.calendarEvents.length).toBe(4);
         });
 
         it('should excpect to load 4 events to scope', function () {
             
-            $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
-            expect(events[0].title).toBe('All Day Event');
+            createFullCalendar(events);
+            expect(scope.calendarEvents[0].title).toBe('All Day Event');
         });
 
-         //The url is set in the directive. Needs to be tested to make sure its there.   //Fails because the events object that is inserted into the directive is still not being tested on. Could use some help here. 
          it('should expect the url to = http://www.angularjs.org', function () {
            
-            $compile('<div ui-full-calendar events="' + events + '"></div>')(scope);
-            expect(events[0].url).toBe('http://www.angularjs.org');
+            createFullCalendar(events);
+            expect(scope.calendarEvents[0].url).toBe('http://www.angularjs.org');
         });
+
+         it('should bind fullcalendar object to scope', function() {
+           createFullCalendar(events);
+           expect(scope.calendarEvents).toBeTruthy();
+         });
 
        });
 
