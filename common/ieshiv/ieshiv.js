@@ -34,7 +34,7 @@
 
   var shiv = function() {
 	// TODO: unfortunately, angular is not exposing these in 'ng' module
-	var tags = [ 'ngInclude', 'ngPluralize', 'ngView' ]; // angular specific, 
+	var tags = [ 'ngInclude', 'ngPluralize', 'ngView', 'ngSwitch' ]; // angular specific, 
 	
 	// TODO: unfortunately, angular does not expose module names, it is a simple change to angular's loader.js
 	// however, not sure if something happens when referencing them, so maybe an OK thing.
