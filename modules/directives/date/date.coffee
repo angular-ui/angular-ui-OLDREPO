@@ -10,10 +10,11 @@ angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
     angular.extend(options, uiConfig.date)
   require: '?ngModel',
   link: (scope, element, attrs, controller)->
-    scope.$watch attrs.uiDate, (value)->
-#      console.log 'value:', scope.$eval(attrs.uiDate)
+    initDateWidget = ()->
       opts = angular.extend({}, options, scope.$eval(attrs.uiDate))
-
+      console.log 'value:', scope.$eval(attrs.uiDate)
+      console.log 'opts:', opts
+    
       ### If we have a controller (i.e. ngModelController) then wire it up ###
       if controller?
         updateModel = (value, picker)->
@@ -32,11 +33,18 @@ angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
 
         ### Update the date picker when the model changes ###
         controller.$render = ()->
-        date = controller.$viewValue
-        date = new Date(date) unless date instanceof Date
-        element.datepicker("setDate", date)
+          date = controller.$viewValue
+          date = new Date(date) unless date instanceof Date
+          element.datepicker("setDate", date)
 
       ### Create the datepicker widget ###
       element.datepicker(opts)
-    , true
+      console.log 'minDate', element.datepicker( "option", "minDate" )
+    
+    updateDateOptions = (options)->
+      for own name, value of options
+        element.datepicker('option', name, value)
+      
+    scope.$watch(attrs.uiDate, updateDateOptions, true)
+    initDateWidget()
 ]
