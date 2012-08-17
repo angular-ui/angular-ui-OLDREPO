@@ -3,6 +3,14 @@ var testacular = require('testacular');
 /*global module:false*/
 module.exports = function(grunt) {
 
+  var modules = {};
+  grunt.file.recurse('modules', function(abspath, rootdir, subdir, filename) {
+    //If numbers / is 1, we know it's first in depth. eg filters/inflector, not filters/inflector/test
+    if (subdir.split('/').length == 2) {
+      modules[subdir] = grunt.file.expand(rootdir+'/'+subdir+'/*.js');
+    }
+  });
+
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-coffee');
 
@@ -62,7 +70,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
-      tasks: 'coffee test'
+      tasks: 'coffee concat:basic test'
     }
   });
 
@@ -94,5 +102,15 @@ module.exports = function(grunt) {
         done();
       }
     });
+  });
+
+  grunt.registerTask('build', 'Build a custom angular-ui.js', function() {
+    var files = ['common/module.js'];
+
+    this.args.forEach(function(moduleName) {
+      if (modules[moduleName])
+        files = files.concat(modules[moduleName]);
+    });
+    grunt.file.write('build/custom/angular-ui.js', grunt.helper('concat', files));
   });
 };
