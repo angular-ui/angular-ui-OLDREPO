@@ -74,6 +74,36 @@ module.exports = function(grunt) {
     }
   });
 
+  // Default task.
+  grunt.registerTask('default', 'coffee concat min recess:basic recess:min test');
+
+  grunt.registerTask('server', 'start testacular server', function() {
+    //Mark the task as async but never call done, so the server stays up
+    var done = this.async();
+    testacular.server.start('test/test-config.js');
+  });
+
+  grunt.registerTask('test', 'run tests (make sure server task is run first)', function() {
+    var done = this.async();
+    grunt.utils.spawn({
+      cmd: process.platform === 'win32' ? 'testacular-run.cmd' : 'testacular-run',
+      args: ['test/test-config.js']
+    }, function(error, result, code) {
+      if (error) {
+        grunt.warn("Make sure the testacular server is online: run `grunt server`.\n"+
+          "Also make sure you have a browser open to http://localhost:8080/.\n"+
+          error.stdout+error.stderr);
+        //the testacular runner somehow modifies the files if it errors(??).
+        //this causes grunt's watch task to re-fire itself constantly,
+        //unless we wait for a sec
+        setTimeout(done, 1000);
+      } else {
+        grunt.log.write(result.stdout);
+        done();
+      }
+    });
+  });
+
   grunt.registerTask('build', 'Build a custom angular-ui.js', function() {
     var files = ['common/module.js'];
 
@@ -82,24 +112,5 @@ module.exports = function(grunt) {
         files = files.concat(modules[moduleName]);
     });
     grunt.file.write('build/custom/angular-ui.js', grunt.helper('concat', files));
-  });
-
-  // Default task.
-  grunt.registerTask('default', 'coffee concat min recess:basic recess:min test');
-
-  grunt.registerTask('test', 'run tests (make sure localhost:8080 is opened', function() {
-    var done = this.async();
-    grunt.log.write('Loading tests ... (Make sure you have at least one browser open to http://localhost:8080)\n')
-    grunt.utils.spawn({
-      cmd: 'testacular',
-      args: ['test/test-config.js', '--single-run']
-    }, function(error, result, code) {
-      if (code == 1) {
-        grunt.warn(error.stdout);
-      } else {
-        grunt.log.write(result.stdout);
-      }
-      done();
-    });
   });
 };
