@@ -15,11 +15,11 @@ describe('uiValidate', function ($compile) {
 
   beforeEach(module('ui'));
   beforeEach(inject(function ($rootScope, $compile) {
-    
+
     scope = $rootScope.$new();
     compileAndDigest = function (inputHtml, scope) {
       var inputElm = angular.element(inputHtml);
-      var formElm =  angular.element('<form name="form"></form>');
+      var formElm = angular.element('<form name="form"></form>');
       formElm.append(inputElm);
       $compile(formElm)(scope);
       scope.$digest();
@@ -35,7 +35,7 @@ describe('uiValidate', function ($compile) {
       scope.validate = trueValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeTruthy();
-      expect(scope.form.input.$error).toEqual({validator : false});
+      expect(scope.form.input.$error).toEqual({validator: false});
     }));
 
     it('should mark input as invalid if initial model is invalid', inject(function () {
@@ -43,7 +43,7 @@ describe('uiValidate', function ($compile) {
       scope.validate = falseValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="validate">', scope);
       expect(scope.form.input.$valid).toBeFalsy();
-      expect(scope.form.input.$error).toEqual({ validator : true });
+      expect(scope.form.input.$error).toEqual({ validator: true });
     }));
   });
 
@@ -82,9 +82,9 @@ describe('uiValidate', function ($compile) {
     });
   });
 
-  describe('multiple validators with custom keys', function(){
+  describe('multiple validators with custom keys', function () {
 
-    it('should support multiple validators with custom keys', function(){
+    it('should support multiple validators with custom keys', function () {
 
       scope.validate1 = trueValidator;
       scope.validate2 = falseValidator;

@@ -1,8 +1,8 @@
-describe('uiEvent', function() {
+describe('uiEvent', function () {
   var $scope, $rootScope, $compile
 
   beforeEach(module('ui.directives'));
-  beforeEach(inject(function(_$rootScope_, _$compile_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
   }));
@@ -11,10 +11,12 @@ describe('uiEvent', function() {
   function eventElement(scope, eventObject) {
     scope._uiEvent = eventObject || {};
     return $compile('<span ui-event="_uiEvent">')(scope);
-  };
+  }
 
-  describe('test', function() {
-    it('should work with dblclick event and assignment', function() {
+  ;
+
+  describe('test', function () {
+    it('should work with dblclick event and assignment', function () {
       $scope = $rootScope.$new();
       var elm = eventElement($scope, {'dblclick': 'dbl=true'});
       expect($scope.dbl).toBeUndefined();
@@ -22,10 +24,10 @@ describe('uiEvent', function() {
       expect($scope.dbl).toBe(true);
     });
 
-    it('should work with two events in one key a function', function() {
+    it('should work with two events in one key a function', function () {
       $scope = $rootScope.$new();
       $scope.counter = 0;
-      $scope.myfn = function() {
+      $scope.myfn = function () {
         $scope.counter++;
       };
       var elm = eventElement($scope, {'keyup mouseenter': 'myfn()'});
@@ -34,13 +36,13 @@ describe('uiEvent', function() {
       expect($scope.counter).toBe(2);
     });
 
-    it('should work work with multiple entries', function() {
+    it('should work work with multiple entries', function () {
       $scope = $rootScope.$new();
       $scope.amount = 5;
       var elm = eventElement($scope, {
         'click': 'amount=amount*2',
         'mouseenter': 'amount=amount*4',
-        'keyup': 'amount=amount*3', 
+        'keyup': 'amount=amount*3',
       });
       elm.trigger('click');
       expect($scope.amount).toBe(10);
@@ -50,9 +52,9 @@ describe('uiEvent', function() {
       expect($scope.amount).toBe(120);
     });
 
-    it('should allow passing of $event object', function() {
+    it('should allow passing of $event object', function () {
       $scope = $rootScope.$new();
-      $scope.clicky = function(par1, $event, par2) {
+      $scope.clicky = function (par1, $event, par2) {
         expect($event.foo).toBe('bar');
         expect(par1).toBe(1);
         expect(par2).toBe(2);
@@ -64,15 +66,15 @@ describe('uiEvent', function() {
       });
     });
 
-    it('should allow passing of $params object', function() {
+    it('should allow passing of $params object', function () {
       $scope = $rootScope.$new();
-      $scope.onStuff = function($event, $params) {
+      $scope.onStuff = function ($event, $params) {
         expect($event.type).toBe('stuff');
         expect($params[0]).toBe('foo');
         expect($params[1]).toBe('bar');
       };
       var elm = eventElement($scope, {'stuff': 'onStuff($event, $params)'});
-      $(elm).trigger('stuff', ['foo','bar']);
+      $(elm).trigger('stuff', ['foo', 'bar']);
     })
   });
 

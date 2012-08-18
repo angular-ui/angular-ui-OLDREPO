@@ -4,7 +4,7 @@ describe 'uiMask', ()->
   beforeEach module 'ui.directives'
 
   describe 'simple use on input element', ()->
-    
+
     # this test could prove nothing but will be expanded
     it 'should have a mask attached', ()->
       inject ($compile, $rootScope)->
