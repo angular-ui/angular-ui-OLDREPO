@@ -15,9 +15,9 @@
 angular.module('ui.directives').directive('uiValidate', function () {
 
   return {
-    restrict:'A',
-    require:'ngModel',
-    link:function (scope, elm, attrs, ctrl) {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctrl) {
 
       var validateFn, validateExpr = attrs.uiValidate;
 
@@ -30,7 +30,7 @@ angular.module('ui.directives').directive('uiValidate', function () {
         validateExpr = { validator: validateExpr };
       }
 
-      angular.forEach(validateExpr, function(validatorFn, key){
+      angular.forEach(validateExpr, function (validatorFn, key) {
         validateFn = function (valueToValidate) {
           if (validatorFn(valueToValidate)) {
             ctrl.$setValidity(key, true);

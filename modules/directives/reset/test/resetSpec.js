@@ -14,6 +14,7 @@ describe('uiReset', function () {
       function compile() {
         $compile('<input type="text" ui-reset/>')(scope);
       }
+
       expect(compile).toThrow();
     });
     it('should proper DOM structure', function () {
