@@ -31,17 +31,17 @@ describe('uiKeypress', function () {
   describe('keypress with Object syntax', function () {
 
     it('should support single key press', function () {
-      createElement({'13':'event=true'}).trigger(createKeyEvent(13));
+      createElement({'13': 'event=true'}).trigger(createKeyEvent(13));
       expect($scope.event).toBe(true);
     });
 
     it('should support combined key press', function () {
-      createElement({'ctrl-shift-13':'event=true'}).trigger(createKeyEvent(13, false, true, true));
+      createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true));
       expect($scope.event).toBe(true);
     });
 
     it('should support multiple key press definitions', function () {
-      var elm = createElement({'13':'event1=true', 'ctrl-shift-13':'event2=true'});
+      var elm = createElement({'13': 'event1=true', 'ctrl-shift-13': 'event2=true'});
 
       elm.trigger(createKeyEvent(13));
       expect($scope.event1).toBe(true);
@@ -52,7 +52,7 @@ describe('uiKeypress', function () {
 
     it('should support $event in expressions', function () {
 
-      var element = createElement({'esc':'cb($event)', '13':'event2=$event'});
+      var element = createElement({'esc': 'cb($event)', '13': 'event2=$event'});
 
       element.trigger(createKeyEvent(27));
       expect($scope.event1.keyCode).toBe(27);

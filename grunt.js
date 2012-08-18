@@ -1,7 +1,7 @@
 var testacular = require('testacular');
 
 /*global module:false*/
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-coffee');
@@ -69,22 +69,22 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', 'coffee concat min recess:basic recess:min test');
 
-  grunt.registerTask('server', 'start testacular server', function() {
+  grunt.registerTask('server', 'start testacular server', function () {
     //Mark the task as async but never call done, so the server stays up
     var done = this.async();
     testacular.server.start('test/test-config.js');
   });
 
-  grunt.registerTask('test', 'run tests (make sure server task is run first)', function() {
+  grunt.registerTask('test', 'run tests (make sure server task is run first)', function () {
     var done = this.async();
     grunt.utils.spawn({
       cmd: process.platform === 'win32' ? 'testacular-run.cmd' : 'testacular-run',
       args: ['test/test-config.js']
-    }, function(error, result, code) {
+    }, function (error, result, code) {
       if (error) {
-        grunt.warn("Make sure the testacular server is online: run `grunt server`.\n"+
-          "Also make sure you have a browser open to http://localhost:8080/.\n"+
-          error.stdout+error.stderr);
+        grunt.warn("Make sure the testacular server is online: run `grunt server`.\n" +
+          "Also make sure you have a browser open to http://localhost:8080/.\n" +
+          error.stdout + error.stderr);
         //the testacular runner somehow modifies the files if it errors(??).
         //this causes grunt's watch task to re-fire itself constantly,
         //unless we wait for a sec

@@ -18,6 +18,7 @@ files = [
   'test/lib/codemirror/codemirror.js',
   'test/lib/tinymce/jquery.tinymce.js',
   'test/lib/googlemaps/googlemaps.js',
+  'test/lib/bootstrap/bootstrap-modal.js',
   'common/module.js',
   'modules/*/*/*.js',
   'modules/*/*/test/*.js',

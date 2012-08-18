@@ -1,23 +1,22 @@
-
 /**
  * Filters out all duplicate items from an array by checking the specified key
  * @param [key] {string} the name of the attribute of each object to compare for uniqueness
-	if the key is empty, the entire object will be compared
-	if the key === false then no filtering will be performed
+ if the key is empty, the entire object will be compared
+ if the key === false then no filtering will be performed
  * @return {array}
  */
-angular.module('ui.filters').filter('unique', function() {
+angular.module('ui.filters').filter('unique', function () {
 
-	return function(items, filterOn) {
+  return function (items, filterOn) {
 
-    if (filterOn===false){
+    if (filterOn === false) {
       return items;
     }
 
-		if ((filterOn || angular.isUndefined(filterOn))&& angular.isArray(items)) {
-			var hashCheck = {}, newItems = [];
+    if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
+      var hashCheck = {}, newItems = [];
 
-      var extractValueToCompare = function(item) {
+      var extractValueToCompare = function (item) {
         if (angular.isObject(item) && angular.isString(filterOn)) {
           return item[filterOn];
         } else {
@@ -34,13 +33,13 @@ angular.module('ui.filters').filter('unique', function() {
             break;
           }
         }
-        if (!isDuplicate){
+        if (!isDuplicate) {
           newItems.push(item);
         }
 
       });
       items = newItems;
-		}
-		return items;
-	};
+    }
+    return items;
+  };
 });
