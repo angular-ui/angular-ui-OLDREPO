@@ -3,19 +3,19 @@
  * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
  * https://github.com/tigbro/jquery-mobile-angular-adapter
  */
-angular.module('ui.directives').directive('uiIf', [function() {
+angular.module('ui.directives').directive('uiIf', [function () {
   return {
     transclude: 'element',
     priority: 1000,
     terminal: true,
     restrict: 'A',
-    compile: function(element, attr, linker) {
-      return function(scope, iterStartElement, attr) {
+    compile: function (element, attr, linker) {
+      return function (scope, iterStartElement, attr) {
         iterStartElement[0].doNotMove = true;
         var expression = attr.uiIf;
         var lastElement;
-        var lastScope; 
-        scope.$watch(expression, function(newValue) {
+        var lastScope;
+        scope.$watch(expression, function (newValue) {
           if (lastElement) {
             lastElement.remove();
             lastElement = null;
@@ -26,7 +26,7 @@ angular.module('ui.directives').directive('uiIf', [function() {
           }
           if (newValue) {
             lastScope = scope.$new();
-            linker(lastScope, function(clone) {
+            linker(lastScope, function (clone) {
               lastElement = clone;
               iterStartElement.after(clone);
             });

@@ -3,8 +3,8 @@
  */
 angular.module('ui.directives').directive('uiReset', ['$parse', function ($parse) {
   return {
-    require:'ngModel',
-    link:function (scope, elm, attrs, ctrl) {
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctrl) {
       var aElement = angular.element('<a class="ui-reset" />');
       elm.wrap('<span class="ui-resetwrap" />').after(aElement);
 

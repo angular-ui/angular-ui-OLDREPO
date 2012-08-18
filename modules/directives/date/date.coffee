@@ -1,17 +1,18 @@
-
 ###
  jQuery UI Datepicker plugin wrapper
  
  @param [ui-date] {object} Options to pass to $.fn.datepicker() merged onto ui.config
 ###
 angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
-  options = {};
+  options = {}
+  ;
   if uiConfig.date?
     angular.extend(options, uiConfig.date)
 
   require: '?ngModel',
   link: (scope, element, attrs, controller)->
-    opts = angular.extend({}, options, scope.$eval(attrs.uiDate));
+    opts = angular.extend({}, options, scope.$eval(attrs.uiDate))
+    ;
 
     ### If we have a controller (i.e. ngModelController) then wire it up ###
     if controller?

@@ -23,8 +23,8 @@ angular.module('ui.directives').directive 'uiSortable', ['ui.config', (uiConfig)
         end   = ui.item.index()
 
         # Reorder array and apply change to scope
-        ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0]);
-        scope.$apply();
+        ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0])
+        scope.$apply()
 
       # If user provided 'start' callback compose it with onStart function
       _start = opts.start
