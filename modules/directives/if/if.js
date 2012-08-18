@@ -20,7 +20,10 @@ angular.module('ui.directives').directive('uiIf', [function() {
             lastElement.remove();
             lastElement = null;
           }
-          lastScope && lastScope.$destroy();
+          if (lastScope) {
+            lastScope.$destroy();
+            lastScope = null;
+          }
           if (newValue) {
             lastScope = scope.$new();
             linker(lastScope, function(clone) {
