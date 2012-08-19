@@ -38,6 +38,14 @@ describe 'uiDate', ()->
       expect(element.datepicker('getDate').toDateString()).toEqual(aDate.toDateString())
       expect(element.datepicker('getDate').toTimeString()).not.toEqual(aDate.toTimeString())
 
+   it 'should retain timezone information', ()->
+      inject ($compile, $rootScope)->
+        aDateString = '2012-08-17'
+        element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope)
+        $rootScope.$apply ()->
+          $rootScope.x = aDateString
+        expect(element.datepicker('getDate').toISOString().substring(0, 10)).toEqual(aDateString)
+
   describe 'use with ng-required directive', ()->
     it 'should be invalid initially', ()->
       inject ($compile, $rootScope)->
