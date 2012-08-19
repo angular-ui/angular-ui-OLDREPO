@@ -59,15 +59,12 @@ module.exports = function (grunt) {
         }
       }
     },
-    test: {
-      files: ['modules/**/test/*.js', 'templates/**/test/*.js']
-    },
     lint: {
       files: ['grunt.js', 'common/**/*.js', 'modules/**/*.js']
     },
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
-      tasks: 'coffee concat:build test'
+      tasks: 'coffee build test'
     }
   });
 
