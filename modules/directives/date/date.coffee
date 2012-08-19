@@ -33,7 +33,7 @@ angular.module('ui.directives').directive 'uiDate', ['ui.config', (uiConfig)->
       ### Update the date picker when the model changes ###
       controller.$render = ()->
         date = controller.$viewValue
-        date = new Date(date) unless date instanceof Date
+        ### We don't need to convert to a Date here since setDate accepts a string ###
         element.datepicker("setDate", date)
 
     ### Create the datepicker widget ###
