@@ -259,6 +259,48 @@ angular.module('ui.directives').directive('uiShow', [function () {
 }]);
 
 /*
+ Attaches jquery-ui input mask onto input element
+*/
+
+angular.module('ui.directives').directive('uiMask', [
+  function() {
+    return {
+      require: 'ngModel',
+      scope: {
+        uiMask: '='
+      },
+      link: function($scope, element, attrs, controller) {
+        /* We override the render method to run the jQuery mask plugin
+        */
+        controller.$render = function() {
+          var value;
+          value = controller.$viewValue || '';
+          element.val(value);
+          return element.mask($scope.uiMask);
+        };
+        /* Add a parser that extracts the masked value into the model but only if the mask is valid
+        */
+
+        controller.$parsers.push(function(value) {
+          var isValid;
+          isValid = element.data('mask-isvalid');
+          controller.$setValidity('mask', isValid);
+          return element.mask();
+        });
+        /* When keyup, update the viewvalue
+        */
+
+        return element.bind('keyup', function() {
+          return $scope.$apply(function() {
+            return controller.$setViewValue(element.mask());
+          });
+        });
+      }
+    };
+  }
+]);
+
+/*
  * Defines the ui-if tag. This removes/adds an element from the dom depending on a condition
  * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
  * https://github.com/tigbro/jquery-mobile-angular-adapter
@@ -528,6 +570,71 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
     'click dblclick');
 
 })();
+/*
+ jQuery UI Datepicker plugin wrapper
+ 
+ @param [ui-date] {object} Options to pass to $.fn.datepicker() merged onto ui.config
+*/
+
+angular.module('ui.directives').directive('uiDate', [
+  'ui.config', function(uiConfig) {
+    var options;
+    options = {};
+    if (uiConfig.date != null) {
+      angular.extend(options, uiConfig.date);
+    }
+    return {
+      require: '?ngModel',
+      link: function(scope, element, attrs, controller) {
+        var opts, updateModel, usersOnSelectHandler;
+        opts = angular.extend({}, options, scope.$eval(attrs.uiDate));
+        /* If we have a controller (i.e. ngModelController) then wire it up
+        */
+
+        if (controller != null) {
+          updateModel = function(value, picker) {
+            return scope.$apply(function() {
+              return controller.$setViewValue(element.datepicker("getDate"));
+            });
+          };
+          if (opts.onSelect != null) {
+            /* Caller has specified onSelect to call this as well as updating the model
+            */
+
+            usersOnSelectHandler = opts.onSelect;
+            opts.onSelect = function(value, picker) {
+              updateModel(value);
+              return usersOnSelectHandler(value, picker);
+            };
+          } else {
+            /* No onSelect already specified so just update the model
+            */
+
+            opts.onSelect = updateModel;
+          }
+          /* Update the date picker when the model changes
+          */
+
+          controller.$render = function() {
+            var date;
+            date = controller.$viewValue;
+            if (date !== null) {
+              if (!(date instanceof Date)) {
+                date = new Date(date);
+              }
+            }
+            return element.datepicker("setDate", date);
+          };
+        }
+        /* Create the datepicker widget
+        */
+
+        return element.datepicker(opts);
+      }
+    };
+  }
+]);
+
 /*global angular, $*/
 /**
  * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
@@ -717,6 +824,58 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$parse'
     }
   };
 }]);
+/*
+ jQuery UI Sortable plugin wrapper
+
+ @param [ui-sortable] {object} Options to pass to $.fn.sortable() merged onto ui.config
+*/
+
+angular.module('ui.directives').directive('uiSortable', [
+  'ui.config', function(uiConfig) {
+    var options;
+    options = {};
+    if (uiConfig.sortable != null) {
+      angular.extend(options, uiConfig.sortable);
+    }
+    return {
+      require: '?ngModel',
+      link: function(scope, element, attrs, ngModel) {
+        var onStart, onUpdate, opts, _start, _update;
+        opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+        if (ngModel != null) {
+          onStart = function(e, ui) {
+            return ui.item.data('ui-sortable-start', ui.item.index());
+          };
+          onUpdate = function(e, ui) {
+            var end, start;
+            start = ui.item.data('ui-sortable-start');
+            end = ui.item.index();
+            ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0]);
+            return scope.$apply();
+          };
+          _start = opts.start;
+          opts.start = function(e, ui) {
+            onStart(e, ui);
+            if (typeof _start === "function") {
+              _start(e, ui);
+            }
+            return scope.$apply();
+          };
+          _update = opts.update;
+          opts.update = function(e, ui) {
+            onUpdate(e, ui);
+            if (typeof _update === "function") {
+              _update(e, ui);
+            }
+            return scope.$apply();
+          };
+        }
+        return element.sortable(opts);
+      }
+    };
+  }
+]);
+
 /**
  * Bind one or more handlers to particular keys or their combination
  * @param hash {mixed} keyBindings Can be an object or string where keybinding expression of keys or keys combinations and AngularJS Exspressions are set. Object syntax: "{ keys1: expression1 [, keys2: expression2 [ , ... ]]}". String syntax: ""expression1 on keys1 [ and expression2 on keys2 [ and ... ]]"". Expression is an AngularJS Expression, and key(s) are dash-separated combinations of keys and modifiers (one or many, if any. Order does not matter). Supported modifiers are 'ctrl', 'shift', 'alt' and key can be used either via its keyCode (13 for Return) or name. Named keys are 'backspace', 'tab', 'enter', 'esc', 'space', 'pageup', 'pagedown', 'end', 'home', 'left', 'up', 'right', 'down', 'insert', 'delete'.
