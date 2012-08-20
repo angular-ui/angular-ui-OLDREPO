@@ -97,8 +97,6 @@
     }]);
   }
 
-  ;
-
   mapOverlayDirective('uiMapMarker',
     'animation_changed click clickable_changed cursor_changed ' +
       'dblclick drag dragend draggable_changed dragstart flat_changed icon_changed ' +

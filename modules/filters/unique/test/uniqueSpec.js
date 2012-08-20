@@ -78,4 +78,4 @@ describe('unique', function () {
     expect(uniqueFilter(arrayToFilter, false)).toEqual(arrayToFilter);
   });
 
-})
+});

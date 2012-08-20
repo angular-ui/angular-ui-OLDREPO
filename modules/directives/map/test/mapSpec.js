@@ -1,5 +1,5 @@
 describe('uiMap', function () {
-  var scope, $rootScope, $compile
+  var scope, $rootScope, $compile;
 
   beforeEach(module('ui.directives'));
   beforeEach(inject(function (_$compile_, _$rootScope_) {
@@ -39,7 +39,7 @@ describe('uiMap', function () {
       var center = new google.maps.LatLng(40, 40);
       createMap({center: center});
       expect(scope.gmap.getCenter()).toBe(center);
-    })
+    });
 
     it('should pass events to the element as "map-eventname"', function () {
       scope.zoomy = false;
@@ -98,6 +98,6 @@ describe('uiMap', function () {
       google.maps.event.trigger(scope.ginfo, 'closeclick');
       expect(scope.closed).toBe(true);
     });
-  })
+  });
 
 });
