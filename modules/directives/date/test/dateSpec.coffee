@@ -114,3 +114,14 @@ describe 'uiDate', ()->
         element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope)
         selectDate(element, aDate)
         expect(element.hasClass('ng-valid')).toBeTruthy()
+
+  describe 'when attribute options change', ()->
+    it 'should watch attribute and update date widget accordingly', ()->
+      inject ($compile, $rootScope)->
+        $rootScope.config = minDate: 5
+        element = $compile("<input ui-date='config' />")($rootScope)
+        $rootScope.$apply()
+        expect(element.datepicker( "option", "minDate" )).toBe(5);
+        $rootScope.$apply ()->
+          $rootScope.config.minDate = 10
+        expect(element.datepicker( "option", "minDate" )).toBe(10);
