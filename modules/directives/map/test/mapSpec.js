@@ -10,7 +10,6 @@ describe('uiMap', function () {
   function createMap(options, events) {
     scope.gmapOptions = options || {};
     scope.gmapEvents = events || {};
-    console.log(angular.toJson(events));
     $compile("<div ui-map='gmap' ui-options='gmapOptions'" +
       "' ui-event='gmapEvents'></div>")(scope);
   }
