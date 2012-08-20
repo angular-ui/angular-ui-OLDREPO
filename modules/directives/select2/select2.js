@@ -81,7 +81,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
                   controller.$setViewValue(value);
                   callback(value);
                 });
-              }
+              };
             }
           }
         }
@@ -97,7 +97,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
         setTimeout(function () {
           elm.select2(opts);
         });
-      }
+      };
     }
   };
 }]);

@@ -19,7 +19,7 @@ angular.module('ui.directives').directive('uiEvent', ['$parse',
           //Take out first paramater (event object);
           params = params.splice(1);
           scope.$apply(function () {
-            fn(scope, {$event: evt, $params: params})
+            fn(scope, {$event: evt, $params: params});
           });
         });
       });
