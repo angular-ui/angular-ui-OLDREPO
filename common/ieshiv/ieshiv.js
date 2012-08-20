@@ -7,10 +7,10 @@
     // Returns the version of Internet Explorer or a -1
     // (indicating the use of another browser).
     var rv = -1; // Return value assumes failure.
-    if (navigator.appName == 'Microsoft Internet Explorer') {
+    if (navigator.appName === 'Microsoft Internet Explorer') {
       var ua = navigator.userAgent;
-      var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-      if (re.exec(ua) != null) {
+      var re = new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");
+      if (re.exec(ua) !== null) {
         rv = parseFloat(RegExp.$1);
       }
     }
@@ -45,17 +45,19 @@
     moduleNames.push('ui.directives');
 
     if (debug) console.log('moduleNames', moduleNames);
+    function pushDirectives(item) {
+      // only allow directives
+      if (item[1] === "directive") {
+        var dirname = item[2][0];
+        tags.push(dirname);
+      } else {
+        if (debug) console.log("skipping", item[1], item[2][0]);
+      }
+    }
+
     for (var k = 0, mlen = moduleNames.length; k < mlen; k++) {
       var modules = angular.module(moduleNames[k]); // will throw runtime exception
-      angular.forEach(modules._invokeQueue, function (item) {
-        // only allow directives
-        if (item[1] === "directive") {
-          var dirname = item[2][0];
-          tags.push(dirname);
-        } else {
-          if (debug) console.log("skipping", item[1], item[2][0]);
-        }
-      });
+      angular.forEach(modules._invokeQueue, pushDirectives);
     }
 
     if (debug) console.log("tags found", tags);

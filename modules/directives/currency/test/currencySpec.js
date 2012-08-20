@@ -1,7 +1,5 @@
 describe('uiCurrency', function () {
   var scope;
-  scope = null,
-    uiConfig = {};
   beforeEach(module('ui'));
   beforeEach(inject(function ($rootScope) {
     scope = $rootScope.$new();

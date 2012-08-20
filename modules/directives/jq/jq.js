@@ -19,9 +19,8 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
     compile: function (tElm, tAttrs) {
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
-        return;
       }
-      var options = uiConfig['jq'] && uiConfig['jq'][tAttrs.uiJq];
+      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
       return function (scope, elm, attrs) {
         var linkOptions = [], ngChange = 'change';
 
@@ -37,9 +36,11 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
           if (linkOptions && angular.isObject(linkOptions[0]) && linkOptions[0].ngChange !== undefined) {
             ngChange = linkOptions[0].ngChange;
           }
-          ngChange && elm.on(ngChange, function () {
-            elm.trigger('input');
-          });
+          if (ngChange) {
+            elm.on(ngChange, function () {
+              elm.trigger('input');
+            });
+          }
         }
         elm[attrs.uiJq].apply(elm, linkOptions);
       };

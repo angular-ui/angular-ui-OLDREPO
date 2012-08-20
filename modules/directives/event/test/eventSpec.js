@@ -1,5 +1,5 @@
 describe('uiEvent', function () {
-  var $scope, $rootScope, $compile
+  var $scope, $rootScope, $compile;
 
   beforeEach(module('ui.directives'));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
@@ -12,8 +12,6 @@ describe('uiEvent', function () {
     scope._uiEvent = eventObject || {};
     return $compile('<span ui-event="_uiEvent">')(scope);
   }
-
-  ;
 
   describe('test', function () {
     it('should work with dblclick event and assignment', function () {
@@ -42,7 +40,7 @@ describe('uiEvent', function () {
       var elm = eventElement($scope, {
         'click': 'amount=amount*2',
         'mouseenter': 'amount=amount*4',
-        'keyup': 'amount=amount*3',
+        'keyup': 'amount=amount*3'
       });
       elm.trigger('click');
       expect($scope.amount).toBe(10);
@@ -75,7 +73,7 @@ describe('uiEvent', function () {
       };
       var elm = eventElement($scope, {'stuff': 'onStuff($event, $params)'});
       $(elm).trigger('stuff', ['foo', 'bar']);
-    })
+    });
   });
 
 });
