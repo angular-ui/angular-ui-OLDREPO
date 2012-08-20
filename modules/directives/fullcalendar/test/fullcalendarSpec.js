@@ -28,7 +28,7 @@ describe('fullCalendar', function () {
 
     describe('compiling this directive and checking for the events', function () {
 
-        //Date Objects needed for events
+        //Date Objects needed for event
     	 var date = new Date();
          var d = date.getDate();
          var m = date.getMonth();

@@ -34,8 +34,7 @@
         var model = $parse(attrs.uiMap);
 
         //Set scope variable for the map
-        model.assign(scope, map); 
-        alert(scope.map)
+        model.assign(scope, map);
         bindMapEvents(scope, mapEvents, map, elm);
       }
     };
