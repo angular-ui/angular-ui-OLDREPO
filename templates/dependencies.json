@@ -4,9 +4,6 @@
     "external": {
         "select2": [
             "https://github.com/ivaynberg/select2"
-        ],
-        "fullCalendar" : [
-            "https://github.com/arshaw/fullcalendar"
         ]
     }
 }
