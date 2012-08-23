@@ -8,17 +8,16 @@
 */
 
 angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
-    'use strict';
 
     uiConfig.uiCalendar = uiConfig.uiCalendar || {};              
-    //returns the fullcalendar
+    //returns the calendar
     return {
       require: 'ngModel',
       restrict : "A",
       replace : true,
       transclude : true,
       scope: {
-        events: "=ngModel",
+        events: "=ngModel"
       },
        
 
@@ -47,6 +46,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
       } else {
         expression = {};
       }
+
       angular.extend(options, uiConfig.uiCalendar, expression);
       //use the options object to create the personalized calendar
       elm.fullCalendar(options);

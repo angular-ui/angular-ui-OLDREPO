@@ -82,21 +82,18 @@ describe('uiCalendar', function () {
         });
         //Tests the height of the calendar.
         it('should expect the calendar attribute height to be 200', function () {
-          
+
             spyOn($.fn, 'fullCalendar');
             createCalendar0(events);
-            runs(function () {
-              expect($.fn.fullCalendar.mostRecentCall.args[0].height).toEqual(200);
-         });
+            expect($.fn.fullCalendar.mostRecentCall.args[0].height).toEqual(200);
+        
         });
         //Tests the weekends boolean of the calendar.
         it('should expect the calendar attribute weekends to be false', function () {
 
             spyOn($.fn, 'fullCalendar');
             createCalendar0(events);
-            runs(function () {
-              expect($.fn.fullCalendar.mostRecentCall.args[0].weekends).toEqual(false);
-         });
+            expect($.fn.fullCalendar.mostRecentCall.args[0].weekends).toEqual(false);
         });
 
        });
