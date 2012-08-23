@@ -1,8 +1,10 @@
 /*
-*  Implementation of JQuery FullCalendar inspired by http://arshaw.com/fullcalendar/
+*  Implementation of JQuery FullCalendar 
+*  inspired by http://arshaw.com/fullcalendar/ 
 *  
 *  Basic Calendar Directive that takes in live events as the ng-model and then calls fullCalendar(options) to render the events correctly. 
-*  fullCalendar.js
+*  
+*  @joshkurz
 */
 
 angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
@@ -16,7 +18,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
       replace : true,
       transclude : true,
       scope: {
-        events: "=ngModel"
+        events: "=ngModel",
       },
        
 
@@ -46,18 +48,8 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
         expression = {};
       }
       angular.extend(options, uiConfig.uiCalendar, expression);
-
-      var model = $parse($attrs.uiCalendar);
-      //render the urls for the events. Adds a link to the event object inserted into the attribute. 
-      //This is where the events can be manipulated if need be. 
-      for(var i = 0;i < scope.events.length;i++){
-        scope.events[i].url =  "http://www.angularjs.org";
-      } 
-      
+      //use the options object to create the personalized calendar
       elm.fullCalendar(options);
-
-      //Set events to the scope. 
-      model.assign(scope, scope.events); 
     
     }
   };

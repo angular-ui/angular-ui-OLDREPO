@@ -19,10 +19,11 @@ describe('uiCalendar', function () {
     afterEach(function() {
       angular.module('ui.config').value('ui.config', {}); // cleanup
     });
-
-    function createCalendar(events) {
+    
+    //Creates a calendar with with two expressions height and weekends
+    function createCalendar0(events) {
       scope.events = events || {};
-      $compile("<div ui-calendar='calendar' ng-model='events'></div>")(scope);
+      $compile("<div ui-calendar='{height: 200, weekends: false}' ng-model='events'></div>")(scope);
     }
 
     describe('compiling this directive and checking for the events', function () {
@@ -37,7 +38,8 @@ describe('uiCalendar', function () {
       var events = [
         {
           title: 'All Day Event',
-          start: new Date(y, m, 1)},
+          start: new Date(y, m, 1),
+          url: 'http://www.angularjs.org'},
         {
           title: 'Long Event',
           start: new Date(y, m, d - 5),
@@ -57,26 +59,45 @@ describe('uiCalendar', function () {
         //These tests pass because the scope.events object is created by the controller and passed into the directive, where the events are manipulated to fit the certain standards of the calendar.  
         it('should excpect to load 4 events to scope', function () {
             
-            createCalendar(events);
+            createCalendar0(events);
             expect(scope.events.length).toBe(4);
         });
-
+        //test to check the title of the first event. 
         it('should excpect to load 4 events to scope', function () {
             
-            createCalendar(events);
+            createCalendar0(events);
             expect(scope.events[0].title).toBe('All Day Event');
         });
-
-         it('should expect the url to = http://www.angularjs.org', function () {
+        //test to make sure the event has a url assigned to it.
+        it('should expect the url to = http://www.angularjs.org', function () {
            
-            createCalendar(events);
+            createCalendar0(events);
             expect(scope.events[0].url).toBe('http://www.angularjs.org');
         });
-
-         it('should bind fullcalendar object to scope', function() {
-           createCalendar(events);
-           expect(scope.events).toBeTruthy();
+        //test the 3rd events' allDay field.
+        it('should expect the url to = http://www.angularjs.org', function () {
+           
+            createCalendar0(events);
+            expect(scope.events[3].allDay).toBe(false);
+        });
+        //Tests the height of the calendar.
+        it('should expect the calendar attribute height to be 200', function () {
+          
+            spyOn($.fn, 'fullCalendar');
+            createCalendar0(events);
+            runs(function () {
+              expect($.fn.fullCalendar.mostRecentCall.args[0].height).toEqual(200);
          });
+        });
+        //Tests the weekends boolean of the calendar.
+        it('should expect the calendar attribute weekends to be false', function () {
+
+            spyOn($.fn, 'fullCalendar');
+            createCalendar0(events);
+            runs(function () {
+              expect($.fn.fullCalendar.mostRecentCall.args[0].weekends).toEqual(false);
+         });
+        });
 
        });
 
