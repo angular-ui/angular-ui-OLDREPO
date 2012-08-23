@@ -1,6 +1,7 @@
 # [Cha Cha Cha Changes](http://www.youtube.com/watch?v=pl3vxEudif8&t=0m53s)
 
 ## master
+* Rewrote ui-keypress (API is not backwards-compatible)
 
 ## v0.2.0
 * Unit tests. Unit tests. Unit tests.
