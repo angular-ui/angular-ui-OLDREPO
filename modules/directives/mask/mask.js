@@ -13,19 +13,22 @@ angular.module('ui.directives').directive('uiMask', [
           var value = controller.$viewValue || '';
           element.val(value);
           element.mask($scope.$eval(attrs.uiMask));
+          element.mask();
         };
 
         /* Add a parser that extracts the masked value into the model but only if the mask is valid
          */
         controller.$parsers.push(function (value) {
-          var isValid = element.isMaskValid();
+          //the second check (or) is only needed due to the fact that element.isMaskValid() will keep returning undefined
+          //until there was at least one key event
+          var isValid = element.isMaskValid() || angular.isUndefined(element.isMaskValid()) && element.val().length>0;
           controller.$setValidity('mask', isValid);
           return isValid ? value : undefined;
         });
 
-        /* When keyup, update the viewvalue
+        /* When keyup, update the view value
          */
-        element.bind('keyup', function () {
+        element.bind('keyup', function (event) {
           $scope.$apply(function () {
             controller.$setViewValue(element.mask());
           });
