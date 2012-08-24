@@ -13,7 +13,6 @@ angular.module('ui.directives').directive('uiMask', [
           var value = controller.$viewValue || '';
           element.val(value);
           element.mask($scope.$eval(attrs.uiMask));
-          element.mask();
         };
 
         /* Add a parser that extracts the masked value into the model but only if the mask is valid
@@ -28,7 +27,7 @@ angular.module('ui.directives').directive('uiMask', [
 
         /* When keyup, update the view value
          */
-        element.bind('keyup', function (event) {
+        element.bind('keyup', function () {
           $scope.$apply(function () {
             controller.$setViewValue(element.mask());
           });
