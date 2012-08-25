@@ -1,5 +1,6 @@
-
+/*global describe, beforeEach, it, inject, expect, module*/
 describe('uiDate', function() {
+  'use strict';
   var selectDate;
   selectDate = function(element, date) {
     element.datepicker('setDate', date);
