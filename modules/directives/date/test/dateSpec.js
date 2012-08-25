@@ -48,6 +48,16 @@ describe('uiDate', function() {
       return expect(element.datepicker('getDate').toISOString().substring(0, 10)).toEqual(aDateString);
     });
   });
+  it('should not freak out when the model is null', function() {
+    return inject(function($compile, $rootScope) {
+      var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+      $rootScope.$apply(function() {
+        return $rootScope.x = null;
+      });
+      return expect(element.datepicker('getDate')).toBe(null);
+    });
+  });
+
   describe('use with ng-required directive', function() {
     it('should be invalid initially', function() {
       return inject(function($compile, $rootScope) {
