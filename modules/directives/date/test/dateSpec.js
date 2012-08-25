@@ -113,9 +113,7 @@ describe('uiDate', function() {
   describe('use with ng-required directive', function() {
     it('should be invalid initially', function() {
       return inject(function($compile, $rootScope) {
-        var aDate, element;
-        aDate = new Date(2010, 12, 1);
-        element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope);
+        var element = $compile("<div ui-date ng-model='x' ng-required='true' ></div>")($rootScope);
         $rootScope.$apply();
         return expect(element.hasClass('ng-invalid')).toBeTruthy();
       });
