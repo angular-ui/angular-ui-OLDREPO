@@ -33,7 +33,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
           // add event name to title attribute on mouseover. 
           eventMouseover: function(event, jsEvent, view) {
             if (view.name !== 'agendaDay') {
-              (jsEvent.target).attr('title', event.title);
+              $(jsEvent.target).attr('title', event.title);
             }
           },
         
