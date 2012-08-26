@@ -1,4 +1,4 @@
-function keypress(mode, scope, elm, attrs){
+function keypress(mode, scope, elm, attrs, $parse){
   var params, paramsParsed, expression, keys, combinations = [], keysByCode = {
     8: 'backspace',
     9: 'tab',
@@ -22,14 +22,14 @@ function keypress(mode, scope, elm, attrs){
   angular.forEach(params, function (v, k) {
     var combination = {};
     combination.expression = $parse(v);
-    combination.keys = k;
 
-    keys = {};
-    angular.forEach(combination.keys.split(' '), function (value) {
-      keys[value] = true;
+    angular.forEach(k.split(' '), function(variation) {
+      combination.keys = {};
+      angular.forEach(variation.split('-'), function (value) {
+        combination.keys[value] = true;
+      });
+      combinations.push(combination);
     });
-    combination.keys = keys;
-    combinations.push(combination);
   });
 
   // Check only mathcing of pressed keys one of the conditions
@@ -77,7 +77,7 @@ function keypress(mode, scope, elm, attrs){
 angular.module('ui.directives').directive('uiKeydown', ['$parse', function ($parse) {
   return {
     link: function (scope, elm, attrs) {
-      keypress('keydown', scope, elm, attrs);
+      keypress('keydown', scope, elm, attrs, $parse);
     }
   };
 }]);
@@ -85,7 +85,7 @@ angular.module('ui.directives').directive('uiKeydown', ['$parse', function ($par
 angular.module('ui.directives').directive('uiKeypress', ['$parse', function ($parse) {
   return {
     link: function (scope, elm, attrs) {
-      keypress('keydown', scope, elm, attrs);
+      keypress('keydown', scope, elm, attrs, $parse);
     }
   };
 }]);
@@ -93,7 +93,7 @@ angular.module('ui.directives').directive('uiKeypress', ['$parse', function ($pa
 angular.module('ui.directives').directive('uiKeyup', ['$parse', function ($parse) {
   return {
     link: function (scope, elm, attrs) {
-      keypress('keydown', scope, elm, attrs);
+      keypress('keydown', scope, elm, attrs, $parse);
     }
   };
 }]);
