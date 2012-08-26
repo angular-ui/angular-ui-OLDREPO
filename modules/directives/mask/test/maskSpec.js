@@ -1,6 +1,6 @@
 describe('uiMask', function () {
 
-  var inputHtml = "<input ui-mask=\"'(9)9'\" placeholder='(_)_' ng-model='x'>";
+  var inputHtml = "<input ui-mask=\"'(9)9'\" ng-model='x'>";
   var $compile, $rootScope, element;
 
   beforeEach(module('ui.directives'));
