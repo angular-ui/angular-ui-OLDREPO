@@ -16,10 +16,14 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
     45: 'insert',
     46: 'delete'
   };
-  
+
+  var capitaliseFirstLetter = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return function(mode, scope, elm, attrs) {
     var params, combinations = [];
-    params = scope.$eval(attrs.uiKeypress);
+    params = scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
 
     // Prepare combinations for simple checking
     angular.forEach(params, function (v, k) {
@@ -34,7 +38,8 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
         combinations.push(combination);
       });
     });
-    // Check only mathcing of pressed keys one of the conditions
+
+    // Check only matching of pressed keys one of the conditions
     elm.bind(mode, function (event) {
       // No need to do that inside the cycle
       var altPressed = event.metaKey || event.altKey;
@@ -88,7 +93,7 @@ angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', functi
 angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
-      keypressHelper('keydown', scope, elm, attrs);
+      keypressHelper('keypress', scope, elm, attrs);
     }
   };
 }]);
@@ -96,7 +101,7 @@ angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', funct
 angular.module('ui.directives').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
-      keypressHelper('keydown', scope, elm, attrs);
+      keypressHelper('keyup', scope, elm, attrs);
     }
   };
 }]);

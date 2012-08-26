@@ -3,7 +3,7 @@ describe('uiKeyup', function () {
   var $scope, $compile;
 
   var createKeyEvent = function (mainKey, alt, ctrl, shif) {
-    var keyEvent = jQuery.Event("keydown");
+    var keyEvent = jQuery.Event("keyup");
 
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt || false;
