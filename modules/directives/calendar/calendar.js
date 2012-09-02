@@ -36,13 +36,10 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             eventMouseover: function(event, jsEvent, view) {
             if (view.name !== 'agendaDay') {
               $(jsEvent.target).attr('title', event.title);
-<<<<<<< HEAD
              }
             },
-=======
             }
           },
->>>>>>> 41b260c1ef4461c32c957fd5e2a60e1a304c69e0
         
             // Calling the events from the scope through the ng-model binding attribute. 
             events: ngModel(scope)
