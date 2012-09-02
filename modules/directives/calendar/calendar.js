@@ -38,8 +38,6 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               $(jsEvent.target).attr('title', event.title);
              }
             },
-            }
-          },
         
             // Calling the events from the scope through the ng-model binding attribute. 
             events: ngModel(scope)
