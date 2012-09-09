@@ -11,10 +11,10 @@ module.exports = function (grunt) {
     builddir: 'build',
     pkg: '<json:package.json>',
     meta: {
-      banner: '/**\n' + ' * <%= pkg.description %>\n' + 
-      ' * @version v<%= pkg.version %> - ' + 
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' + 
-      ' * @link <%= pkg.homepage %>\n' + 
+      banner: '/**\n' + ' * <%= pkg.description %>\n' +
+      ' * @version v<%= pkg.version %> - ' +
+      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      ' * @link <%= pkg.homepage %>\n' +
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
     },
     coffee: {
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     },
     concat: {
       build: {
-        src: ['<banner:meta.banner>', 'common/*.js'],
+        src: ['<banner:meta.banner>'], 
         dest: '<%= builddir %>/<%= pkg.name %>.js'
       },
       ieshiv: {
@@ -68,57 +68,33 @@ module.exports = function (grunt) {
     }
   });
 
-  //Get all the available modules into an array
-  var modules = {};
-  grunt.file.recurse('modules', function(abspath, rootdir, subdir, filename) {
-    var moduleDir;
-    //If number of / is 1, we know it's first in depth. eg filters/inflector, not filters/inflector/test
-    if (subdir.split('/').length === 2) {
-      moduleDir = rootdir + '/' + subdir;
-      modules[subdir] = {
-        js: grunt.file.expand(moduleDir + '/*.js'),
-        less: grunt.file.expand(moduleDir + '/*.less')
-      };
-    }
-  });
-
   // Default task.
   grunt.registerTask('default', 'coffee build test');
 
-  grunt.registerTask('build', 'build all or some of the angular-ui modules', function() {
+  grunt.registerTask('build', 'build all or some of the angular-ui modules', function () {
 
     var jsBuildFiles = grunt.config('concat.build.src');
     var lessBuildFiles = grunt.config('recess.build.src');
 
-    function addModuleFiles(module) {
-      module.js.forEach(function(file) {
-        jsBuildFiles.push(file);
-      });
-      module.less.forEach(function(file) {
-        lessBuildFiles.push(file);
-      });
-    }
+    if (this.args.length > 0) {
 
-    if (this.args.length === 0) {
-      //if no modules given as args, go to default: build all
-      for (var moduleName in modules) {
-        if (modules.hasOwnProperty(moduleName)) {
-          addModuleFiles(modules[moduleName]);
-        }
-      }
-    } else {
-      //if args are found, build given modules & build to custom folder
-      grunt.config('builddir', 'build/custom');
       this.args.forEach(function(moduleName) {
-        if (modules[moduleName]) {
-          addModuleFiles(modules[moduleName]);
-        }
-      });
-    }
+        var modulejs = grunt.file.expandFiles('modules/*/' + moduleName + '/*.js');
+        var moduleless = grunt.file.expandFiles('modules/*/' + moduleName + '/stylesheets/*.less', 'modules/*/' + moduleName + '/*.less');
 
-    //Set config with our new file lists
-    grunt.config('concat.build.src', jsBuildFiles);
-    grunt.config('recess.build.src', lessBuildFiles);
+        jsBuildFiles = jsBuildFiles.concat(modulejs);
+        lessBuildFiles = lessBuildFiles.concat(moduleless);
+      });
+
+      //Set config with our new file lists
+      grunt.config('builddir', 'build/custom');
+      grunt.config('concat.build.src', jsBuildFiles);
+      grunt.config('recess.build.src', lessBuildFiles);
+
+    } else {
+      grunt.config('concat.build.src', jsBuildFiles.concat(['common/*.js', 'modules/*/*/*.js'])); 
+      grunt.config('recess.build.src', lessBuildFiles.concat(['common/**/*.less']));
+    }
 
     grunt.task.run('concat min recess:build recess:min');
   });
