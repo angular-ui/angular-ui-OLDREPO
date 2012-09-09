@@ -20,8 +20,10 @@ files = [
   'test/lib/googlemaps/googlemaps.js',
   'test/lib/bootstrap/bootstrap-modal.js',
   'common/module.js',
-  'modules/*/*/*.js',
-  'modules/*/*/test/*.js',
+  'modules/directives/*/*.js',
+  'modules/directives/*/test/*.js',
+  'modules/filters/*/*.js',
+  'modules/filters/*/test/*.js',
   'templates/*.js',
   'templates/test/*.js'
 ];
