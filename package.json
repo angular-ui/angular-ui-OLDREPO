@@ -18,6 +18,6 @@
     "grunt-recess": "~0.1.0",
     "grunt-coffee": "~0.0.3",
     "async": "0.1.x",
-    "testacular": "0.2.x"
+    "testacular": "0.0.x"
   }
 }
