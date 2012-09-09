@@ -102,14 +102,14 @@ module.exports = function (grunt) {
   grunt.registerTask('server', 'start testacular server', function () {
     //Mark the task as async but never call done, so the server stays up
     var done = this.async();
-    testacular.server.start('test/test-config.js');
+    testacular.server.start({ configFile: 'test/test-config.js'});
   });
 
   grunt.registerTask('test', 'run tests (make sure server task is run first)', function () {
     var done = this.async();
     grunt.utils.spawn({
-      cmd: process.platform === 'win32' ? 'testacular-run.cmd' : 'testacular-run',
-      args: ['test/test-config.js']
+      cmd: process.platform === 'win32' ? 'testacular.cmd' : 'testacular',
+      args: ['run']
     }, function (error, result, code) {
       if (error) {
         grunt.warn("Make sure the testacular server is online: run `grunt server`.\n" +
