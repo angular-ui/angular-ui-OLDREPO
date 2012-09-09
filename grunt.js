@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     },
     concat: {
       build: {
-        src: ['<banner:meta.banner>', 'common/*.js', 'modules/*/*/*.js'],
+        src: ['<banner:meta.banner>'], 
         dest: '<%= builddir %>/<%= pkg.name %>.js'
       },
       ieshiv: {
@@ -73,12 +73,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', 'build all or some of the angular-ui modules', function () {
 
-    //if no modules given as args, go to default: build all
-    //else build custom modules into a custom folder
-    if (this.args.length > 0) {
+    var jsBuildFiles = grunt.config('concat.build.src');
+    var lessBuildFiles = grunt.config('recess.build.src');
 
-      var jsBuildFiles = [];
-      var lessBuildFiles = [];
+    if (this.args.length > 0) {
 
       this.args.forEach(function(moduleName) {
         var modulejs = grunt.file.expandFiles('modules/*/' + moduleName + '/*.js');
@@ -92,6 +90,10 @@ module.exports = function (grunt) {
       grunt.config('builddir', 'build/custom');
       grunt.config('concat.build.src', jsBuildFiles);
       grunt.config('recess.build.src', lessBuildFiles);
+
+    } else {
+      grunt.config('concat.build.src', jsBuildFiles.concat(['common/*.js', 'modules/*/*/*.js'])); 
+      grunt.config('recess.build.src', lessBuildFiles.concat(['common/**/*.less']));
     }
 
     grunt.task.run('concat min recess:build recess:min');
