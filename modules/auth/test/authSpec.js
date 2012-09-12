@@ -26,6 +26,7 @@ describe('uiAuth', function () {
   });
 
   it('should emit unauthenticated if 401 returned', function () {
+    $httpBackend.when('POST', '/error').respond(401, '');
     expect(false).toBeTruthy();
   });
 
