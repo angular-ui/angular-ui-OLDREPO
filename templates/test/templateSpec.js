@@ -50,7 +50,7 @@ describe('uiTemplate', function () {
   describe('directive', function () {
     var element;
     it('should create an element if using element-style', function () {
-      var element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
+      element = $compile('<ui-directive-tmpl ng-model="a"></ui-directive-tmpl>')($rootScope);
       expect(element).toBeDefined();
     });
   });
