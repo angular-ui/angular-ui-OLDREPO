@@ -34,8 +34,6 @@
  *
  * @return array
  *
- * @example TODO
- *
  */
 
 var CompareObject = {
@@ -102,8 +100,7 @@ var CheckCondition = function(data, conditions) {
     var valid = true;
     angular.forEach(conditions, function(value, key) {
         if(key == 'or') {
-            var internal = CheckCondition(data, value);
-            valid = valid || internal;
+            valid = valid || CheckCondition(data, value);
         } else if(key == 'and') {
             valid = valid && CheckCondition(data, value);
         } else {
@@ -112,7 +109,7 @@ var CheckCondition = function(data, conditions) {
             var fn = tmp[1];
             if(fn in CompareObject) {
                 var cmp_fn = CompareObject[fn];
-                valid = valid & cmp_fn(data[field], value);
+                valid = valid && cmp_fn(data[field], value);
             }
         }
     });
