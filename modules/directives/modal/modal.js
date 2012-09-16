@@ -9,12 +9,13 @@ angular.module('ui.directives')
       scope.$watch(attrs.ngModel, function(value) {
         elm.modal(value && 'show' || 'hide');
       });
-      elm.on('show.ui', function() {
+      //If bootstrap animations are enabled, listen to 'shown' and 'hidden' events
+      elm.on(jQuery.support.transition && 'shown' || 'show', function() {
         $timeout(function() {
           model.$setViewValue(true);
         });
       });
-      elm.on('hide.ui', function() {
+      elm.on(jQuery.support.transition && 'hidden' || 'hide', function() {
         $timeout(function() {
           model.$setViewValue(false);
         });

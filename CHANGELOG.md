@@ -1,6 +1,10 @@
 # [Cha Cha Cha Changes](http://www.youtube.com/watch?v=pl3vxEudif8&t=0m53s)
 
 ## master
+* New **format** filter
+* Lots of cleanup! Consistent indentation, linting
+* Custom builds via grunt (soon to be leveraged via builder)
+* uiDate now watches options
 
 ## v0.2.0
 * Unit tests. Unit tests. Unit tests.
