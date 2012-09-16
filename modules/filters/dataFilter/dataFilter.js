@@ -42,7 +42,13 @@ var CompareObject = {
     "gt": function(a, b){ return a > b; },
     "lte": function(a, b){ return a <= b; },
     "gte": function(a, b){ return a >= b; },
-    "in": function(a, b){ return (a in b); },
+    "in": function(a, b){
+            if(b.indexOf(a) != -1) {
+                return true;
+            } else {
+                return false;
+            }
+    },
     'startswith': function(a, b) {
             return CompareObject._with(a, b, 'start');
         },

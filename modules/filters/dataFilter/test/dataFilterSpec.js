@@ -12,8 +12,9 @@ describe('format', function() {
     {id:8, f1:'jump', f2:'jump-123'},
     {id:9, f1:'green', f2:'1-2-3'},
     {id:10, f1:'one', f2:'1-echo-1'},
+    {id:11, f1:'one', f2:'1-echo-1'},
     {id:12, f1:'oNeplus', f2:'1-echo-1'},
-    {id:13, f1:'Oneplus', f2:'1-echo-1'},
+    {id:13, f1:'Oneplus', f2:'1-echo-1'}
   ]
 
   beforeEach(module('ui.filters'));
@@ -57,16 +58,14 @@ describe('format', function() {
   // endswith
   it('Should return only objects with "f1" ends with "st"', function() {
       expect(dataFilterFilter(sampleData, {f1__endswith:"st"})).toEqual(
-          [sampleData[1], sampleData[2], sampleData[3], sampleData[4],
-              sampleData[6]
-          ]
+          [sampleData[0], sampleData[1], sampleData[2], sampleData[3], sampleData[4], sampleData[6]]
       )
   });
   // or test
   it('Should return only object with id < 5 or equal to 9', function() {
     expect(dataFilterFilter(sampleData, {id__lt:5, or:{id__eq:9}})).toEqual(
         [sampleData[0], sampleData[1], sampleData[2], sampleData[3], 
-        sampleData[8]])
+            sampleData[4], sampleData[8]])
   });
 
   // startswith test
@@ -80,7 +79,7 @@ describe('format', function() {
   it('Should return only objects with f1 starts with "One"',
       function(){
         expect(dataFilterFilter(sampleData, {f1__istartswith:"One"})).toEqual(
-          [sampleData[9], sampleData[12]]
+          [sampleData[9], sampleData[10], sampleData[11], sampleData[12]]
         )
       }
   )
