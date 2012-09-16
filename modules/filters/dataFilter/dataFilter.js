@@ -21,8 +21,6 @@
  *                      checking case of characters,
  *      'iendswith' - if value ends with specific characters, without checking
  *                      case of characters,
- *      'exact' if value is *exact* with value in model,
- *      'iexact' the same but ignore letter case,
  *      'contains' check if value contains specific string,
  *      'icontains' the same as above but without checking letter-case,
  *      'range' - check if value is between(inclusive) given range,
@@ -61,8 +59,6 @@ var CompareObject = {
     'iendswith': function(a, b){
             return CompareObject._with(a, b, 'end', 'i');
         },
-    'exact': function(a, b) { return a === b; },
-    'iexact': function(a, b) { return a.toLowerCase() == b.toLowerCase(); },
     'contains': function(a, b) {
             return (a.indexOf(b) !== -1);
         },
