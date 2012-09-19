@@ -118,7 +118,7 @@ var CheckCondition = function(data, conditions) {
     return valid;
 }
 
-angular.module('ui.filters').filter('dataFilter', function(){
+angular.module('ui.filters').filter('extract', function(){
   return function(array, options) {
     if (!array) {
       return array;
