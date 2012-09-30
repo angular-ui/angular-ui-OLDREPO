@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-09-19
+ * @version v0.2.2 - 2012-09-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -211,7 +211,7 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
         if (controller) {
           var updateModel = function () {
             scope.$apply(function () {
-              controller.$setViewValue(element.datepicker("getDate"));
+              controller.$setViewValue($(element).datepicker("getDate"));
             });
           };
           if (opts.onSelect) {
@@ -231,17 +231,17 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
           // Update the date picker when the model changes
           controller.$render = function () {
             var date = controller.$viewValue;
-            element.datepicker("setDate", date);
+            $(element).datepicker("setDate", date);
             // Update the model if we received a string
             if (angular.isString(date)) {
-              controller.$setViewValue(element.datepicker("getDate"));
+              controller.$setViewValue($(element).datepicker("getDate"));
             }
           };
         }
         // If we don't destroy the old one it doesn't update properly when the config changes
-        element.datepicker('destroy');
+        $(element).datepicker('destroy');
         // Create the new datepicker widget
-        element.datepicker(opts);
+        $(element).datepicker(opts);
         // Force a render to override whatever is in the input text box
         controller.$render();
       };
