@@ -20,9 +20,9 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 
       // Enable watching of the options dataset if in use
       if (tElm.is('select')) {
-        repeatOption = tElm.find('option[ng-repeat]');
+        repeatOption = tElm.find('option[ng-repeat], option[data-ng-repeat]');
         if (repeatOption.length) {
-          watch = repeatOption.attr('ng-repeat').split(' ').pop();
+          watch = (repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat')).split(' ').pop();
         }
       }
 
