@@ -46,9 +46,12 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
           controller.$render = function () {
             var date = controller.$viewValue;
             element.datepicker("setDate", date);
-            // Update the model if we received a string
             if (angular.isString(date)) {
+              element.datepicker("setDate", new Date(date));
+              // Update the model if we received a string
               controller.$setViewValue(element.datepicker("getDate"));
+            } else {
+              element.datepicker("setDate", date);
             }
           };
         }

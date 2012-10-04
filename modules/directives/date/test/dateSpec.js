@@ -109,6 +109,18 @@ describe('uiDate', function() {
         expect(element.datepicker('getDate')).toEqual(aDate);
       });
     });
+    it('should be able to use an ISOdate', function() {
+      inject(function($compile, $rootScope) {
+          var aDate, element, dateStr;
+          dateStr = "1922-03-08T00:00:00.000Z";
+          aDate = new Date(dateStr);
+          element = $compile("<div ui-date ng-model='x'></div>")($rootScope);
+          $rootScope.$apply(function() {
+              $rootScope.x = dateStr;
+          });
+          expect(element.datepicker('getDate')).toEqual(aDate);
+      });
+    });
     it('should put the date in the model', function() {
       inject(function($compile, $rootScope) {
         var aDate, element;
