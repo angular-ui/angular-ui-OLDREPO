@@ -37,17 +37,6 @@ describe('uiDate', function() {
       });
     });
   });
-  it('should parse the date correctly from a string', function() {
-    inject(function($compile, $rootScope) {
-      var aDateString, element;
-      aDateString = '2012-08-17';
-      element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
-      $rootScope.$apply(function() {
-        $rootScope.x = aDateString;
-      });
-      expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual(aDateString);
-    });
-  });
   it('should not freak out when the model is null', function() {
     inject(function($compile, $rootScope) {
       var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
@@ -164,6 +153,34 @@ describe('uiDate', function() {
           $rootScope.config.minDate = 10;
         });
         expect(element.datepicker("option", "minDate")).toBe(10);
+      });
+    });
+  });
+
+  describe('use with the ui-date-format directive', function() {
+    it('should parse the date correctly from an ISO string', function() {
+      inject(function($compile, $rootScope) {
+        var aDateString, element;
+        aDateString = (new Date(2012,8,17)).toISOString();
+        element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = aDateString;
+        });
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-09-17');
+      });
+    });
+    it('should parse the date correctly from a custom string', function() {
+      inject(function($compile, $rootScope) {
+        var format = 'DD, d MM, yy';
+        var aDateString = "Thursday, 11 October, 2012";
+        var element = $compile('<input ui-date ui-date-format="'+ format + '" ng-model="x"/>')($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = aDateString;
+        });
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
+        expect(element.datepicker('getDate')).toEqual(new Date(2012, 9, 11));
       });
     });
   });
