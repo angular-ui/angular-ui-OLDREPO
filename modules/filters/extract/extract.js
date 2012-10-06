@@ -1,19 +1,17 @@
 
 /**
- * Data filter for array of objects which is able to apply some logic data
- * filter.
+ * extract - subset array of objects based on conditions 
  *
- * @param array Array or Object which would be filtered against options
+ * @param array Array or Objects which would be filtered against options
  * @param options Object with definition of query
  *   {fieldName__condition: value}
- *   where 'fieldName' is name of field in array which would be taken into
- *   account and 'condition' is one of logical tags:
+ *   where 'fieldName' is the name of field in array which would be taken into
+ *   account and 'condition' is one of tags:
  *      'lt' - <
  *      'lte' - <=
  *      'gt' - >
  *      'gte' - >=
  *      'eq' - ==
- *  and special tags like:
  *      'in'       - checks if value of field is in the given in 'value' list
  *      'startswith' - if value stats with specific characters,
  *      'endswith' - if value ends with specific characters,
