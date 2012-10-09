@@ -40,7 +40,13 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
             opts.onSelect = updateModel;
           }
           // In case the user changes the text directly in the input box
-          element.bind('change', updateModel);
+          element.bind('change', function() {
+              var date = element.datepicker("getDate");
+              element.datepicker("setDate", element.val());
+              if (!angular.equals(date, element.datepicker("getDate"))) {
+                  updateModel();
+              }
+          });
 
           // Update the date picker when the model changes
           controller.$render = function () {
