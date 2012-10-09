@@ -28,6 +28,7 @@ angular.module('ui.directives')
           var updateModel = function () {
             scope.$apply(function () {
               var date = element.datepicker("getDate");
+              element.datepicker("setDate", element.val());
               controller.$setViewValue(date);
             });
           };

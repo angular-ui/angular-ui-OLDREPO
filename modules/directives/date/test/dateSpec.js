@@ -47,6 +47,26 @@ describe('uiDate', function() {
     });
   });
 
+  it('should update the input field correctly on a manual update', function() {
+      inject(function($compile, $rootScope) {
+          var dateString = '2012-08-17';
+          var dateObj = $.datepicker.parseDate('yy-mm-dd', dateString);
+          var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+              $rootScope.x = dateObj;
+          });
+          // Now change the data in the input box
+          dateString = '2012-8-01';
+          dateObj = $.datepicker.parseDate('yy-mm-dd', dateString);
+          element.val(dateString);
+          element.trigger("change");
+          expect(element.datepicker('getDate')).toEqual(dateObj);
+          expect(element.val()).toEqual('2012-08-01');
+          $rootScope.$digest();
+          expect($rootScope.x).toEqual(dateObj);
+      });
+  });
+
   describe('use with ng-required directive', function() {
     it('should be invalid initially', function() {
       inject(function($compile, $rootScope) {
