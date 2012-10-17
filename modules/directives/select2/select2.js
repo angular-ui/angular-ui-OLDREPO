@@ -87,7 +87,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
         }
 
         attrs.$observe('disabled', function (value) {
-          elm.select2(value && 'disable' || 'enable');
+          setDisabled(elm, value);
         });
 
         // Set initial value since Angular doesn't
@@ -96,8 +96,13 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
         // Initialize the plugin late so that the injected DOM does not disrupt the template compiler
         setTimeout(function () {
           elm.select2(opts);
+		  setDisabled(elm, attrs.disabled);
         });
       };
     }
   };
+  function setDisabled(elm, value) {
+    value = (value === 'false') ? false : value;
+    elm.select2(value && 'disable' || 'enable');
+  }
 }]);
