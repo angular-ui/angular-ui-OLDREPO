@@ -96,7 +96,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
         // Initialize the plugin late so that the injected DOM does not disrupt the template compiler
         setTimeout(function () {
           elm.select2(opts);
-		  setDisabled(elm, attrs.disabled);
+          setDisabled(elm, attrs.disabled);
         });
       };
     }
