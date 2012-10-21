@@ -19,6 +19,13 @@ Apply the directive to an element:
         <div ng-include="/more/likely/tabs/are/includes.htm"></div>
     </div>
 
+The tab definitions could of course also come from a controller:
+
+    <div ui-tabs="getTabDefinitions()">
+        <div>This is the content of the second tab</div>
+        <div ng-include="/more/likely/tabs/are/includes.htm"></div>
+    </div>
+
 ## Options/META data
 
 The ui-tabs directive reauires you to provide initialization information for each tab. The number of tabs define must match
