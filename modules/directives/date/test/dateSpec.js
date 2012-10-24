@@ -46,6 +46,24 @@ describe('uiDate', function() {
       expect(element.datepicker('getDate')).toBe(null);
     });
   });
+  it('should not freak out when the model is undefined', function() {
+    inject(function($compile, $rootScope) {
+      var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+      $rootScope.$apply(function() {
+        $rootScope.x = undefined;
+      });
+      expect(element.datepicker('getDate')).toBe(undefined);
+    });
+  });
+  it('should not freak out when the model is false', function() {
+    inject(function($compile, $rootScope) {
+      var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+      $rootScope.$apply(function() {
+        $rootScope.x = false;
+      });
+      expect(element.datepicker('getDate')).toBe(false);
+    });
+  });
 
   it('should update the input field correctly on a manual update', function() {
       inject(function($compile, $rootScope) {
@@ -201,6 +219,41 @@ describe('uiDate', function() {
         expect($rootScope.x).toEqual(aDateString);
         expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
         expect(element.datepicker('getDate')).toEqual(new Date(2012, 9, 11));
+      });
+    });
+    it('should not freak out when the model is false', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = false;
+          });
+          expect($rootScope.x).toBe(false);
+          expect(element.val()).toEqual('');
+      });
+    });
+    
+    it('should not freak out when the model is undefined', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = undefined;
+          });
+          expect($rootScope.x).toBe(undefined);
+          expect(element.val()).toEqual('');
+      });
+    });
+    
+    it('should not freak out when the model is null', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = null;
+          });
+          expect($rootScope.x).toBe(null);
+          expect(element.val()).toEqual('');
       });
     });
   });
