@@ -76,19 +76,31 @@ angular.module('ui.directives')
       if ( attrs.uiDateFormat === '' ) {
         // Default to ISO formatting
         modelCtrl.$formatters.push(function(value) {
-          return new Date(value);
+          if (value)
+            return new Date(value);
+          else
+            return value;
         });
         modelCtrl.$parsers.push(function(value){
-          return value.toISOString();
+          if (value)
+            return value.toISOString();
+          else
+            return value;
         });
       } else {
         var format = attrs.uiDateFormat;
         // Use the datepicker with the attribute value as the format string to convert to and from a string
         modelCtrl.$formatters.push(function(value) {
-          return $.datepicker.parseDate(format, value);
+          if (value)
+            return $.datepicker.parseDate(format, value);
+          else
+            return value;
         });
         modelCtrl.$parsers.push(function(value){
-          return $.datepicker.formatDate(format, value);
+          if (value)
+            return $.datepicker.formatDate(format, value);
+          else
+            return value;
         });
       }
     }
