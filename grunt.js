@@ -108,7 +108,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', 'run tests (make sure server task is run first)', function () {
     var done = this.async();
     grunt.utils.spawn({
-      cmd: process.platform === 'win32' ? 'testacular.cmd' : 'testacular',
+      cmd: process.platform === 'win32' ? 'testacular.cmd' : 'testacular-run',
       args: process.env.TRAVIS ? ['start', 'test/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run']
     }, function (error, result, code) {
       if (error) {
