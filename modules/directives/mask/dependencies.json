@@ -1,0 +1,8 @@
+{
+    "core": [ "jquery" ],
+    "external": {
+        "mask": [
+            "https://github.com/FagnerMartinsBrack/jquery.maskedinput/raw/master/src/jquery.maskedinput.js"
+        ]
+    }
+}
