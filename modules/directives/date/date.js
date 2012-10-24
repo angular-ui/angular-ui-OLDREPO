@@ -49,7 +49,7 @@ angular.module('ui.directives')
           // Update the date picker when the model changes
           controller.$render = function () {
             var date = controller.$viewValue;
-            if ( date && !angular.isDate(date) ) {
+            if ( angular.isDefined(date) && date !== null && !angular.isDate(date) ) {
               throw new Error('ng-Model value must be a Date object - currently it is a ' + typeof date + ' - use ui-date-format to convert it from a string');
             }
             element.datepicker("setDate", date);
@@ -76,31 +76,31 @@ angular.module('ui.directives')
       if ( attrs.uiDateFormat === '' ) {
         // Default to ISO formatting
         modelCtrl.$formatters.push(function(value) {
-          if (value)
+          if (angular.isString(value) ) {
             return new Date(value);
-          else
-            return value;
+          }
+          return null;
         });
         modelCtrl.$parsers.push(function(value){
-          if (value)
+          if (angular.isString(value) ) {
             return value.toISOString();
-          else
-            return value;
+          }
+          return null;
         });
       } else {
         var format = attrs.uiDateFormat;
         // Use the datepicker with the attribute value as the format string to convert to and from a string
         modelCtrl.$formatters.push(function(value) {
-          if (value)
+          if (angular.isString(value) ) {
             return $.datepicker.parseDate(format, value);
-          else
-            return value;
+          }
+          return null;
         });
         modelCtrl.$parsers.push(function(value){
-          if (value)
+          if (angular.isString(value) ) {
             return $.datepicker.formatDate(format, value);
-          else
-            return value;
+          }
+          return null;
         });
       }
     }
