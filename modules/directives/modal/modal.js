@@ -6,6 +6,9 @@ angular.module('ui.directives')
     link: function(scope, elm, attrs, model) {
       //helper so you don't have to type class="modal hide"
       elm.addClass('modal hide');
+	  elm.on( 'shown', function() {
+		elm.find( "[autofocus]" ).focus();
+	  } );
       scope.$watch(attrs.ngModel, function(value) {
         elm.modal(value && 'show' || 'hide');
       });
