@@ -43,6 +43,7 @@
 
     var moduleNames = window.myAngularModules || []; // allow user to inject their own directives
     moduleNames.push('ui.directives');
+    moduleNames.push('ui.bootstrap');
 
     if (debug) console.log('moduleNames', moduleNames);
     for (var k = 0, mlen = moduleNames.length; k < mlen; k++) {
