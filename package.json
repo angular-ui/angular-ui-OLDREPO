@@ -2,14 +2,14 @@
   "author": "https://github.com/angular-ui/angular-ui/graphs/contributors",
   "name": "angular-ui",
   "description": "AngularUI - The companion suite for AngularJS",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "http://angular-ui.github.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/angular-ui/angular-ui.git"
   },
   "engines": {
-    "node": ">= 0.6.11"
+    "node": ">= 0.8.4"
   },
   "dependencies": {
   },
@@ -17,6 +17,6 @@
     "grunt-recess": "~0.1.0",
     "grunt-coffee": "~0.0.3",
     "async": "0.1.x",
-    "testacular": "0.0.x"
+    "testacular": "~0.2.0"
   }
 }

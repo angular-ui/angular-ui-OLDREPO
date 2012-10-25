@@ -15,14 +15,17 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
     compile: function (tElm, tAttrs) {
       var watch,
         repeatOption,
+		repeatAttr,
         isSelect = tElm.is('select'),
         isMultiple = (tAttrs.multiple !== undefined);
 
       // Enable watching of the options dataset if in use
       if (tElm.is('select')) {
-        repeatOption = tElm.find('option[ng-repeat]');
+        repeatOption = tElm.find('option[ng-repeat], option[data-ng-repeat]');
+		
         if (repeatOption.length) {
-          watch = repeatOption.attr('ng-repeat').split(' ').pop();
+		  repeatAttr = repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat');
+          watch = repeatAttr.split('|')[0].trim().split(' ').pop();
         }
       }
 
