@@ -1,7 +1,16 @@
 // READ: http://docs-next.angularjs.org/guide/ie
+// element tags are statically defined in order to accommodate lazy-loading whereby directives are also unknown
 (function (exports) {
 
-  var debug = window.ieShivDebug || false;
+  var debug = window.ieShivDebug || false,
+      tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
+                "uiKeypress", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline", "uiMapPolygon", "uiMapRectangle",
+                "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset", "uiScrollfix", "uiSelect2", "uiShow", "uiHide",
+                "uiToggle", "uiSortable", "uiTinymce", "accordion", "accordionGroup", "modal", "tabs", "pane"
+                ];
+
+  window.myCustomTags =  window.myCustomTags || []; // externally defined by developer using angular-ui directives
+  tags.push.apply(tags, window.myCustomTags);
 
   var getIE = function () {
     // Returns the version of Internet Explorer or a -1
@@ -35,36 +44,10 @@
   };
 
   var shiv = function () {
-    // TODO: unfortunately, angular is not exposing these in 'ng' module
-    var tags = [ 'ngInclude', 'ngPluralize', 'ngView', 'ngSwitch' ]; // angular specific,
-
-    // TODO: unfortunately, angular does not expose module names, it is a simple change to angular's loader.js
-    // however, not sure if something happens when referencing them, so maybe an OK thing.
-
-    var moduleNames = window.myAngularModules || []; // allow user to inject their own directives
-    moduleNames.push('ui.directives');
-
-    if (debug) console.log('moduleNames', moduleNames);
-    for (var k = 0, mlen = moduleNames.length; k < mlen; k++) {
-      var modules = angular.module(moduleNames[k]); // will throw runtime exception
-      angular.forEach(modules._invokeQueue, function (item) {
-        // only allow directives
-        if (item[1] === "directive") {
-          var dirname = item[2][0];
-          tags.push(dirname);
-        } else {
-          if (debug) console.log("skipping", item[1], item[2][0]);
-        }
-      });
-    }
-
-    if (debug) console.log("tags found", tags);
     for (var i = 0, tlen = tags.length; i < tlen; i++) {
-      if (debug) console.log("tag", tags[i]);
       var customElements = toCustomElements(tags[i], ':');
       for (var j = 0, clen = customElements.length; j < clen; j++) {
         var customElement = customElements[j];
-        if (debug) console.log("shivving", customElement);
         document.createElement(customElement);
       }
     }
