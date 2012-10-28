@@ -5,6 +5,7 @@
 * Lots of cleanup! Consistent indentation, linting
 * Custom builds via grunt (soon to be leveraged via builder)
 * uiDate now watches options
+* Rewrote ui-keypress (API is not backwards-compatible)
 
 ## v0.2.0
 * Unit tests. Unit tests. Unit tests.

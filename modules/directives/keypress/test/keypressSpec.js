@@ -3,7 +3,7 @@ describe('uiKeypress', function () {
   var $scope, $compile;
 
   var createKeyEvent = function (mainKey, alt, ctrl, shif) {
-    var keyEvent = jQuery.Event("keydown");
+    var keyEvent = jQuery.Event("keypress");
 
     keyEvent.keyCode = mainKey;
     keyEvent.altKey = alt || false;
@@ -28,71 +28,40 @@ describe('uiKeypress', function () {
     };
   }));
 
-  describe('keypress with Object syntax', function () {
-
-    it('should support single key press', function () {
-      createElement({'13': 'event=true'}).trigger(createKeyEvent(13));
-      expect($scope.event).toBe(true);
-    });
-
-    it('should support combined key press', function () {
-      createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true));
-      expect($scope.event).toBe(true);
-    });
-
-    it('should support multiple key press definitions', function () {
-      var elm = createElement({'13': 'event1=true', 'ctrl-shift-13': 'event2=true'});
-
-      elm.trigger(createKeyEvent(13));
-      expect($scope.event1).toBe(true);
-
-      elm.trigger(createKeyEvent(13, false, true, true));
-      expect($scope.event2).toBe(true);
-    });
-
-    it('should support $event in expressions', function () {
-
-      var element = createElement({'esc': 'cb($event)', '13': 'event2=$event'});
-
-      element.trigger(createKeyEvent(27));
-      expect($scope.event1.keyCode).toBe(27);
-
-      element.trigger(createKeyEvent(13));
-      expect($scope.event2.keyCode).toBe(13);
-    });
+  it('should support single key press', function () {
+    createElement({'13': 'event=true'}).trigger(createKeyEvent(13));
+    expect($scope.event).toBe(true);
   });
 
-  describe('keypress with String syntax', function () {
+  it('should support combined key press', function () {
+    createElement({'ctrl-shift-13': 'event=true'}).trigger(createKeyEvent(13, false, true, true));
+    expect($scope.event).toBe(true);
+  });
+  
+  it('should support alternative combinations', function () {
+    $scope.event = 0;
+    createElement({'ctrl-shift-14 ctrl-shift-13': 'event=event+1'}).trigger(createKeyEvent(13, false, true, true)).trigger(createKeyEvent(14, false, true, true));
+    expect($scope.event).toBe(2);
+  });
 
-    it('should support single key press', function () {
-      createElement('event=true on 13').trigger(createKeyEvent(13));
-      expect($scope.event).toBe(true);
-    });
+  it('should support multiple key press definitions', function () {
+    var elm = createElement({'13': 'event1=true', 'ctrl-shift-13': 'event2=true'});
 
-    it('should support combined key press', function () {
-      createElement('event=true on ctrl-shift-13').trigger(createKeyEvent(13, false, true, true));
-      expect($scope.event).toBe(true);
-    });
+    elm.trigger(createKeyEvent(13));
+    expect($scope.event1).toBe(true);
 
-    it('should support multiple key press definitions', function () {
-      var elm = createElement('event1=true on 13 and event2=true on ctrl-shift-13');
+    elm.trigger(createKeyEvent(13, false, true, true));
+    expect($scope.event2).toBe(true);
+  });
 
-      elm.trigger(createKeyEvent(13));
-      expect($scope.event1).toBe(true);
+  it('should support $event in expressions', function () {
 
-      elm.trigger(createKeyEvent(13, false, true, true));
-      expect($scope.event2).toBe(true);
-    });
+    var element = createElement({'esc': 'cb($event)', '13': 'event2=$event'});
 
-    it('should support $event in expressions', function () {
+    element.trigger(createKeyEvent(27));
+    expect($scope.event1.keyCode).toBe(27);
 
-      var element = createElement('cb($event) on esc and event2=$event on enter');
-
-      element.trigger(createKeyEvent(27));
-      expect($scope.event1.keyCode).toBe(27);
-
-      element.trigger(createKeyEvent(13));
-      expect($scope.event2.keyCode).toBe(13);
-    });
+    element.trigger(createKeyEvent(13));
+    expect($scope.event2.keyCode).toBe(13);
   });
 });
