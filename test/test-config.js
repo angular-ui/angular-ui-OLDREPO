@@ -19,6 +19,7 @@ files = [
   'test/lib/tinymce/jquery.tinymce.js',
   'test/lib/googlemaps/googlemaps.js',
   'test/lib/bootstrap/bootstrap-modal.js',
+  'test/lib/select2/select2.js',
   'common/module.js',
   'modules/*/*/*.js',
   'modules/*/*/test/*.js',
