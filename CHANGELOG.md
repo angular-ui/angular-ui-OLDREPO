@@ -12,6 +12,7 @@
   * The **ui-keypress** can now be used to `$event.preventDefault()` as expected
   * Multiple combinations are separated by spaces, while multi-key combos are separated by dashes: `'enter alt-space 13-shift':'whatever()'`
   * The string-notation (__a and be or c and d__) has been dropped completely
+* Can now pass (or globally define) the value uiReset resets to
 
 ## v0.2.0
 * Unit tests. Unit tests. Unit tests.

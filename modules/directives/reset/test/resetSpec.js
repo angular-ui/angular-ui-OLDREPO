@@ -51,23 +51,5 @@ describe('uiReset', function () {
       expect(scope.foo).toBe('i was reset');
       expect(element.val()).toBe('i was reset');
     });
-    it('should set the model value to the options property resetValue when an object is passed with the resetValue property', function () {
-      scope.foo = 'bar';
-      var element = $compile('<input type="text" ui-reset="{resetValue: \'was reset\'}" ng-model="foo"/>')(scope);
-      scope.$digest();
-      expect(element.val()).toBe('bar');
-      element.next().click();
-      expect(scope.foo).toBe('was reset');
-      expect(element.val()).toBe('was reset');
-    });
-    it('should set the model value to null when an object is passed without the resetValue property', function () {
-      scope.foo = 'bar';
-      var element = $compile('<input type="text" ui-reset="{baz: \'was reset\'}" ng-model="foo"/>')(scope);
-      scope.$digest();
-      expect(element.val()).toBe('bar');
-      element.next().click();
-      expect(scope.foo).toBe(null);
-      expect(element.val()).toBe('');
-    });
   });
 });
