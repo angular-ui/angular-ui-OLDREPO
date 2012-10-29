@@ -47,5 +47,46 @@ describe('uiTinymce', function () {
       });
     });
   });
-
+  describe('setting a value to the model', function () {
+    it('should update the editor', function() {
+      inject(function($compile, $rootScope) {
+        var element, text = '<p>Hello</p>';
+        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = text;
+        });
+        expect(element.find('textarea').tinymce().getContent()).toEqual(text);
+      });
+    });
+    it('should handle undefined gracefully', function() {
+      inject(function($compile, $rootScope) {
+        var element;
+        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = undefined;
+        });
+        expect(element.find('textarea').tinymce().getContent()).toEqual('');
+      });
+    });
+    it('should handle null gracefully', function() {
+      inject(function($compile, $rootScope) {
+        var element;
+        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = null;
+        });
+        expect(element.find('textarea').tinymce().getContent()).toEqual('');
+      });
+    });
+  });
+  describe('using the editor', function () {
+    it('should update the model', function() {
+      inject(function($compile, $rootScope) {
+        var element, text = '<p>Hello</p>';
+        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
+        element.find('textarea').tinymce().setContent(text);
+        expect($rootScope.x).toEqual(text);
+      });
+    });
+  });
 });

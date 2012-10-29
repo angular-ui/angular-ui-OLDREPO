@@ -13,7 +13,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
             if (inst.isDirty()) {
               inst.save();
               ngModel.$setViewValue(elm.val());
-              scope.$apply();
+              if (!scope.$$phase)
+                scope.$apply();
             }
           },
           // Update model on keypress
@@ -21,7 +22,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
             if (this.isDirty()) {
               this.save();
               ngModel.$setViewValue(elm.val());
-              scope.$apply();
+              if (!scope.$$phase)
+                scope.$apply();
             }
             return true; // Continue handling
           },
@@ -31,7 +33,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
               if (ed.isDirty()) {
                 ed.save();
                 ngModel.$setViewValue(elm.val());
-                scope.$apply();
+                if (!scope.$$phase)
+                  scope.$apply();
               }
             });
           }
