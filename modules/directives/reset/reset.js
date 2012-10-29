@@ -12,12 +12,12 @@ angular.module('ui.directives').directive('uiReset', ['ui.config', function (uiC
       aElement = angular.element('<a class="ui-reset" />');
       elm.wrap('<span class="ui-resetwrap" />').after(aElement);
       aElement.bind('click', function (e) {
-        if (attrs.uiReset) {
-          resetValue = scope.$eval(attrs.uiReset);
-        }
         e.preventDefault();
         scope.$apply(function () {
-          ctrl.$setViewValue(resetValue);
+          if (attrs.uiReset)
+            ctrl.$setViewValue(scope.$eval(attrs.uiReset));
+          else
+            ctrl.$setViewValue(resetValue);
           ctrl.$render();
         });
       });
