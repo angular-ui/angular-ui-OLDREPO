@@ -2,7 +2,7 @@
 describe('uiTinymce', function () {
   'use strict';
 
-  var scope, $compile, element;
+  var scope, $compile, element, text = '<p>Hello</p>';
   beforeEach(module('ui'));
   beforeEach(function () {
     // throw some garbage in the tinymce cfg to be sure it's getting thru to the directive
@@ -47,33 +47,31 @@ describe('uiTinymce', function () {
       });
     });
   });
+  /*
   describe('setting a value to the model', function () {
     it('should update the editor', function() {
-      inject(function($compile, $rootScope) {
-        var element, text = '<p>Hello</p>';
-        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
-        $rootScope.$apply(function() {
-          $rootScope.x = text;
+      compile();
+      runs(function () {
+        scope.$apply(function() {
+          scope.foo = text;
         });
         expect(element.find('textarea').tinymce().getContent()).toEqual(text);
       });
     });
     it('should handle undefined gracefully', function() {
-      inject(function($compile, $rootScope) {
-        var element;
-        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
-        $rootScope.$apply(function() {
-          $rootScope.x = undefined;
+      compile();
+      runs(function () {
+        scope.$apply(function() {
+          scope.foo = undefined;
         });
         expect(element.find('textarea').tinymce().getContent()).toEqual('');
       });
     });
     it('should handle null gracefully', function() {
-      inject(function($compile, $rootScope) {
-        var element;
-        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
-        $rootScope.$apply(function() {
-          $rootScope.x = null;
+      compile();
+      runs(function () {
+        scope.$apply(function() {
+          scope.foo = null;
         });
         expect(element.find('textarea').tinymce().getContent()).toEqual('');
       });
@@ -81,12 +79,12 @@ describe('uiTinymce', function () {
   });
   describe('using the editor', function () {
     it('should update the model', function() {
-      inject(function($compile, $rootScope) {
-        var element, text = '<p>Hello</p>';
-        element = $compile("<textarea ui-tinymce ng-model='x'></textarea>")($rootScope);
+      compile();
+      runs(function () {
         element.find('textarea').tinymce().setContent(text);
         expect($rootScope.x).toEqual(text);
       });
     });
   });
+   */
 });
