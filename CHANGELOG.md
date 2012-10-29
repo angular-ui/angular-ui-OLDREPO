@@ -1,11 +1,17 @@
 # [Cha Cha Cha Changes](http://www.youtube.com/watch?v=pl3vxEudif8&t=0m53s)
 
-## master
+## Master
+
+## v0.3.0
 * New **format** filter
 * Lots of cleanup! Consistent indentation, linting
 * Custom builds via grunt (soon to be leveraged via builder)
 * uiDate now watches options
 * Rewrote ui-keypress (API is not backwards-compatible)
+  * **ui-**keypress has been expanded into **ui-keyup**, **ui-keydown** and **ui-keypress**
+  * The **ui-keypress** can now be used to `$event.preventDefault()` as expected
+  * Multiple combinations are separated by spaces, while multi-key combos are separated by dashes: `'enter alt-space 13-shift':'whatever()'`
+  * The string-notation (__a and be or c and d__) has been dropped completely
 
 ## v0.2.0
 * Unit tests. Unit tests. Unit tests.

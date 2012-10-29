@@ -27,11 +27,14 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
 
     // Prepare combinations for simple checking
     angular.forEach(params, function (v, k) {
-      var combination = {};
-      combination.expression = $parse(v);
+      var combination, expression;
+      expression = $parse(v);
 
       angular.forEach(k.split(' '), function(variation) {
-        combination.keys = {};
+        combination = {
+          expression: expression,
+          keys: {}
+        };
         angular.forEach(variation.split('-'), function (value) {
           combination.keys[value] = true;
         });
