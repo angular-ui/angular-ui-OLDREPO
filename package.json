@@ -14,7 +14,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "grunt-recess": "~0.1.0",
+    "grunt-recess": "https://github.com/proloser/grunt-recess/tarball/patch-1",
     "grunt-coffee": "~0.0.3",
     "async": "0.1.x",
     "testacular": "~0.2.0"
