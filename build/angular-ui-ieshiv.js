@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-10-28
+ * @version v0.3.0 - 2012-10-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -23,9 +23,9 @@
 
   var debug = window.ieShivDebug || false,
       tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
-                "uiKeypress", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline", "uiMapPolygon", "uiMapRectangle",
-                "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset", "uiScrollfix", "uiSelect2", "uiShow", "uiHide",
-                "uiToggle", "uiSortable", "uiTinymce", "accordion", "accordionGroup", "modal", "tabs", "pane"
+                "uiKeypress", "uiKeyup", "uiKeydown", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline",
+                "uiMapPolygon", "uiMapRectangle", "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset",
+                "uiScrollfix", "uiSelect2", "uiShow", "uiHide", "uiToggle", "uiSortable", "uiTinymce"
                 ];
 
   window.myCustomTags =  window.myCustomTags || []; // externally defined by developer using angular-ui directives
@@ -37,8 +37,8 @@
     var rv = -1; // Return value assumes failure.
     if (navigator.appName == 'Microsoft Internet Explorer') {
       var ua = navigator.userAgent;
-      var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-      if (re.exec(ua) != null) {
+      var re = new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");
+      if (re.exec(ua) !== null) {
         rv = parseFloat(RegExp.$1);
       }
     }
