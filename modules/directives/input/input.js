@@ -1,7 +1,7 @@
-angular.module('ui.directives', ['ui.config'])
-  .factory('InputHelper', ['$compile', '$http', '$templateCache', 'ui.config', function ($compile, $http, $templateCache, uiConfig) {
+angular.module('ui.directives')
+  .directive('uiInput', ['$compile', '$http', '$templateCache', 'ui.config', function ($compile, $http, $templateCache, uiConfig) {
 
-  uiConfig.uiinput = uiConfig.uiinput || {};
+  uiConfig.input = uiConfig.input || {};
 
   var idUid = ['0', '0', '0'];
   var nameUid = ['0', '0', '0'];
@@ -42,60 +42,41 @@ angular.module('ui.directives', ['ui.config'])
     });
   }
 
-  var internalAttrs = ['family', 'kind', 'validation'];
-
   return {
-    restrict:'E',
+    restrict:'EA',
     priority:10000,
     terminal:true,
-    compile:function compile(tElement, tAttrs, transclude) {
+    scope:true,
+    require:'?uiForm',
+    compile:function compile(tElement, tAttrs, transclude, uiForm) {
 
-      var control = {
-        id:tAttrs.id || 'id' + nextUid(idUid)
+      var model = tAttrs.ngModel, input = {
+        id:tAttrs.id || 'input' + nextUid(idUid)
       };
 
       return function (scope, element, attrs) {
 
-        var childScope = scope.$new();
-        var tplFamily = tAttrs.family || uiConfig.uiinput.family;
-        var tplKind = tAttrs.kind || uiConfig.uiinput.kind;
-
         //infer a field type from template's tag name (can be one of ui-input, ui-select, ui-textarea)
-        var targetTagName = tElement[0].tagName.substring(3).toLowerCase();
-
-        $http.get(targetTagName + '.' + tplFamily + '.' + tplKind + '.html', {cache:$templateCache}).success(function (response) {
+        $http.get(scope.$eval(attrs.src), {cache:$templateCache}).success(function (response) {
 
           element.html(response);
 
-          var inputEl = angular.element(element.find(targetTagName)[0]);
+          var inputEl = element.find('[ng-transclude]');
           angular.forEach(tAttrs, function (value, key) {
-            if (key.charAt(0) !== '$') {
-              if (key.indexOf('input') === 0) {
-                control[key.charAt(5).toLowerCase() + key.substr(6)] = value;
-              } else {
-                inputEl.attr(snake_case(key, '-'), value);
-              }
+            if (key.charAt(0) !== '$' && ['src','uiInput'].indexOf(key) === -1) {
+              inputEl.attr(snake_case(key, '-'), value);
             }
           });
 
           //prepare validation messages
-          control.validation = angular.extend({}, uiConfig.uiinput.validation, scope.$eval(tAttrs.validation));
+          input.validation = angular.extend({}, uiConfig.input.validation, scope.$eval(tAttrs.validation));
 
           //expose model to a field's template
-          childScope.$control = control;
-          $compile(element.contents())(childScope);
-          childScope.$field = inputEl.controller('ngModel');
+          scope.$input = input;
+          $compile(element.contents())(scope);
+          scope.$field = inputEl.controller('ngModel');
         });
       };
     }
   };
-}])
-  .directive('uiInput', ['InputHelper', function (InputHelper) {
-  return InputHelper;
-}])
-  .directive('uiTextarea', ['InputHelper', function (InputHelper) {
-  return InputHelper;
-}])
-  .directive('uiSelect', ['InputHelper', function (InputHelper) {
-  return InputHelper;
 }]);
