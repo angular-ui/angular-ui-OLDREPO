@@ -20,7 +20,6 @@ angular.module('ui.directives').directive('uiValidate', function () {
     restrict: 'A',
     require: 'ngModel',
     link: function (scope, elm, attrs, ctrl) {
-
       var validateFn, watch, validators = {},
         validateExpr = scope.$eval(attrs.uiValidate);
 
@@ -30,9 +29,9 @@ angular.module('ui.directives').directive('uiValidate', function () {
         validateExpr = { validator: validateExpr };
       }
 
-      angular.forEach(validateExpr, function (validatorFn, key) {
+      angular.forEach(validateExpr, function (expression, key) {
         validateFn = function (valueToValidate) {
-          if (scope.$eval(validatorFn, { '$value' : valueToValidate })) {
+          if (scope.$eval(expression, { '$value' : valueToValidate })) {
             ctrl.$setValidity(key, true);
             return valueToValidate;
           } else {
@@ -57,7 +56,7 @@ angular.module('ui.directives').directive('uiValidate', function () {
         } else {
           angular.forEach(watch, function(expression, key){
             scope.$watch(expression, function(){
-              validatorFn[key](ctrl.$viewValue);
+              validators[key](ctrl.$viewValue);
             });
           });
         }
