@@ -1,4 +1,4 @@
-describe('uiMap', function () {
+xdescribe('uiMap', function () {
   var scope, $rootScope, $compile;
 
   beforeEach(module('ui.directives'));

@@ -37,25 +37,52 @@ describe('uiDate', function() {
       });
     });
   });
-  it('should parse the date correctly from a string', function() {
-    inject(function($compile, $rootScope) {
-      var aDateString, element;
-      aDateString = '2012-08-17';
+  describe('when model is not a Date', function() {
+    var element;
+    var scope;
+    beforeEach(inject(function($compile, $rootScope) {
       element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
-      $rootScope.$apply(function() {
-        $rootScope.x = aDateString;
-      });
-      expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual(aDateString);
-    });
-  });
-  it('should not freak out when the model is null', function() {
-    inject(function($compile, $rootScope) {
-      var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
-      $rootScope.$apply(function() {
-        $rootScope.x = null;
+      scope = $rootScope;
+    }));
+    it('should not freak out when the model is null', function() {
+      scope.$apply(function() {
+        scope.x = null;
       });
       expect(element.datepicker('getDate')).toBe(null);
     });
+    it('should not freak out when the model is undefined', function() {
+      scope.$apply(function() {
+        scope.x = undefined;
+      });
+      expect(element.datepicker('getDate')).toBe(null);
+    });
+    it('should throw an error if you try to pass in a boolean when the model is false', function() {
+      expect(function() {
+        scope.$apply(function() {
+          scope.x = false;
+        });
+      }).toThrow();
+    });
+  });
+
+  it('should update the input field correctly on a manual update', function() {
+      inject(function($compile, $rootScope) {
+          var dateString = '2012-08-17';
+          var dateObj = $.datepicker.parseDate('yy-mm-dd', dateString);
+          var element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+              $rootScope.x = dateObj;
+          });
+          // Now change the data in the input box
+          dateString = '2012-8-01';
+          dateObj = $.datepicker.parseDate('yy-mm-dd', dateString);
+          element.val(dateString);
+          element.trigger("change");
+          expect(element.datepicker('getDate')).toEqual(dateObj);
+          expect(element.val()).toEqual('2012-08-01');
+          $rootScope.$digest();
+          expect($rootScope.x).toEqual(dateObj);
+      });
   });
 
   describe('use with ng-required directive', function() {
@@ -164,6 +191,69 @@ describe('uiDate', function() {
           $rootScope.config.minDate = 10;
         });
         expect(element.datepicker("option", "minDate")).toBe(10);
+      });
+    });
+  });
+
+  describe('use with the ui-date-format directive', function() {
+    it('should parse the date correctly from an ISO string', function() {
+      inject(function($compile, $rootScope) {
+        var aDateString, element;
+        aDateString = (new Date(2012,8,17)).toISOString();
+        element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = aDateString;
+        });
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-09-17');
+      });
+    });
+    it('should parse the date correctly from a custom string', function() {
+      inject(function($compile, $rootScope) {
+        var format = 'DD, d MM, yy';
+        var aDateString = "Thursday, 11 October, 2012";
+        var element = $compile('<input ui-date ui-date-format="'+ format + '" ng-model="x"/>')($rootScope);
+        $rootScope.$apply(function() {
+          $rootScope.x = aDateString;
+        });
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
+        expect(element.datepicker('getDate')).toEqual(new Date(2012, 9, 11));
+      });
+    });
+    it('should not freak out when the model is false', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = false;
+          });
+          expect($rootScope.x).toBe(false);
+          expect(element.datepicker('getDate')).toEqual(null);
+      });
+    });
+    
+    it('should not freak out when the model is undefined', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = undefined;
+          });
+          expect($rootScope.x).toBe(undefined);
+          expect(element.datepicker('getDate')).toEqual(null);
+      });
+    });
+    
+    it('should not freak out when the model is null', function() {
+      inject(function($compile, $rootScope) {
+         var aDateString, element;
+          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+            $rootScope.x = null;
+          });
+          expect($rootScope.x).toBe(null);
+          expect(element.datepicker('getDate')).toEqual(null);
       });
     });
   });

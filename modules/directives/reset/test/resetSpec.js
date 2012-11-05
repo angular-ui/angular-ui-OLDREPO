@@ -32,7 +32,7 @@ describe('uiReset', function () {
       element.siblings().get(0).click();
       expect($.Event.prototype.preventDefault).toHaveBeenCalled();
     });
-    it('should clear the model and control value', function () {
+    it('should set the model value to null and clear control when no options given', function () {
       scope.foo = 'bar';
       var element = $compile('<input type="text" ui-reset ng-model="foo"/>')(scope);
       scope.$digest();
@@ -40,6 +40,16 @@ describe('uiReset', function () {
       element.next().click();
       expect(scope.foo).toBe(null);
       expect(element.val()).toBe('');
+    });
+    it('should set the model value to the options scope variable when a string is passed in options', function () {
+      scope.foo = 'bar';
+      scope.resetTo = 'i was reset';
+      var element = $compile('<input type="text" ui-reset="resetTo" ng-model="foo"/>')(scope);
+      scope.$digest();
+      expect(element.val()).toBe('bar');
+      element.next().click();
+      expect(scope.foo).toBe('i was reset');
+      expect(element.val()).toBe('i was reset');
     });
   });
 });
