@@ -97,9 +97,18 @@ describe('uiValidate', function ($compile) {
   });
 
   describe('uiValidateWatch', function(){
+    var validateWatch = function(watchMe) {
+      return watchMe;
+    };
 
     it('should watch the string and refire the single validator', function () {
-      expect().toBeTruthy();
+      scope.validateWatch = validateWatch;
+      scope.watchMe = true;
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validateWatch($value)\'" ui-validate-watch="\'watchMe\'">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.validate).toBe(false);
+      scope.$apply('watchMe=true');
+      expect(scope.form.input.$error.validate).toBe(true);
     });
 
     it('should watch the string and refire all validators', function () {
