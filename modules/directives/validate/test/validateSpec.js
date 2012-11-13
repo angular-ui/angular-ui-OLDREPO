@@ -97,26 +97,56 @@ describe('uiValidate', function ($compile) {
   });
 
   describe('uiValidateWatch', function(){
-    var validateWatch = function(watchMe) {
+    function validateWatch(watchMe) {
       return watchMe;
     };
 
-    it('should watch the string and refire the single validator', function () {
+    beforeEach(function(){
       scope.validateWatch = validateWatch;
-      scope.watchMe = true;
-      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validateWatch($value)\'" ui-validate-watch="\'watchMe\'">', scope);
+    });
+
+    it('should watch the string and refire the single validator', function () {
+      scope.watchMe = false;
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validateWatch(watchMe)\'" ui-validate-watch="\'watchMe\'">', scope);
       expect(scope.form.input.$valid).toBe(false);
-      expect(scope.form.input.$error.validate).toBe(false);
+      expect(scope.form.input.$error.validator).toBe(true);
       scope.$apply('watchMe=true');
-      expect(scope.form.input.$error.validate).toBe(true);
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.validator).toBe(false);
     });
 
     it('should watch the string and refire all validators', function () {
-      expect().toBeTruthy();
+      scope.watchMe = false;
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="{foo:\'validateWatch(watchMe)\',bar:\'validateWatch(watchMe)\'}" ui-validate-watch="\'watchMe\'">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.foo).toBe(true);
+      expect(scope.form.input.$error.bar).toBe(true);
+      scope.$apply('watchMe=true');
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.foo).toBe(false);
+      expect(scope.form.input.$error.bar).toBe(false);
     });
 
     it('should watch the all object attributes and each respective validator', function () {
-      expect().toBeTruthy();
+      scope.watchFoo = false;
+      scope.watchBar = false;
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="{foo:\'validateWatch(watchFoo)\',bar:\'validateWatch(watchBar)\'}" ui-validate-watch="{foo:\'watchFoo\',bar:\'watchBar\'}">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.foo).toBe(true);
+      expect(scope.form.input.$error.bar).toBe(true);
+      scope.$apply('watchFoo=true');
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.foo).toBe(false);
+      expect(scope.form.input.$error.bar).toBe(true);
+      scope.$apply('watchBar=true');
+      scope.$apply('watchFoo=false');
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.foo).toBe(true);
+      expect(scope.form.input.$error.bar).toBe(false);
+      scope.$apply('watchFoo=true');
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.foo).toBe(false);
+      expect(scope.form.input.$error.bar).toBe(false);
     });
 
   });
