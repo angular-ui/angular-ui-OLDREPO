@@ -44,15 +44,18 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
         if (controller) {
           // Watch the model for programmatic changes
           controller.$render = function () {
-            if (isSelect) {
-              elm.select2('val', controller.$modelValue);
-            } else {
-              if (isMultiple && !controller.$modelValue) {
-                elm.select2('data', []);
+            // Delayed so that the options have time to be rendered
+            setTimeout(function () {
+              if (isSelect) {
+                elm.select2('val', controller.$modelValue);
               } else {
-                elm.select2('data', controller.$modelValue);
+                if (isMultiple && !controller.$modelValue) {
+                  elm.select2('data', []);
+                } else {
+                  elm.select2('data', controller.$modelValue);
+                }
               }
-            }
+            });
           };
 
 
