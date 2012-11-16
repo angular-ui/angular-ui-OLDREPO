@@ -38,12 +38,6 @@ describe('uiCalendar', function () {
               allDay: true}
           ]; //End of Events Array
 
-          //Date Objects needed for event
-          var date = new Date();
-          var d = date.getDate();
-          var m = date.getMonth();
-          var y = date.getFullYear();
-
           scope.addChild = function() {
             scope.events.push({
               title: 'Click for Google ' + scope.events.length,
@@ -117,12 +111,12 @@ describe('uiCalendar', function () {
         it('should expect the calendar to update itself with new events', function () {
             spyOn($.fn, 'fullCalendar');
             $compile('<div id="uicalendar" ui-calendar="{height: 200, weekends: false}" ng-model="events"></div>')(scope);
-            var clientEventsLength = $.fn.fullCalendar.mostRecentCall.args[0].events.length
+            var clientEventsLength = $.fn.fullCalendar.mostRecentCall.args[0].events.length;
             expect(clientEventsLength).toEqual(4);
             //remove an event from the scope.
             scope.remove(0);
             //events should auto update inside the calendar. 
-            clientEventsLength = $.fn.fullCalendar.mostRecentCall.args[0].events.length
+            clientEventsLength = $.fn.fullCalendar.mostRecentCall.args[0].events.length;
             expect(clientEventsLength).toEqual(3);
         });
 
