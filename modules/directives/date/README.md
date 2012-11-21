@@ -55,7 +55,7 @@ If you want to pass date strings to and from the date directive via ng-model the
 This directive specifies the format of the date string that will be expected in the ng-model.
 The format string syntax is that defined by the JQueryUI Date picker. For example
 
-    <input ui-date date-format="'DD, d MM, yy'" ng-model="myDate"></input>
+    <input ui-date ui-date-format="DD, d MM, yy" ng-model="myDate"></input>
 
 Now you can set myDate in the controller.
 
