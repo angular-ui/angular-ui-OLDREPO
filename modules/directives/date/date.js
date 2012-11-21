@@ -79,13 +79,11 @@ angular.module('ui.directives')
           if (angular.isString(value) ) {
             return new Date(value);
           }
-          return null;
         });
         modelCtrl.$parsers.push(function(value){
-          if (angular.isString(value) ) {
+          if (value) {
             return value.toISOString();
           }
-          return null;
         });
       } else {
         var format = attrs.uiDateFormat;
@@ -94,13 +92,11 @@ angular.module('ui.directives')
           if (angular.isString(value) ) {
             return $.datepicker.parseDate(format, value);
           }
-          return null;
         });
         modelCtrl.$parsers.push(function(value){
-          if (angular.isString(value) ) {
+          if (value) {
             return $.datepicker.formatDate(format, value);
           }
-          return null;
         });
       }
     }

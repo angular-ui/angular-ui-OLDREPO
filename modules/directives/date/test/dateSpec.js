@@ -212,7 +212,7 @@ describe('uiDate', function() {
       inject(function($compile, $rootScope) {
         var format = 'DD, d MM, yy';
         var aDateString = "Thursday, 11 October, 2012";
-        var element = $compile('<input ui-date ui-date-format="'+ format + '" ng-model="x"/>')($rootScope);
+        var element = $compile('<input ui-date ui-date-format="' + format + '" ng-model="x"/>')($rootScope);
         $rootScope.$apply(function() {
           $rootScope.x = aDateString;
         });
@@ -254,6 +254,31 @@ describe('uiDate', function() {
           });
           expect($rootScope.x).toBe(null);
           expect(element.datepicker('getDate')).toEqual(null);
+      });
+    });
+
+    it('should format a selected date correctly to an ISO string', function() {
+      inject(function($compile, $rootScope) {
+        var aDate = new Date(2012,8,17);
+        var aDateString = (aDate).toISOString();
+        var element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
+        $rootScope.$apply();
+        selectDate(element, aDate);
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-09-17');
+      });
+    });
+    it('should format a selected date correctly to a custom string', function() {
+      inject(function($compile, $rootScope) {
+        var format = 'DD, d MM, yy';
+        var aDate = new Date(2012,9,11);
+        var aDateString = "Thursday, 11 October, 2012";
+        var element = $compile('<input ui-date ui-date-format="' + format + '" ng-model="x"/>')($rootScope);
+        $rootScope.$apply();
+        selectDate(element, aDate);
+        expect($rootScope.x).toEqual(aDateString);
+        expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
+        expect(element.datepicker('getDate')).toEqual(aDate);
       });
     });
   });
