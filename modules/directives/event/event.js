@@ -8,8 +8,8 @@
  *
  * @param ui-event {string|object literal} The event to bind to as a string or a hash of events with their callbacks
  */
-angular.module('ui.directives').directive('uiEvent', ['$parse',
-  function ($parse) {
+angular.module('ui.directives').directive('uiEvent', ['$parse','$timeout',
+  function ($parse, $timeout) {
     return function (scope, elm, attrs) {
       var events = scope.$eval(attrs.uiEvent);
       angular.forEach(events, function (uiEvent, eventName) {
@@ -18,8 +18,10 @@ angular.module('ui.directives').directive('uiEvent', ['$parse',
           var params = Array.prototype.slice.call(arguments);
           //Take out first paramater (event object);
           params = params.splice(1);
-          scope.$apply(function () {
-            fn(scope, {$event: evt, $params: params});
+          $timeout(function(){
+            scope.$apply(function () {
+              fn(scope, {$event: evt, $params: params});
+            })
           });
         });
       });
