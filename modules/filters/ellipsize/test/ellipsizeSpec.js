@@ -1,4 +1,4 @@
-describe('ellipsize', function() {
+﻿describe('ellipsize', function() {
   
   var ellipsizeFilter;
 
@@ -8,7 +8,7 @@ describe('ellipsize', function() {
   }));
 
   it('should ellipsize the string', function() {
-    expect(ellipsizeFilter('This is a long string')).toEqual('This is�g string');
+    expect(ellipsizeFilter('This is a long string')).toEqual('This is…g string');
   });
   
   it('should do nothing, since the string doesn\' need to be ellipsized', function() {
