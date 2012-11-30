@@ -1,28 +1,29 @@
 ﻿/**
-	 * Ellipsize String
-	 *
-	 * This function will strip tags from a string, split it at its max_length and ellipsize
-	 *
-	 * @param	string	string to ellipsize
-	 * @param	int	max length of string
-	 * @param	mixed	int (1|0) or float, .5, .2, etc for position to split
-	 * @param	string	ellipsis ; Default '...'
-	 * @return	string	ellipsized string
-	 */
+ * Ellipsize String
+ *
+ * This function will strip tags from a string, split it at its max_length and ellipsize
+ *
+ * @param    string    string to ellipsize
+ * @param    int    max length of string
+ * @param    mixed    int (1|0) or float, .5, .2, etc for position to split
+ * @param    string    ellipsis ; Default '...'
+ * @return    string    ellipsized string
+ */
 
 angular.module('ui.filters').filter('ellipsize', function () {
 	return function (str, max_length, position, ellipsis) {
 		
 		var beg, end;
-
+		
 		// Default values
-		position = position || 0.5;
-		max_length = max_length || 15;
-		ellipsis = ellipsis +  || '…';
+		position = position ? position : 0.5;
+		max_length = max_length ? max_length : 15;
+		ellipsis = ellipsis ? ellipsis : '…';
 		
 		// Is the string long enough to ellipsize?
-		if (str.length <= max_length)
+		if (str.length <= max_length) {
 			return str;
+		}
 		
 		beg = str.substr(0, Math.floor(max_length * position));
 		position = (position > 1) ? 1 : position;
@@ -35,12 +36,5 @@ angular.module('ui.filters').filter('ellipsize', function () {
 		
 		return beg + ellipsis + end;
 		
-	}
+	};
 });
-
-function TestCtrl(ng) {
-	ng.frase = 'this_string_is_entirely_too_long_and_might_break_my_design.jpg';
-}
-
-TestCtrl.$inject = ['$scope'];
-​
