@@ -27,7 +27,7 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
         if (attrs.uiOptions) {
           linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
           if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
-            linkOptions[0] = angular.extend(options, linkOptions[0]);
+            linkOptions[0] = angular.extend({}, options, linkOptions[0]);
           }
         } else if (options) {
           linkOptions = [options];
