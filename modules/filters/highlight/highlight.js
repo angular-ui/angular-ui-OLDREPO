@@ -11,6 +11,9 @@ angular.module('ui.filters').filter('highlight', function () {
             text = text.toString();
             search = search.toString();
             try {
+                if(capture && (new RegExp(search, caseSensitive && 'g' || 'gi').exec(text).length == 1)) {
+                    return text;
+                }
                 return text.replace(new RegExp(search, caseSensitive && 'g' || 'gi'), '<span class="ui-match">' + (capture && '$1'|| '$&') + '</span>');
             }
             catch (Exception) {
