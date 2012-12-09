@@ -82,9 +82,15 @@ describe('highlight', function () {
             expect(highlightFilter(testPhrase, '(highlight)', true, true)).toEqual(testPhrase);
         });
     });
-    describe('capture at start', function () {
+    describe('further capture tests', function () {
         it('should highlight a matching phrase at the start', function () {
             expect(highlightFilter("this is a phrase", '(this)', true, true)).toEqual('<span class="ui-match">this</span> is a phrase');
+        });
+        it('should highlight a matching phrase with a match beginning at start', function () {
+            expect(highlightFilter("/this is a phrase", '/(this)', true, true)).toEqual('/<span class="ui-match">this</span> is a phrase');
+        });
+        it('should highlight a matching phrase with a match beginning at start and part part of match', function () {
+            expect(highlightFilter("this is a phrase", 'this (is)', true, true)).toEqual('this <span class="ui-match">is</span> a phrase');
         });
         it('should not highlight a matching phrase at the start', function () {
             expect(highlightFilter("this is a phrase", 'this', true, true)).toEqual('this is a phrase');
