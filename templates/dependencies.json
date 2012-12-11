@@ -3,7 +3,8 @@
     "internal": [ "directives/showHide", "filters/highlight" ],
     "external": {
         "select2": [
-            "https://github.com/ivaynberg/select2"
+            "http://ivaynberg.github.com/select2/select2-3.2/select2.js",
+            "http://ivaynberg.github.com/select2/select2-3.2/select2.css",
         ]
     }
 }
