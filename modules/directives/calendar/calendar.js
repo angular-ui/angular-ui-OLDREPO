@@ -48,7 +48,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               //extend the options to suite the custom directive.
               angular.extend(options, uiConfig.uiCalendar, expression);
               //call fullCalendar from an empty html tag, to keep angular happy.
-              elm.html('').fullCalendar(options);
+              $(elm.html('')).fullCalendar(options);
             }
             //on load update call.
             update();
