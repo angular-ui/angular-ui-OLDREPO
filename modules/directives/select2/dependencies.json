@@ -1,6 +1,6 @@
 {
-    "core": [ "jquery", "jquery-ui", "bootstrap" ],
-    "internal": [ "directives/showHide", "filters/highlight" ],
+    "core": [ "jquery" ],
+    "internal": [],
     "external": [
         "http://ivaynberg.github.com/select2/select2-3.2/select2.js",
         "http://ivaynberg.github.com/select2/select2-3.2/select2.css",
