@@ -85,6 +85,27 @@ describe('uiDate', function() {
       });
   });
 
+  describe("use with user events", function() {
+    it('should call the user onSelect event within a scope.$apply context', function() {
+      inject(function($compile, $rootScope) {
+        var watched = false;
+        $rootScope.myDateSelected = function() {
+          $rootScope.watchMe = true;
+        }
+        $rootScope.$watch("watchMe", function(watchMe) {
+          if (watchMe) {
+            watched = true;
+          }
+        });
+        var aDate = new Date(2012,9,11);
+        var element = $compile('<input ui-date="{onSelect: myDateSelected}" ng-model="x"/>')($rootScope);
+        $rootScope.$apply();
+        selectDate(element, aDate);
+        expect(watched).toBeTruthy();
+      });
+    });
+  });
+
   describe('use with ng-required directive', function() {
     it('should be invalid initially', function() {
       inject(function($compile, $rootScope) {

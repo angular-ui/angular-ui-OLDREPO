@@ -38,7 +38,7 @@ angular.module('ui.directives')
             opts.onSelect = function (value, picker) {
               updateModel();
               scope.$apply(function() {
-                  userHandler(value, picker);
+                userHandler(value, picker);
               });
             };
           } else {
