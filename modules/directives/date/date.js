@@ -37,7 +37,11 @@ angular.module('ui.directives')
             var userHandler = opts.onSelect;
             opts.onSelect = function (value, picker) {
               updateModel();
-              return userHandler(value, picker);
+              var ret = null;
+              scope.$apply(function() {
+                  ret = userHandler(value, picker);
+              });
+              return ret
             };
           } else {
             // No onSelect already specified so just update the model
