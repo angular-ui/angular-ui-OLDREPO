@@ -16,7 +16,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 			}
 
 			options = uiConfig.codemirror || {};
-			opts = angular.extend({}, options, scope.$eval(attrs.codemirror));
+			opts = angular.extend({}, options, scope.$eval(attrs.uiCodemirror));
 
 
 			events = "cursorActivity viewportChange gutterClick focus blur scroll update".split(' ');
