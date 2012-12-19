@@ -1,6 +1,8 @@
 /*global angular, CodeMirror, Error*/
 /**
  * Binds a CodeMirror widget to a <textarea> element.
+ *
+ * Add a ui-refresh="someExpression" to help refresh CodeMirror after it's unhidden or visually changed otherwise.
  */
 angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeout', function (uiConfig, $timeout) {
 	'use strict';
@@ -59,6 +61,13 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 				ngModel.$render = function () {
 					codeMirror.setValue(ngModel.$viewValue);
 				};
+
+				// Watch ui-refresh and refresh the directive
+				if (attrs.uiRefresh) {
+					scope.$watch(attrs.uiRefresh, function(){
+						setTimeout(codemirror.refresh);
+					});
+				}
 
 			};
 

@@ -82,6 +82,22 @@ describe('uiCodemirror', function () {
     });
   });
 
+  describe('when uiRefresh is added', function () {
+    it('should trigger the CodeMirror.refresh() method', function () {
+      var element;
+      runs(function(){
+        element = $compile('<textarea ui-codemirror ng-model="foo" ui-refresh="bar"></textarea>')($rootScope);
+        spyOn(element.CodeMirror, 'refresh');
+        $rootScope.bar = true;
+        $rootScope.$apply();
+      });
+      waits(200);
+      runs(function(){
+        expect(element.CodeMirror.refresh).toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('when the IDE changes', function () {
     it('should update the model', function () {
       var codemirror,
