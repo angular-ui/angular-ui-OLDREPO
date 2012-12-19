@@ -65,7 +65,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 				// Watch ui-refresh and refresh the directive
 				if (attrs.uiRefresh) {
 					scope.$watch(attrs.uiRefresh, function(){
-						setTimeout(codemirror.refresh);
+						$timeout(codemirror.refresh);
 					});
 				}
 
