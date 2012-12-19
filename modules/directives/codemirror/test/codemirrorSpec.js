@@ -57,19 +57,20 @@ describe('uiCodemirror', function () {
     });
 	  
 	  // Sorry I'm not enough familiar Jasmine to fix this...
-	  /*  
+	   
     it('should include the passed options', function () {
       spyOn(CodeMirror, 'fromTextArea');
       $compile('<textarea ui-codemirror="{foo: \'bar\'}" ng-model="foo"></textarea>')($rootScope);
-      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].foo).toEqual('bar');
+      expect(CodeMirror.fromTextArea).toHaveBeenCalledWith({foo:'bar'})
     });
 
     it('should include the default options', function () {
+      angular.module('ui.config').value('ui.config', { codemirror: { bar: 'baz' } });
       spyOn(CodeMirror, 'fromTextArea');
       $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].bar).toEqual('baz');
+      expect(CodeMirror.fromTextArea).toHaveBeenCalledWith({bar:'baz'})
     });
-	  */
+	  
   });
 
   describe('when the model changes', function () {
