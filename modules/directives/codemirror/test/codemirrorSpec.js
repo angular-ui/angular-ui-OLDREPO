@@ -1,9 +1,5 @@
 /*global beforeEach, afterEach, describe, it, inject, expect, module, spyOn, CodeMirror, angular, $*/
-/**
- * TODO Test all the CodeMirror events : cursorActivity viewportChange gutterClick focus blur scroll update.
- *      with  <textarea ui-codemirror="{onChange: doChange ,onCursorActivity: doSomething}" ng-model="foo">
- *      
- */
+
 describe('uiCodemirror', function () {
   'use strict';
 
@@ -11,6 +7,9 @@ describe('uiCodemirror', function () {
 	var $rootScope, $compile, $timeout, uiConfig = angular.module('ui.config');
 
 	beforeEach(module('ui.directives'));
+	beforeEach(function () {
+		uiConfig.value('ui.config', {codemirror: {bar: 'baz'}});
+	});
 
 	// inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
 	// otherwise, you would need to inject these into each test
@@ -21,7 +20,7 @@ describe('uiCodemirror', function () {
 	}));
 
 	afterEach(function () {
-		angular.module('ui.config').value('ui.config', {}); // cleanup
+		uiConfig.value('ui.config', {}); // cleanup
 	});
 
   describe('compiling this directive', function () {
@@ -56,20 +55,28 @@ describe('uiCodemirror', function () {
       expect($rootScope.$watch).toHaveBeenCalled();
     });
 	  
-	  // Sorry I'm not enough familiar Jasmine to fix this...
-	  /*  
     it('should include the passed options', function () {
-      spyOn(CodeMirror, 'fromTextArea');
-      $compile('<textarea ui-codemirror="{foo: \'bar\'}" ng-model="foo"></textarea>')($rootScope);
-      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].foo).toEqual('bar');
+	    var codemirror, options,
+		    fromTextArea = CodeMirror.fromTextArea;
+	    spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
+		    codemirror = fromTextArea.apply(this, arguments);
+		    return codemirror;
+	    });
+      $compile('<textarea ui-codemirror="{fooo: \'baar\'}" ng-model="foo"></textarea>')($rootScope);
+	    $timeout.flush();
+      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].fooo).toEqual("baar");
     });
 
-    it('should include the default options', function () {
-      spyOn(CodeMirror, 'fromTextArea');
-      $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
+    it('should include the default options', function () {var codemirror, options,
+	    fromTextArea = CodeMirror.fromTextArea;
+	    spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
+		    codemirror = fromTextArea.apply(this, arguments);
+		    return codemirror;
+	    });
+	    $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
+	    $timeout.flush();
       expect(CodeMirror.fromTextArea.mostRecentCall.args[1].bar).toEqual('baz');
     });
-	  */
   });
 
   describe('when the model changes', function () {
