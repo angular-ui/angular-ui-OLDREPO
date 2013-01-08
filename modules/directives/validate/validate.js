@@ -50,13 +50,13 @@ angular.module('ui.directives').directive('uiValidate', function () {
         if (angular.isString(watch)) {
           scope.$watch(watch, function(){
             angular.forEach(validators, function(validatorFn, key){
-              validatorFn(ctrl.$viewValue);
+              validatorFn(ctrl.$modelValue);
             });
           });
         } else {
           angular.forEach(watch, function(expression, key){
             scope.$watch(expression, function(){
-              validators[key](ctrl.$viewValue);
+              validators[key](ctrl.$modelValue);
             });
           });
         }
