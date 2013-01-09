@@ -36,6 +36,19 @@ describe('uiDate', function() {
         expect($rootScope.x).toEqual(aDate);
       });
     });
+    it('should blur the input element after selecting a date', function() {
+      inject(function($compile, $rootScope) {
+        var aDate, element;
+        aDate = new Date(2010, 12, 1);
+        element = $compile("<input ui-date ng-model='x'/>")($rootScope);
+        $rootScope.$apply();
+        $(document.body).append(element);
+        element.focus();
+        expect(document.activeElement).toEqual(element[0]);
+        selectDate(element, aDate);
+        expect(document.activeElement).not.toEqual(element[0]);
+      });
+    });
   });
   describe('when model is not a Date', function() {
     var element;
