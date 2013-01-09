@@ -1,4 +1,4 @@
-describe('uiMask', function () {
+xdescribe('uiMask', function () {
 
   var inputHtml = "<input ui-mask=\"'(9)9'\" ng-model='x'>";
   var $compile, $rootScope, element;
