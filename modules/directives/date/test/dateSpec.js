@@ -42,11 +42,12 @@ describe('uiDate', function() {
         aDate = new Date(2010, 12, 1);
         element = $compile("<input ui-date ng-model='x'/>")($rootScope);
         $rootScope.$apply();
-        $(document.body).append(element);
+        $(document.body).append(element); // Need to add it to the document so that it can get focus
         element.focus();
         expect(document.activeElement).toEqual(element[0]);
         selectDate(element, aDate);
         expect(document.activeElement).not.toEqual(element[0]);
+        element.remove();  // And then remove it again!
       });
     });
   });
