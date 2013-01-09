@@ -30,6 +30,7 @@ angular.module('ui.directives')
               var date = element.datepicker("getDate");
               element.datepicker("setDate", element.val());
               controller.$setViewValue(date);
+              element.blur();
             });
           };
           if (opts.onSelect) {
