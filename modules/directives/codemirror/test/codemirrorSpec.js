@@ -78,7 +78,7 @@ describe('uiCodemirror', function () {
       $rootScope.foo = 'bar';
       $rootScope.$apply();
 	    $timeout.flush();
-      expect($.trim(element.siblings().text())).toBe($rootScope.foo);
+      expect(element[0].nextSibling.CodeMirror.getValue()).toBe($rootScope.foo);
     });
   });
 
