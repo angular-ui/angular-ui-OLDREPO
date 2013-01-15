@@ -13,7 +13,6 @@ angular.module('ui.directives').directive('uiMapLocale', ['$parse', function($pa
   var map, options;
 
   var successCallback = function(position) {
-    console.log('Usuário foi geolocalizado com successo: ', position);
     map.setCenter( new google.maps.LatLng(position.coords.latitude, position.coords.longitude) );
   };
 
