@@ -101,6 +101,12 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
           });
         }
 
+        if (attrs.ngClass){
+          scope.$watch(attrs.ngClass, function(newVal, oldVal) {
+            elm.prev().addClass(newVal).removeClass(oldVal);
+          });
+        }
+
         // Set initial value since Angular doesn't
         elm.val(scope.$eval(attrs.ngModel));
 
