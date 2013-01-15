@@ -21,7 +21,7 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
-      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
+      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq] || {};
       return function (scope, elm, attrs) {
         var linkOptions = [], uiDefer = false;
 
@@ -40,19 +40,10 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
             elm.trigger('input');
           });
         }
-        // If uiConfig.jq.{yourPlugin}.uiDefer is true OR you have a ui-defer attribute, initialize the plugin in a timeout
-        if (uiOptions.jq[attrs.uiJq].uiDefer || attrs.uiDefer !== undefined) {
+        // If options.uiDefer is true OR you have a ui-defer attribute, initialize the plugin in a timeout
+        if (options.uiDefer || attrs.uiDefer !== undefined) {
           uiDefer = true
-          delete true;
-        }
-
-        // If ui-refresh is used, re-fire the the method upon every change
-        if (attrs.uiRefresh) {
-          scope.$watch(attrs.uiRefresh, function(){
-            callPlugin();
-          });
-        } else {
-          callPlugin();
+          delete linkOptions[0].uiDefer;
         }
 
         // Call jQuery method and pass relevant options
@@ -65,6 +56,15 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
             elm[attrs.uiJq].apply(elm, linkOptions);
           }
         }
+
+        // If ui-refresh is used, re-fire the the method upon every change
+        if (attrs.uiRefresh) {
+          scope.$watch(attrs.uiRefresh, function(){
+            callPlugin();
+          });
+        }
+        
+        callPlugin();
       };
     }
   };
