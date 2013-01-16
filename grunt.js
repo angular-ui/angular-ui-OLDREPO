@@ -86,8 +86,6 @@ module.exports = function (grunt) {
         lessBuildFiles = lessBuildFiles.concat(moduleless);
       });
 
-      //Set config with our new file lists
-      grunt.config('builddir', 'build/custom');
       grunt.config('concat.build.src', jsBuildFiles);
       grunt.config('recess.build.src', lessBuildFiles);
 
@@ -97,6 +95,11 @@ module.exports = function (grunt) {
     }
 
     grunt.task.run('concat min recess:build recess:min');
+  });
+
+  grunt.registerTask('dist', 'change dist location', function() {
+    var dir = this.args[0];
+    if (dir) { grunt.config('builddir', dir); }
   });
 
   grunt.registerTask('server', 'start testacular server', function () {
