@@ -6,8 +6,18 @@ angular.module('ui.directives')
     link: function(scope, elm, attrs, model) {
       //helper so you don't have to type class="modal hide"
       elm.addClass('modal hide');
+      var opts = angular.extend({}, scope.$eval(attrs.uiModal));
+
       elm.on( 'shown', function() {
         elm.find( "[autofocus]" ).focus();
+        if (angular.isFunction(opts.onShown)) {
+         opts.onShown();
+        }
+      });
+      elm.on( 'hidden', function() {
+        if (angular.isFunction(opts.onHidden)) {
+          opts.onHidden();
+        }
       });
       scope.$watch(attrs.ngModel, function(value) {
         elm.modal(value && 'show' || 'hide');
