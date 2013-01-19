@@ -27,7 +27,7 @@ angular.module('ui.directives').directive('uiSortable', [
     return {
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
-        var onStart, onUpdate,onReceive, opts, _start, _update, _receive, onRemove, _remove;
+        var onStart, onUpdate, opts, _start, _update;
         opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
         if (ngModel != null) {
           onStart = function(e, ui) {
@@ -37,26 +37,7 @@ angular.module('ui.directives').directive('uiSortable', [
             var end, start;
             start = ui.item.data('ui-sortable-start');
             end = ui.item.index();
-            ui.item.indexs =ui.item.index();
-            if(ui.item.received === true ){
-            ui.item.received = false;
-            }else{
-                ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0]);
-            }
-            return scope.$apply();
-          };
-          onReceive = function(e, ui) {
-              var model, modelIndex;
-            ngModel.$modelValue.splice(ui.item.indexs,0,ui.item.connectedData);
-            ui.item.received = true;
-            return scope.$apply();
-          };
-          onRemove = function(e, ui) {
-            if(ngModel.$modelValue.length === 1) {
-               ui.item.connectedData = ngModel.$modelValue.splice(0,1)[0]; 
-            }else {
-               ui.item.connectedData = ngModel.$modelValue.splice(ui.item.index(),1)[0];
-            }
+            ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0]);
             return scope.$apply();
           };
           _start = opts.start;
@@ -72,22 +53,6 @@ angular.module('ui.directives').directive('uiSortable', [
             onUpdate(e, ui);
             if (typeof _update === "function") {
               _update(e, ui);
-            }
-            return scope.$apply();
-          };
-          _receive = opts.receive;
-          opts.receive = function(e, ui) {
-            onReceive(e, ui);
-            if (typeof _receive === "function") {
-                _receive(e, ui);
-            }
-            return scope.$apply();
-          };
-          _remove = opts.remove;
-          opts.remove = function(e, ui) {
-            onRemove(e, ui);
-            if (typeof _receive === "function") {
-                remove(e, ui);
             }
             return scope.$apply();
           };
