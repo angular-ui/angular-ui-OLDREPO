@@ -10,12 +10,13 @@ angular.module('ui.directives').directive('uiInput2', ['$compile', function($com
       var clone = (function() {
         var cursor = iElement;
         return function(type) {
-          var input = angular.element('<input />');
+          var input = angular.element('<input type="' + type + '" />');
           angular.forEach(iAttrs.$attr, function(v,k) {
-            input.attr(v, iAttrs[k]);
+            if (v != 'type') {
+              input.attr(v, iAttrs[k]);
+            }
           });
           input.removeAttr('ui-input2');
-          input.attr('type', type);
           cursor.after(input);
           cursor.remove();
           cursor = input;
