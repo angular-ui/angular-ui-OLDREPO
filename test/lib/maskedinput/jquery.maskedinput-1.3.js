@@ -54,7 +54,11 @@
 		mask: function(mask, settings) {
 			if (!mask && this.length > 0) {
 				var input = $(this[0]);
-				return input.data($.mask.dataName)();
+				var maskFn = input.data($.mask.dataName);
+				if (typeof maskFn !== 'function') {
+					throw new Error('The Mask widget is not correctly set up');
+				}
+				return maskFn();
 			}
 			settings = $.extend({
 				placeholder: "_",
