@@ -4,14 +4,14 @@
  * It is possible to specify a default set of parameters for each jQuery plugin.
  * Under the jq key, namespace each plugin by that which will be passed to ui-jq.
  * Unfortunately, at this time you can only pre-define the first parameter.
- * @example { jq : { datepicker : { showOn:'click' } } }
+ * @example { jq : { datepicker : { showOn:'click', uiDefer: true } } }
  *
  * @param ui-jq {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
  *     Multiple parameters can be separated by commas
- *    Set {ngChange:false} to disable passthrough support for change events ( since angular watches 'input' events, not 'change' events )
+ * @param [ui-refresh] {expression} Watch expression and refire plugin on changes
  *
- * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter">
+ * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
 angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConfig) {
   return {
@@ -20,10 +20,11 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
-      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
+      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq] || {};
       return function (scope, elm, attrs) {
-        var linkOptions = [], ngChange = 'change';
+        var linkOptions = [], uiDefer = false;
 
+        // If ui-options are passed, merge (or override) them onto global defaults and pass to the jQuery method
         if (attrs.uiOptions) {
           linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
           if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
@@ -32,17 +33,32 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
         } else if (options) {
           linkOptions = [options];
         }
+        // If change compatibility is enabled, the form input's "change" event will trigger an "input" event
         if (attrs.ngModel && elm.is('select,input,textarea')) {
-          if (linkOptions && angular.isObject(linkOptions[0]) && linkOptions[0].ngChange !== undefined) {
-            ngChange = linkOptions[0].ngChange;
-          }
-          if (ngChange) {
-            elm.on(ngChange, function () {
-              elm.trigger('input');
+          elm.on('change', function () {
+            elm.trigger('input');
+          });
+        }
+
+        // Call jQuery method and pass relevant options
+        function callPlugin() {
+          if (uiDefer) {
+            scope.$evalAsync(function(){
+              elm[attrs.uiJq].apply(elm, linkOptions);
             });
+          } else {
+            elm[attrs.uiJq].apply(elm, linkOptions);
           }
         }
-        elm[attrs.uiJq].apply(elm, linkOptions);
+
+        // If ui-refresh is used, re-fire the the method upon every change
+        if (attrs.uiRefresh) {
+          scope.$watch(attrs.uiRefresh, function(){
+            callPlugin();
+          });
+        }
+        
+        callPlugin();
       };
     }
   };
