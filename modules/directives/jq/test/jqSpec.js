@@ -59,28 +59,28 @@ describe('uiJq', function () {
       expect(jQuery.fn.foo.callCount).toBe(3);
     });
   });
-  describe('passing uiChange to options', function() {
-    it('should watch a form control change event and trigger an input event if true', function() {
+  describe('change events', function() {
+    it('should trigger an `input` event', function() {
       var bar = false;
-      var element = compile('<input ui-jq="foo">')(scope);
+      var element = compile('<input ui-jq="foo" ng-model="foobar">')(scope);
       element.bind('input', function(){
         bar = true;
       });
       element.trigger('change');
       expect(bar).toBe(true);
     });
-    it('should not watch a form control change event and trigger an input event if false', function() {
+    it('should ignore controls without ngModel attribute', function() {
       var bar = false;
-      var element = compile('<input ui-jq="foo" ui-options="{uiChange:false}">')(scope);
+      var element = compile('<input ui-jq="foo">')(scope);
       element.bind('input', function(){
         bar = true;
       });
       element.trigger('change');
       expect(bar).toBe(false);
     });
-    it('should not watch non-form controls', function() {
+    it('should ignore non-form controls', function() {
       var bar = false;
-      var element = compile('<div ui-jq="foo"></div>')(scope);
+      var element = compile('<div ui-jq="foo"></div  ng-model="foobar">')(scope);
       element.bind('input', function(){
         bar = true;
       });

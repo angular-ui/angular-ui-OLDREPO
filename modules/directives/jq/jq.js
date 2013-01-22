@@ -9,10 +9,9 @@
  * @param ui-jq {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
  *     Multiple parameters can be separated by commas
- * @param [ui-defer] or use ui.config.jq.{yourPlugin}.uiDefer = true to defer execution (wait until after AngularJS finishes rendering)
  * @param [ui-refresh] {expression} Watch expression and refire plugin on changes
  *
- * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange" ui-defer>
+ * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
 angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConfig) {
   return {
@@ -39,11 +38,6 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
           elm.on('change', function () {
             elm.trigger('input');
           });
-        }
-        // If options.uiDefer is true OR you have a ui-defer attribute, initialize the plugin in a timeout
-        if (options.uiDefer || attrs.uiDefer !== undefined) {
-          uiDefer = true
-          delete linkOptions[0].uiDefer;
         }
 
         // Call jQuery method and pass relevant options
