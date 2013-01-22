@@ -19,9 +19,10 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
          link: function(scope, elm, attrs) {
             //update the calendar with the correct options
             function update() {
+            var view;
             if(elm.fullCalendar('getView')){
               //setting the default view to be whatever the current view is. This can be overwritten. 
-              var view = elm.fullCalendar('getView').name;
+              view = elm.fullCalendar('getView').name;
             }
             //If the calendar has options added then render them.
             var expression,
@@ -37,7 +38,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
-                  }
+                  };
                 }
              } else {
               expression = {};
