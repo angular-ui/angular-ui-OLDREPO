@@ -1,61 +1,53 @@
 /*
 *  AngularJs Fullcalendar Wrapper for the JQuery FullCalendar
-*  inspired by http://arshaw.com/fullcalendar/ 
+*  API @ http://arshaw.com/fullcalendar/ 
 *  
-*  Basic Angular Calendar Directive that takes in live events as the ng-model and watches that event array for changes, to update the view accordingly. 
-*  Can also take in an event url as a source object(s) and feed the events per view. 
+*  Angular Calendar Directive that takes in the eventSources nested array object as the ng-model and watches an object named events for changes, 
+*  to update the view accordingly. Can also take in multiple event urls as a source object(s) and feed the events per view.
+*
+*
+*  The calendar must have an object named events on the scope to update itself properly when the events array is altered from outside of the calendar.  
 *
 */
 
 angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
     uiConfig.uiCalendar = uiConfig.uiCalendar || {};       
-    //returns the fullcalendar     
-    return {
+     //returns calendar     
+     return {
         require: 'ngModel',
         restrict: 'A',
-        scope: {
-          events: "=ngModel"
-        },
-        link: function(scope, elm, $attrs) {
-            var ngModel = $parse($attrs.ngModel);
-            //update method that is called on load and whenever the events array is changed. 
+         link: function(scope, elm, attrs) {
+            //update the calendar with the correct options
             function update() {
-              //Default View Options
-              var expression,
-                options = {
-                  header: {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'month,agendaWeek,agendaDay'
-                },
-              // add event name to title attribute on mouseover. 
-              eventMouseover: function(event, jsEvent, view) {
-              if (view.name !== 'agendaDay') {
-                $(jsEvent.target).attr('title', event.title);
-               }
-              },
-          
-              // Calling the events from the scope through the ng-model binding attribute. 
-              events: scope.events
-              };          
-              //if attrs have been entered to the directive, then create a relative expression. 
-              if ($attrs.uiCalendar){
-                 expression = scope.$eval($attrs.uiCalendar);
-              }
-              else{
-                expression = {};
-              } 
-              //extend the options to suite the custom directive.
-              angular.extend(options, uiConfig.uiCalendar, expression);
-              //call fullCalendar from an empty html tag, to keep angular happy.
-              elm.html('').fullCalendar(options);
+            if(elm.fullCalendar('getView')){
+              //setting the default view to be whatever the current view is. This can be overwritten. 
+              var view = elm.fullCalendar('getView').name;
             }
-            //on load update call.
+            //If the calendar has options added then render them.
+            var expression,
+              options = {
+                defaultView : view,
+                eventSources: scope.$eval(attrs.ngModel)
+              };
+            if (attrs.uiCalendar) {
+              expression = scope.$eval(attrs.uiCalendar);
+                //if header has not been included then render default header options
+                if(!expression.hasOwnProperty('header')){
+                  expression.header = {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                  }
+                }
+             } else {
+              expression = {};
+             }
+             angular.extend(options, uiConfig.uiCalendar, expression);
+             elm.html('').fullCalendar(options);
+            }
             update();
-            //watching the length of the array to create a more efficient update process. 
-            scope.$watch( 'events.length', function( newVal, oldVal )
+            scope.$watch('events.length', function( newVal, oldVal )
             {
-              //update the calendar on every change to events.length
               update();
             }, true );
         }
