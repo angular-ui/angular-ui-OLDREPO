@@ -49,6 +49,8 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
             } else {
               if (isMultiple && !controller.$modelValue) {
                 elm.select2('data', []);
+              } else if (angular.isArray(controller.$modelValue)) {
+                elm.select2('val', controller.$modelValue);
               } else if (angular.isObject(controller.$modelValue)) {
                 elm.select2('data', controller.$modelValue);
               } else {
