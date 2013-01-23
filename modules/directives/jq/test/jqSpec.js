@@ -25,38 +25,59 @@ describe('uiJq', function () {
     it('should just like, sort of work and junk', function () {
       spyOn(jQuery.fn, 'foo');
       compile("<div ui-jq='foo'></div>")(scope);
-      expect(jQuery.fn.foo).toHaveBeenCalled();
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo).toHaveBeenCalled();
+      });
     });
   });
   describe('calling a jQuery element function with options', function() {
     it('should not copy options.pizza to global', function() {
       spyOn(jQuery.fn, 'foo');
       compile('<div ui-jq="foo" ui-options="{pizza:true}"></div><div ui-jq="foo" ui-options="{}"></div>')(scope);
-      expect(jQuery.fn.foo.calls[0].args).toEqual([{pizza: true}]);
-      expect(jQuery.fn.foo.calls[1].args).toEqual([{}]);
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.calls[0].args).toEqual([{pizza: true}]);
+        expect(jQuery.fn.foo.calls[1].args).toEqual([{}]);
+      });
     });
   });
   describe('using ui-refresh', function() {
     it('should execute exactly once if the expression is never set', function() {
       spyOn(jQuery.fn, 'foo');
       compile('<div ui-jq="foo" ui-refresh="bar"></div>')(scope);
-      expect(jQuery.fn.foo.callCount).toBe(1);
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.callCount).toBe(1);
+      });
     });
     it('should execute exactly once if the expression is set at initialization', function() {
       spyOn(jQuery.fn, 'foo');
       scope.$apply('bar = true');
       compile('<div ui-jq="foo" ui-refresh="bar"></div>')(scope);
-      expect(jQuery.fn.foo.callCount).toBe(1);
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.callCount).toBe(1);
+      });
     });
     it('should execute once for each time the expression changes', function() {
       spyOn(jQuery.fn, 'foo');
       scope.$apply('bar = 1');
       compile('<div ui-jq="foo" ui-refresh="bar"></div>')(scope);
-      expect(jQuery.fn.foo.callCount).toBe(1);
-      scope.$apply('bar = bar+1');
-      expect(jQuery.fn.foo.callCount).toBe(2);
-      scope.$apply('bar = bar+1');
-      expect(jQuery.fn.foo.callCount).toBe(3);
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.callCount).toBe(1);
+        scope.$apply('bar = bar+1');
+      });
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.callCount).toBe(2);
+        scope.$apply('bar = bar+1');
+      });
+      waits(200);
+      runs(function(){
+        expect(jQuery.fn.foo.callCount).toBe(3);
+      });
     });
   });
   describe('change events', function() {
@@ -67,7 +88,10 @@ describe('uiJq', function () {
         bar = true;
       });
       element.trigger('change');
-      expect(bar).toBe(true);
+      waits(200);
+      runs(function(){
+        expect(bar).toBe(true);
+      });
     });
     it('should ignore controls without ngModel attribute', function() {
       var bar = false;
@@ -76,7 +100,10 @@ describe('uiJq', function () {
         bar = true;
       });
       element.trigger('change');
-      expect(bar).toBe(false);
+      waits(200);
+      runs(function(){
+        expect(bar).toBe(false);
+      });
     });
     it('should ignore non-form controls', function() {
       var bar = false;
@@ -85,7 +112,10 @@ describe('uiJq', function () {
         bar = true;
       });
       element.trigger('change');
-      expect(bar).toBe(false);
+      waits(200);
+      runs(function(){
+        expect(bar).toBe(false);
+      });
     });
   });
 });

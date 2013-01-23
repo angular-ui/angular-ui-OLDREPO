@@ -42,13 +42,9 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
 
         // Call jQuery method and pass relevant options
         function callPlugin() {
-          if (uiDefer) {
-            scope.$evalAsync(function(){
-              elm[attrs.uiJq].apply(elm, linkOptions);
-            });
-          } else {
+          scope.$evalAsync(function(){
             elm[attrs.uiJq].apply(elm, linkOptions);
-          }
+          });
         }
 
         // If ui-refresh is used, re-fire the the method upon every change
