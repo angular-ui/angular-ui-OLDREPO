@@ -17,6 +17,6 @@
     "grunt-coffee": "~0.0.3",
     "async": "0.1.x",
     "testacular": "~0.4.0",
-    "grunt-curl": "~0.2.0",
+    "grunt-curl": "~0.2.0"
   }
 }
