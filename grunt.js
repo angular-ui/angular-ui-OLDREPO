@@ -6,7 +6,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-coffee');
   grunt.loadNpmTasks('grunt-curl');
-  grunt.loadNpmTasks('gruntacular');
 
   // Project configuration.
   grunt.initConfig({
