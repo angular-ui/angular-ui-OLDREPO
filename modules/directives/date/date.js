@@ -83,6 +83,8 @@ angular.module('ui.directives')
         modelCtrl.$formatters.push(function(value) {
           if (angular.isString(value) ) {
             return new Date(value);
+          } else if (angular.isDate(value)) {
+             return value;
           }
         });
         modelCtrl.$parsers.push(function(value){
@@ -96,6 +98,8 @@ angular.module('ui.directives')
         modelCtrl.$formatters.push(function(value) {
           if (angular.isString(value) ) {
             return $.datepicker.parseDate(format, value);
+          } else if (angular.isDate(value)) {
+             return value;
           }
         });
         modelCtrl.$parsers.push(function(value){
