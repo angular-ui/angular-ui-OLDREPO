@@ -57,7 +57,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             {
               //update the calendar on every change to events.length
               update();
-            }, true );
+            });
         }
     };
 }]);
