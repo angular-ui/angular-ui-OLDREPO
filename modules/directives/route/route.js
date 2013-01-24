@@ -4,7 +4,7 @@
 angular.module('ui.directives').directive('uiRoute', ['ui.config', '$location', function (uiConfig, $location) {
   return {
     restrict: 'AC',
-    priority: 9999,
+    priority: 100, // must occur before attrs.ngHref is removed
     link: function ($scope, elm, attrs) {
       var watcher = angular.noop;
 
