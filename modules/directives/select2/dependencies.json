@@ -3,6 +3,6 @@
     "internal": [],
     "external": [
         "http://ivaynberg.github.com/select2/select2-3.2/select2.js",
-        "http://ivaynberg.github.com/select2/select2-3.2/select2.css",
+        "http://ivaynberg.github.com/select2/select2-3.2/select2.css"
     ]
 }
