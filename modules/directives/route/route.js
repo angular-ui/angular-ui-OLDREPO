@@ -1,7 +1,7 @@
 /**
  * Set a $activeRoute boolean to see if the current route matches
  */
-angular.module('ui.directives').directive('uiRoute', ['ui.config', '$location', function (uiConfig, $location) {
+angular.module('ui.directives').directive('uiRoute', ['$location', function ($location) {
   return {
     restrict: 'AC',
     priority: 100, // must occur before attrs.ngHref is removed
@@ -19,7 +19,7 @@ angular.module('ui.directives').directive('uiRoute', ['ui.config', '$location', 
       if (attrs.uiRoute) {
         attrs.$observe('uiRoute', function(newVal) {
           watcher = function watchRegex() {
-            var regexp = new RegExp('^' + watcher + '$', ["i"]);
+            var regexp = new RegExp('^' + newVal + '$', ['i']);
             $scope.$routeActive = regexp.test($location.path());
           };
           watcher();
