@@ -5,7 +5,6 @@ angular.module('ui.directives').directive('uiRoute', ['$location', function ($lo
   return {
     restrict: 'AC',
     priority: 100, // must occur before attrs.ngHref is removed
-    scope: false,
     link: function ($scope, elm, attrs) {
       var watcher = angular.noop;
 
@@ -19,7 +18,7 @@ angular.module('ui.directives').directive('uiRoute', ['$location', function ($lo
         watcher();
       }
 
-      if (attrs.uiRoute) {
+      if (elm.attr(attrs.$attr.uiRoute)) {
         attrs.$observe('uiRoute', function(newVal) {
           if ((hash = newVal.indexOf('#')) > -1)
             newVal = newVal.substr(hash + 1);
