@@ -10,12 +10,17 @@ describe('uiRoute', function () {
     $location = _$location_;
   }));
 
+  function setPath(path) {
+    $location.path(path);
+    scope.$apply();
+  }
+
   describe('with uiRoute defined', function(){
     it('should use the uiRoute property', function(){
       $compile('<div ui-route="/foo" />')(scope);
     });
     it('should update $uiRoute on $observe', function(){
-      $location.path('/bar');
+      setPath('/bar');
       scope.$apply('foobar = "foo"');
       $compile('<div ui-route="/{{foobar}}" />')(scope);
       expect(scope.$uiRoute).toBeFalsy();
@@ -25,7 +30,7 @@ describe('uiRoute', function () {
       expect(scope.$uiRoute).toBe(false);
     });
     it('should support regular expression', function(){
-      $location.path('/foo/123');
+      setPath('/foo/123');
       $compile('<div ui-route="/foo/[0-9]*" />')(scope);
       expect(scope.$uiRoute).toBe(true);
     });
@@ -34,12 +39,13 @@ describe('uiRoute', function () {
   describe('with ngHref defined', function(){
 
     it('should use the ngHref property', function(){
-      $location.path('/foo');
+      setPath('/foo');
+      scope.$apply();
       $compile('<a ng-href="/foo" ui-route />')(scope);
       expect(scope.$uiRoute).toBe(true);
     });
     it('should update $uiRoute on $observe', function(){
-      $location.path('/bar');
+      setPath('/bar');
       scope.$apply('foobar = "foo"');
       $compile('<a ng-href="/{{foobar}}" ui-route />')(scope);
       expect(scope.$uiRoute).toBeFalsy();
@@ -53,7 +59,7 @@ describe('uiRoute', function () {
   describe('with href defined', function(){
 
     it('should use the href property', function(){
-      $location.path('/foo');
+      setPath('/foo');
       $compile('<a href="/foo" ui-route />')(scope);
       expect(scope.$uiRoute).toBe(true);
     });
@@ -66,12 +72,12 @@ describe('uiRoute', function () {
   });
 
   it('should update $uiRoute on route change', function(){
-    $location.path('/bar');
+    setPath('/bar');
     $compile('<div ui-route="/foo" />')(scope);
     expect(scope.$uiRoute).toBeFalsy();
-    $location.path('/foo');
+    setPath('/foo');
     expect(scope.$uiRoute).toBe(true);
-    $location.path('/bar');
+    setPath('/bar');
     expect(scope.$uiRoute).toBe(false);
   });
 });

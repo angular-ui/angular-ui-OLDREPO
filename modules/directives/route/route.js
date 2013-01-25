@@ -19,7 +19,7 @@ angular.module('ui.directives').directive('uiRoute', ['$location', function ($lo
         var watcher = angular.noop;
 
         // Used by href and ngHref
-        function observeHref(newVal) {
+        function staticWatcher(newVal) {
           if ((hash = newVal.indexOf('#')) > -1)
             newVal = newVal.substr(hash + 1);
           watcher = function watchHref() {
@@ -27,26 +27,33 @@ angular.module('ui.directives').directive('uiRoute', ['$location', function ($lo
           };
           watcher();
         }
+        // Used by uiRoute
+        function regexWatcher(newVal) {
+          if ((hash = newVal.indexOf('#')) > -1)
+            newVal = newVal.substr(hash + 1);
+          watcher = function watchRegex() {
+            var regexp = new RegExp('^' + newVal + '$', ['i']);
+            $scope.$uiRoute = regexp.test($location.path());
+          };
+          watcher();
+        }
 
         switch (useProperty) {
           case 'uiRoute':
-            attrs.$observe('uiRoute', function(newVal) {
-              if ((hash = newVal.indexOf('#')) > -1)
-                newVal = newVal.substr(hash + 1);
-              watcher = function watchRegex() {
-                var regexp = new RegExp('^' + newVal + '$', ['i']);
-                $scope.$uiRoute = regexp.test($location.path());
-              };
-              watcher();
-            });
+            // if uiRoute={{}} this will be undefined, otherwise it will have a value and $observe() never gets triggered
+            if (attrs.uiRoute) {
+              regexWatcher(attrs.uiRoute);
+            } else {
+              attrs.$observe('uiRoute', regexWatcher);
+            }
             break;
           case 'ngHref':
             // Setup watcher() every time ngHref changes
-            attrs.$observe('ngHref', observeHref);
+            attrs.$observe('ngHref', staticWatcher);
             break;
           case 'href':
             // Setup watcher()
-            observeHref(attrs.href);
+            staticWatcher(attrs.href);
         }
 
         $scope.$on('$routeChangeSuccess', function(){
