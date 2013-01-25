@@ -14,20 +14,20 @@ describe('uiRoute', function () {
     it('should use the uiRoute property', function(){
       $compile('<div ui-route="/foo" />')(scope);
     });
-    it('should update $activeRoute on $observe', function(){
+    it('should update $uiRoute on $observe', function(){
       $location.path('/bar');
       scope.$apply('foobar = "foo"');
       $compile('<div ui-route="/{{foobar}}" />')(scope);
-      expect(scope.$activeRoute).toBeFalsy();
+      expect(scope.$uiRoute).toBeFalsy();
       scope.$apply('foobar = "bar"');
-      expect(scope.$activeRoute).toBe(true);
+      expect(scope.$uiRoute).toBe(true);
       scope.$apply('foobar = "foo"');
-      expect(scope.$activeRoute).toBe(false);
+      expect(scope.$uiRoute).toBe(false);
     });
     it('should support regular expression', function(){
       $location.path('/foo/123');
       $compile('<div ui-route="/foo/[0-9]*" />')(scope);
-      expect(scope.$activeRoute).toBe(true);
+      expect(scope.$uiRoute).toBe(true);
     });
   });
 
@@ -36,17 +36,17 @@ describe('uiRoute', function () {
     it('should use the ngHref property', function(){
       $location.path('/foo');
       $compile('<a ng-href="/foo" ui-route />')(scope);
-      expect(scope.$activeRoute).toBe(true);
+      expect(scope.$uiRoute).toBe(true);
     });
-    it('should update $activeRoute on $observe', function(){
+    it('should update $uiRoute on $observe', function(){
       $location.path('/bar');
       scope.$apply('foobar = "foo"');
       $compile('<a ng-href="/{{foobar}}" ui-route />')(scope);
-      expect(scope.$activeRoute).toBeFalsy();
+      expect(scope.$uiRoute).toBeFalsy();
       scope.$apply('foobar = "bar"');
-      expect(scope.$activeRoute).toBe(true);
+      expect(scope.$uiRoute).toBe(true);
       scope.$apply('foobar = "foo"');
-      expect(scope.$activeRoute).toBe(false);
+      expect(scope.$uiRoute).toBe(false);
     });
   });
 
@@ -55,7 +55,7 @@ describe('uiRoute', function () {
     it('should use the href property', function(){
       $location.path('/foo');
       $compile('<a href="/foo" ui-route />')(scope);
-      expect(scope.$activeRoute).toBe(true);
+      expect(scope.$uiRoute).toBe(true);
     });
   });
 
@@ -65,13 +65,13 @@ describe('uiRoute', function () {
     }).toThrow();
   });
 
-  it('should update $activeRoute on route change', function(){
+  it('should update $uiRoute on route change', function(){
     $location.path('/bar');
     $compile('<div ui-route="/foo" />')(scope);
-    expect(scope.$activeRoute).toBeFalsy();
+    expect(scope.$uiRoute).toBeFalsy();
     $location.path('/foo');
-    expect(scope.$activeRoute).toBe(true);
+    expect(scope.$uiRoute).toBe(true);
     $location.path('/bar');
-    expect(scope.$activeRoute).toBe(false);
+    expect(scope.$uiRoute).toBe(false);
   });
 });

@@ -1,26 +1,31 @@
 /**
- * Set a $activeRoute boolean to see if the current route matches
+ * Set a $uiRoute boolean to see if the current route matches
  */
 angular.module('ui.directives').directive('uiRoute', ['$location', function ($location) {
   return {
     restrict: 'AC',
     priority: 100, // must occur before attrs.ngHref is removed
+    scope: false,
     link: function ($scope, elm, attrs) {
       var watcher = angular.noop;
 
       // Used by href and ngHref
       function observeHref(newVal) {
+        if ((hash = newVal.indexOf('#')) > -1)
+          newVal = newVal.substr(hash + 1);
         watcher = function watchHref() {
-          $scope.$routeActive = ($location.path().indexOf(newVal) > -1);
+          $scope.$uiRoute = ($location.path().indexOf(newVal) > -1);
         };
         watcher();
       }
 
       if (attrs.uiRoute) {
         attrs.$observe('uiRoute', function(newVal) {
+          if ((hash = newVal.indexOf('#')) > -1)
+            newVal = newVal.substr(hash + 1);
           watcher = function watchRegex() {
             var regexp = new RegExp('^' + newVal + '$', ['i']);
-            $scope.$routeActive = regexp.test($location.path());
+            $scope.$uiRoute = regexp.test($location.path());
           };
           watcher();
         });
