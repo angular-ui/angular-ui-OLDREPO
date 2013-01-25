@@ -12,6 +12,7 @@ describe('uiRoute', function () {
 
   function setPath(path) {
     $location.path(path);
+    scope.$broadcast('$routeChangeSuccess');
     scope.$apply();
   }
 
@@ -38,9 +39,8 @@ describe('uiRoute', function () {
 
   describe('with ngHref defined', function(){
 
-    it('should use the ngHref property', function(){
+    iit('should use the ngHref property', function(){
       setPath('/foo');
-      scope.$apply();
       $compile('<a ng-href="/foo" ui-route />')(scope);
       expect(scope.$uiRoute).toBe(true);
     });

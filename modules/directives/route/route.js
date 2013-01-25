@@ -41,15 +41,17 @@ angular.module('ui.directives').directive('uiRoute', ['$location', function ($lo
         switch (useProperty) {
           case 'uiRoute':
             // if uiRoute={{}} this will be undefined, otherwise it will have a value and $observe() never gets triggered
-            if (attrs.uiRoute) {
+            if (attrs.uiRoute)
               regexWatcher(attrs.uiRoute);
-            } else {
+            else
               attrs.$observe('uiRoute', regexWatcher);
-            }
             break;
           case 'ngHref':
             // Setup watcher() every time ngHref changes
-            attrs.$observe('ngHref', staticWatcher);
+            if (attrs.ngHref)
+              staticWatcher(attrs.ngHref);
+            else
+              attrs.$observe('ngHref', staticWatcher);
             break;
           case 'href':
             // Setup watcher()
