@@ -2,6 +2,7 @@
 /*
  jQuery UI Datepicker plugin wrapper
 
+ @note If ≤ IE8 make sure you have a polyfill for Date.toISOString()
  @param [ui-date] {object} Options to pass to $.fn.datepicker() merged onto ui.config
  */
 
