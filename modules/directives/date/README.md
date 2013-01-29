@@ -6,6 +6,7 @@ This directive allows you to add a date-picker to your form elements.
 
 - JQuery
 - JQueryUI
+- [Date.toISOString()](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/toISOString) (requires [polyfill](https://github.com/kriskowal/es5-shim/) for &le;IE8)
 
 # Usage
 
