@@ -1,5 +1,5 @@
 {
   "core": [],
-  "internal": [],
+  "internal": ["event"],
   "external": []
 }
