@@ -10,7 +10,7 @@ angular.module('ui.directives').directive 'uiSortable', ['ui.config', (uiConfig)
 
   require: '?ngModel'
   link: (scope, element, attrs, ngModel) ->
-    opts = angular.extend({}, options, scope.$eval(attrs.uiOptions))
+    opts = angular.extend({}, options, scope.$eval(attrs.uiSortable))
 
     if ngModel?
       onStart = (e, ui) ->
