@@ -37,6 +37,7 @@ describe('uiJq', function () {
       };
       scope.$apply('items=[1, 2]');
       compile("<ul ui-jq='bar'><li ng-repeat='item in items'></li></ul>")(scope);
+      scope.$apply();
       timeout.flush();
       expect(length).toBe(2);
     });
