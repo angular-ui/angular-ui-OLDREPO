@@ -13,7 +13,7 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConfig) {
+angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function (uiConfig, $timeout) {
   return {
     restrict: 'A',
     compile: function (tElm, tAttrs) {
@@ -42,22 +42,17 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
 
         // Call jQuery method and pass relevant options
         function callPlugin() {
-          if (uiDefer) {
-            scope.$evalAsync(function(){
-              elm[attrs.uiJq].apply(elm, linkOptions);
-            });
-          } else {
+          $timeout(function(){
             elm[attrs.uiJq].apply(elm, linkOptions);
-          }
+          }, 0, false);
         }
 
         // If ui-refresh is used, re-fire the the method upon every change
         if (attrs.uiRefresh) {
-          scope.$watch(attrs.uiRefresh, function(){
+          scope.$watch(attrs.uiRefresh, function(newVal){
             callPlugin();
           });
         }
-        
         callPlugin();
       };
     }
