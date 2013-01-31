@@ -4,7 +4,7 @@
  * It is possible to specify a default set of parameters for each jQuery plugin.
  * Under the jq key, namespace each plugin by that which will be passed to ui-jq.
  * Unfortunately, at this time you can only pre-define the first parameter.
- * @example { jq : { datepicker : { showOn:'click', uiDefer: true } } }
+ * @example { jq : { datepicker : { showOn:'click' } } }
  *
  * @param ui-jq {string} The $elm.[pluginName]() to call.
  * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
@@ -13,16 +13,16 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function (uiConfig, $timeout) {
+angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function(uiConfig, $timeout) {
   return {
     restrict: 'A',
-    compile: function (tElm, tAttrs) {
+    compile: function(tElm, tAttrs) {
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
-      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq] || {};
-      return function (scope, elm, attrs) {
-        var linkOptions = [], uiDefer = false;
+      var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
+      return function(scope, elm, attrs) {
+        var linkOptions = [];
 
         // If ui-options are passed, merge (or override) them onto global defaults and pass to the jQuery method
         if (attrs.uiOptions) {
@@ -35,21 +35,22 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', func
         }
         // If change compatibility is enabled, the form input's "change" event will trigger an "input" event
         if (attrs.ngModel && elm.is('select,input,textarea')) {
-          elm.on('change', function () {
+          elm.on('change', function() {
             elm.trigger('input');
           });
         }
 
         // Call jQuery method and pass relevant options
         function callPlugin() {
-          $timeout(function(){
+          $timeout(function() {
+            console.log(attrs.uiJq, elm[attrs.uiJq], elm);
             elm[attrs.uiJq].apply(elm, linkOptions);
           }, 0, false);
         }
 
         // If ui-refresh is used, re-fire the the method upon every change
         if (attrs.uiRefresh) {
-          scope.$watch(attrs.uiRefresh, function(newVal){
+          scope.$watch(attrs.uiRefresh, function(newVal) {
             callPlugin();
           });
         }
