@@ -5,6 +5,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-coffee');
+  grunt.loadNpmTasks('grunt-curl');
 
   // Project configuration.
   grunt.initConfig({
@@ -12,8 +13,7 @@ module.exports = function (grunt) {
     pkg: '<json:package.json>',
     meta: {
       banner: '/**\n' + ' * <%= pkg.description %>\n' +
-      ' * @version v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      ' * @version v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
       ' * @link <%= pkg.homepage %>\n' +
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
     },
@@ -33,6 +33,8 @@ module.exports = function (grunt) {
         dest: '<%= builddir %>/<%= pkg.name %>-ieshiv.js'
       }
     },
+    curl: { //grunt-curl external dependencies
+    },
     min: {
       build: {
         src: ['<banner:meta.banner>', '<config:concat.build.dest>'],
@@ -45,7 +47,7 @@ module.exports = function (grunt) {
     },
     recess: {
       build: {
-        src: ['common/**/*.less'],
+        src: [],
         dest: '<%= builddir %>/<%= pkg.name %>.css',
         options: {
           compile: true
@@ -60,12 +62,13 @@ module.exports = function (grunt) {
       }
     },
     lint: {
-      files: ['grunt.js', 'common/**/*.js', 'modules/**/*.js']
+      files: ['grunt.js', 'common/**/*.js', 'modules/**/*.js', 'modules/**/*.json']
     },
     watch: {
       files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
       tasks: 'coffee build test'
     }
+
   });
 
   // Default task.
@@ -73,28 +76,45 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', 'build all or some of the angular-ui modules', function () {
 
-    var jsBuildFiles = grunt.config('concat.build.src');
-    var lessBuildFiles = [];
+    var jsFiles = grunt.config('concat.build.src');
+    var lessFiles = grunt.config('recess.build.src');
+    var curlFiles = grunt.config('curl');
 
-    if (this.args.length > 0) {
-
-      this.args.forEach(function(moduleName) {
-        var modulejs = grunt.file.expandFiles('modules/*/' + moduleName + '/*.js');
-        var moduleless = grunt.file.expandFiles('modules/*/' + moduleName + '/stylesheets/*.less', 'modules/*/' + moduleName + '/*.less');
-
-        jsBuildFiles = jsBuildFiles.concat(modulejs);
-        lessBuildFiles = lessBuildFiles.concat(moduleless);
+    function findModuleFiles(moduleName, getExternalFiles) {
+      jsFiles = jsFiles.concat(grunt.file.expand('modules/*/' + moduleName + '/*.js'));
+      lessFiles = lessFiles.concat(grunt.file.expand('modules/*/' + moduleName + '/**/*.less'));
+      
+      grunt.file.expand('modules/*/' + moduleName + '/dependencies.json')
+      .map(grunt.file.read).forEach(function(content) {
+        var json = JSON.parse(content);
+        if (getExternalFiles) {
+          //Add external deps to curl list
+          json.external.forEach(function(url) {
+            var fileName = url.substr(url.lastIndexOf('/') + 1);
+            curlFiles[grunt.config('builddir') + '/lib/' + fileName] = url;
+          });
+        }
+        json.internal.forEach(findModuleFiles);
       });
-
-      grunt.config('concat.build.src', jsBuildFiles);
-      grunt.config('recess.build.src', lessBuildFiles);
-
-    } else {
-      grunt.config('concat.build.src', jsBuildFiles.concat(['modules/*/*/*.js']));
-      grunt.config('recess.build.src', lessBuildFiles.concat(grunt.config('recess.build.src')));
     }
 
-    grunt.task.run('concat min recess:build recess:min');
+    if (this.args.length > 0) {
+      this.args.forEach(function(module) { findModuleFiles(module, true); });
+    } else {
+      //Find modules for every directory
+      grunt.file.expand('modules/*/*').forEach(function(path) { 
+        findModuleFiles(path.split('/')[2]);
+      });
+    }
+    grunt.config('concat.build.src', jsFiles);
+    grunt.config('recess.build.src', lessFiles);
+    grunt.config('curl', curlFiles);
+    
+    //Only run curl task if length of curlFiles > 0
+    if (Object.keys(grunt.config('curl')).length > 0) {
+      grunt.task.run('curl');
+    }
+    grunt.task.run('concat min recess');
   });
 
   grunt.registerTask('dist', 'change dist location', function() {
