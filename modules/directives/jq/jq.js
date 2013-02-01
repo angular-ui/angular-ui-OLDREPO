@@ -13,15 +13,19 @@
  *
  * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
-angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function(uiConfig, $timeout) {
+angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function uiJqInjectingFunction(uiConfig, $timeout) {
+
   return {
     restrict: 'A',
-    compile: function(tElm, tAttrs) {
+    compile: function uiJqCompilingFunction(tElm, tAttrs) {
+
       if (!angular.isFunction(tElm[tAttrs.uiJq])) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
       var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
-      return function(scope, elm, attrs) {
+
+      return function uiJqLinkingFunction(scope, elm, attrs) {
+
         var linkOptions = [];
 
         // If ui-options are passed, merge (or override) them onto global defaults and pass to the jQuery method
