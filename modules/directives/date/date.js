@@ -75,11 +75,24 @@ angular.module('ui.directives')
 }
 ])
 
-.directive('uiDateFormat', [function() {
+.directive('uiDateFormat', ['ui.config', function(uiConfig) {
   var directive = {
     require:'ngModel',
     link: function(scope, element, attrs, modelCtrl) {
-      if ( attrs.uiDateFormat === '' ) {
+      var dateFormat = attrs.uiDateFormat || uiConfig.dateFormat;
+      if ( dateFormat ) {
+        // Use the datepicker with the attribute value as the dateFormat string to convert to and from a string
+        modelCtrl.$formatters.push(function(value) {
+          if (angular.isString(value) ) {
+            return $.datepicker.parseDate(dateFormat, value);
+          }
+        });
+        modelCtrl.$parsers.push(function(value){
+          if (value) {
+            return $.datepicker.formatDate(dateFormat, value);
+          }
+        });
+      } else {
         // Default to ISO formatting
         modelCtrl.$formatters.push(function(value) {
           if (angular.isString(value) ) {
@@ -89,19 +102,6 @@ angular.module('ui.directives')
         modelCtrl.$parsers.push(function(value){
           if (value) {
             return value.toISOString();
-          }
-        });
-      } else {
-        var format = attrs.uiDateFormat;
-        // Use the datepicker with the attribute value as the format string to convert to and from a string
-        modelCtrl.$formatters.push(function(value) {
-          if (angular.isString(value) ) {
-            return $.datepicker.parseDate(format, value);
-          }
-        });
-        modelCtrl.$parsers.push(function(value){
-          if (value) {
-            return $.datepicker.formatDate(format, value);
           }
         });
       }

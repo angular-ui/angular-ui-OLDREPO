@@ -229,92 +229,126 @@ describe('uiDate', function() {
       });
     });
   });
+});
 
-  describe('use with the ui-date-format directive', function() {
+describe('uiDateFormat', function() {
+  beforeEach(module('ui.directives'));
+
+  describe('$formatting', function() {
     it('should parse the date correctly from an ISO string', function() {
       inject(function($compile, $rootScope) {
-        var aDateString, element;
-        aDateString = (new Date(2012,8,17)).toISOString();
-        element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
-        $rootScope.$apply(function() {
-          $rootScope.x = aDateString;
-        });
+        var aDate, aDateString, element;
+        aDate = new Date(2012,8,17);
+        aDateString = (aDate).toISOString();
+
+        element = $compile('<input ui-date-format ng-model="x"/>')($rootScope);
+        $rootScope.x = aDateString;
+        $rootScope.$digest();
+
+        // Check that the model has not been altered
         expect($rootScope.x).toEqual(aDateString);
-        expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-09-17');
+        // Check that the viewValue has been parsed correctly
+        expect(element.controller('ngModel').$viewValue).toEqual(aDate);
       });
     });
     it('should parse the date correctly from a custom string', function() {
       inject(function($compile, $rootScope) {
-        var format = 'DD, d MM, yy';
+        var aDate = new Date(2012, 9, 11);
         var aDateString = "Thursday, 11 October, 2012";
-        var element = $compile('<input ui-date ui-date-format="' + format + '" ng-model="x"/>')($rootScope);
-        $rootScope.$apply(function() {
-          $rootScope.x = aDateString;
-        });
-        expect($rootScope.x).toEqual(aDateString);
-        expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
-        expect(element.datepicker('getDate')).toEqual(new Date(2012, 9, 11));
-      });
-    });
-    it('should not freak out when the model is false', function() {
-      inject(function($compile, $rootScope) {
-         var aDateString, element;
-          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
-          $rootScope.$apply(function() {
-            $rootScope.x = false;
-          });
-          expect($rootScope.x).toBe(false);
-          expect(element.datepicker('getDate')).toEqual(null);
-      });
-    });
-    
-    it('should not freak out when the model is undefined', function() {
-      inject(function($compile, $rootScope) {
-         var aDateString, element;
-          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
-          $rootScope.$apply(function() {
-            $rootScope.x = undefined;
-          });
-          expect($rootScope.x).toBe(undefined);
-          expect(element.datepicker('getDate')).toEqual(null);
-      });
-    });
-    
-    it('should not freak out when the model is null', function() {
-      inject(function($compile, $rootScope) {
-         var aDateString, element;
-          element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
-          $rootScope.$apply(function() {
-            $rootScope.x = null;
-          });
-          expect($rootScope.x).toBe(null);
-          expect(element.datepicker('getDate')).toEqual(null);
-      });
-    });
 
+        var element = $compile('<input ui-date-format="DD, d MM, yy" ng-model="x"/>')($rootScope);
+        $rootScope.x = aDateString;
+        $rootScope.$digest();
+
+        // Check that the model has not been altered
+        expect($rootScope.x).toEqual(aDateString);
+        // Check that the viewValue has been parsed correctly
+        expect(element.controller('ngModel').$viewValue).toEqual(aDate);
+      });
+    });
+    it('should handle unusual model values', function() {
+      inject(function($compile, $rootScope) {
+        var element = $compile('<input ui-date-format ng-model="x"/>')($rootScope);
+
+        $rootScope.x = false;
+        $rootScope.$digest();
+        // Check that the model has not been altered
+        expect($rootScope.x).toEqual(false);
+        // Check that the viewValue has been parsed correctly
+        expect(element.controller('ngModel').$viewValue).toEqual(null);
+
+        $rootScope.x = undefined;
+        $rootScope.$digest();
+        // Check that the model has not been altered
+        expect($rootScope.x).toBeUndefined();
+        // Check that the viewValue has been parsed correctly
+        expect(element.controller('ngModel').$viewValue).toEqual(null);
+
+        $rootScope.x = null;
+        $rootScope.$digest();
+        // Check that the model has not been altered
+        expect($rootScope.x).toBeNull();
+        // Check that the viewValue has been parsed correctly
+        expect(element.controller('ngModel').$viewValue).toEqual(null);
+      });
+    });
+  });
+
+  describe('$parsing', function() {
     it('should format a selected date correctly to an ISO string', function() {
       inject(function($compile, $rootScope) {
         var aDate = new Date(2012,8,17);
         var aDateString = (aDate).toISOString();
-        var element = $compile('<input ui-date ui-date-format ng-model="x"/>')($rootScope);
-        $rootScope.$apply();
-        selectDate(element, aDate);
+        var element = $compile('<input ui-date-format ng-model="x"/>')($rootScope);
+        $rootScope.$digest();
+
+        element.controller('ngModel').$setViewValue(aDate);
+        // Check that the model is updated correctly
         expect($rootScope.x).toEqual(aDateString);
-        expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-09-17');
+        // Check that the $viewValue has not been altered
+        expect(element.controller('ngModel').$viewValue).toEqual(aDate);
       });
     });
+
     it('should format a selected date correctly to a custom string', function() {
       inject(function($compile, $rootScope) {
         var format = 'DD, d MM, yy';
         var aDate = new Date(2012,9,11);
         var aDateString = "Thursday, 11 October, 2012";
-        var element = $compile('<input ui-date ui-date-format="' + format + '" ng-model="x"/>')($rootScope);
-        $rootScope.$apply();
-        selectDate(element, aDate);
+        var element = $compile('<input ui-date-format="' + format + '" ng-model="x"/>')($rootScope);
+        $rootScope.$digest();
+
+        element.controller('ngModel').$setViewValue(aDate);
+        // Check that the model is updated correctly
         expect($rootScope.x).toEqual(aDateString);
-        expect($.datepicker.formatDate(format, element.datepicker('getDate'))).toEqual(aDateString);
-        expect(element.datepicker('getDate')).toEqual(aDate);
+        // Check that the $viewValue has not been altered
+        expect(element.controller('ngModel').$viewValue).toEqual(aDate);
       });
+    });
+  });
+
+  describe('with uiConfig', function() {
+    var element, scope, config;
+    var format = 'DD, d MM, yy';
+    var aDate = new Date(2012,9,11);
+    var aDateString = "Thursday, 11 October, 2012";
+    var aISODateString = aDate.toISOString();
+    beforeEach(inject(['$compile', '$rootScope', 'ui.config', function($compile, $rootScope, uiConfig) {
+      config = uiConfig;
+      element = $compile('<input ui-date-format ng-model="x"/>')($rootScope);
+      scope = $rootScope;
+    }]));
+
+    it('use ISO if not config value', function() {
+      scope.x = aISODateString;
+      scope.$digest();
+      expect(element.controller('ngModel').$viewValue).toEqual(aDate);
+    });
+    it('use format value if config given', function() {
+      config.dateFormat = format;
+      scope.x = aDateString;
+      scope.$digest();
+      expect(element.controller('ngModel').$viewValue).toEqual(aDate);
     });
   });
 });
