@@ -23,21 +23,9 @@ angular.module('ui.directives').directive('uiCurrency', ['ui.config', 'currencyF
       renderview = function (viewvalue) {
         var num;
         num = viewvalue * 1;
-        if (num > 0) {
-          element.addClass(opts.pos);
-        } else {
-          element.removeClass(opts.pos);
-        }
-        if (num < 0) {
-          element.addClass(opts.neg);
-        } else {
-          element.removeClass(opts.neg);
-        }
-        if (num === 0) {
-          element.addClass(opts.zero);
-        } else {
-          element.removeClass(opts.zero);
-        }
+        element.toggleClass(opts.pos, (num > 0) );
+        element.toggleClass(opts.neg, (num < 0) );
+        element.toggleClass(opts.zero, (num === 0) );
         if (viewvalue === '') {
           element.text('');
         } else {
