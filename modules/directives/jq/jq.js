@@ -43,7 +43,6 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', func
         // Call jQuery method and pass relevant options
         function callPlugin() {
           $timeout(function() {
-            console.log(attrs.uiJq, elm[attrs.uiJq], elm);
             elm[attrs.uiJq].apply(elm, linkOptions);
           }, 0, false);
         }
