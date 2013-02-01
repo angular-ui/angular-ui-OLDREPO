@@ -4,7 +4,6 @@ var testacular = require('testacular');
 module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-recess');
-  grunt.loadNpmTasks('grunt-coffee');
 
   // Project configuration.
   grunt.initConfig({
@@ -16,12 +15,6 @@ module.exports = function (grunt) {
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
       ' * @link <%= pkg.homepage %>\n' +
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
-    },
-    coffee: {
-      build: {
-        src: ['common/*.coffee', 'modules/**/*.coffee'],
-        extension: ".coffee.js"
-      }
     },
     concat: {
       build: {
@@ -63,13 +56,13 @@ module.exports = function (grunt) {
       files: ['grunt.js', 'common/**/*.js', 'modules/**/*.js']
     },
     watch: {
-      files: ['modules/**/*.coffee', 'modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
-      tasks: 'coffee build test'
+      files: ['modules/**/*.js', 'common/**/*.js', 'templates/**/*.js'],
+      tasks: 'build test'
     }
   });
 
   // Default task.
-  grunt.registerTask('default', 'coffee build test');
+  grunt.registerTask('default', 'build test');
 
   grunt.registerTask('build', 'build all or some of the angular-ui modules', function () {
 
