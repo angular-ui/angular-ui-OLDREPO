@@ -81,16 +81,15 @@ angular.module('ui.directives')
     link: function(scope, element, attrs, modelCtrl) {
       var dateFormat = attrs.uiDateFormat || uiConfig.dateFormat;
       if ( dateFormat ) {
-        var format = attrs.uiDateFormat;
-        // Use the datepicker with the attribute value as the format string to convert to and from a string
+        // Use the datepicker with the attribute value as the dateFormat string to convert to and from a string
         modelCtrl.$formatters.push(function(value) {
           if (angular.isString(value) ) {
-            return $.datepicker.parseDate(format, value);
+            return $.datepicker.parseDate(dateFormat, value);
           }
         });
         modelCtrl.$parsers.push(function(value){
           if (value) {
-            return $.datepicker.formatDate(format, value);
+            return $.datepicker.formatDate(dateFormat, value);
           }
         });
       } else {
