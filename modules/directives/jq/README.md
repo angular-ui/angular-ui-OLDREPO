@@ -4,7 +4,7 @@ This directive is designed to reduce the need for you to create new directives f
 
 ## Injecting, Compiling, and Linking functions
 
-When you create a directive, there are up to 3 function layers for you to define[*][1]:
+When you create a directive, there are up to 3 function layers for you to define[1]:
 
 ```js
 myApp.directive('uiJq', function uiJqInjectingFunction(){
