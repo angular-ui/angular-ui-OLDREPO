@@ -4,7 +4,7 @@ This directive is designed to reduce the need for you to create new directives f
 
 ## Injecting, Compiling, and Linking functions
 
-When you create a directive, there are up to 3 function layers for you to define[1]:
+When you create a directive, there are up to 3 function layers for you to define[[1]](#footnotes):
 
 ```js
 myApp.directive('uiJq', function uiJqInjectingFunction(){
@@ -107,4 +107,6 @@ To make this easy, we added a `ui-refresh` property. This is the equivalent to a
 <input ui-jq="focus" ui-refresh="isLoginFormVisible">
 ```
 
-[1]: A [transcluding function](http://docs.angularjs.org/guide/directive) is actually a 4th layer, but this is not used by uiJq
+## Footnotes
+
+1. A [transcluding function](http://docs.angularjs.org/guide/directive) is actually a 4th layer, but this is not used by uiJq
