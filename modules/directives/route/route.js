@@ -13,7 +13,7 @@ angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', fun
       } else if (tAttrs.href) {
         useProperty = 'href';
       } else {
-        throw new Error('uiRoute missing a route or href property on ' + elm[0]);
+        throw new Error('uiRoute missing a route or href property on ' + tElement[0]);
       }
       return function ($scope, elm, attrs) {
         var modelSetter = $parse(attrs.ngModel || attrs.routeModel || '$uiRoute').assign;
