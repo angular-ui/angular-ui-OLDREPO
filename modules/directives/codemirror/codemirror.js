@@ -12,7 +12,7 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 		link:function (scope, elm, attrs, ngModel) {
 			var options, opts, onChange, deferCodeMirror, codeMirror;
 
-			if (elm[0].type !== 'textarea') {
+			if (elm[0].tagName.toLowerCase() == 'textarea') {
 				throw new Error('uiCodemirror3 can only be applied to a textarea element');
 			}
 
