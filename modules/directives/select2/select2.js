@@ -24,7 +24,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
         repeatOption = tElm.find('option[ng-repeat], option[data-ng-repeat]');
 
         if (repeatOption.length) {
-		      repeatAttr = repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat');
+          repeatAttr = repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat');
           watch = jQuery.trim(repeatAttr.split('|')[0]).split(' ').pop();
         }
       }
@@ -70,7 +70,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
             scope.$watch(watch, function (newVal, oldVal, scope) {
               if (!newVal) return;
               // Delayed so that the options have time to be rendered
-              setTimeout(function () {
+              $timeout(function () {
                 elm.select2('val', controller.$viewValue);
                 // Refresh angular to remove the superfluous option
                 elm.trigger('change');
