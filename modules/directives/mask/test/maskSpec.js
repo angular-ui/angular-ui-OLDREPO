@@ -41,7 +41,7 @@ xdescribe('uiMask', function () {
       $rootScope.x = 42;
       var errorInputHtml = "<input ui-mask=\"(9)9\" ng-model='x'>";
       element = $compile(errorInputHtml)($rootScope);
-      expect($rootScope.$digest()).toThrow();      
+      expect($rootScope.$digest).toThrow('The Mask widget is not correctly set up');
     });
   });
 });
