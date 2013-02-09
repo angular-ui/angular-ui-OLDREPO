@@ -1,63 +1,65 @@
 /*
 *  AngularJs Fullcalendar Wrapper for the JQuery FullCalendar
-*  inspired by http://arshaw.com/fullcalendar/ 
+*  API @ http://arshaw.com/fullcalendar/ 
 *  
-*  Basic Angular Calendar Directive that takes in live events as the ng-model and watches that event array for changes, to update the view accordingly. 
-*  Can also take in an event url as a source object(s) and feed the events per view. 
+*  Angular Calendar Directive that takes in the [eventSources] nested array object as the ng-model and watches (eventSources.length + eventSources[i].length) for changes. 
+*       Can also take in multiple event urls as a source object(s) and feed the events per view.
+*       The calendar will watch any eventSource array and update itself when a delta is created  
+*       An equalsTracker attrs has been added for use cases that would render the overall length tracker the same even though the events have changed to force updates.
 *
 */
 
 angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
-    uiConfig.uiCalendar = uiConfig.uiCalendar || {};       
-    //returns the fullcalendar     
-    return {
+     uiConfig.uiCalendar = uiConfig.uiCalendar || {};       
+     //returns calendar     
+     return {
         require: 'ngModel',
         restrict: 'A',
-        scope: {
-          events: "=ngModel"
-        },
-        link: function(scope, elm, $attrs) {
-            var ngModel = $parse($attrs.ngModel);
-            //update method that is called on load and whenever the events array is changed. 
+          link: function(scope, elm, attrs, $timeout) {
+            var sources = scope.$eval(attrs.ngModel);
+            var tracker = 0;
+            /* returns the length of all source arrays plus the length of eventSource itself */
+            var getSources = function () {
+              tracker = 0;
+              angular.forEach(sources,function(value,key){
+                if(angular.isArray(value)){
+                  tracker += value.length;
+                }
+              });
+               if(angular.isNumber(equalsTracker)){
+                return tracker + sources.length + equalsTracker;
+               }else{
+                return tracker + sources.length;
+              }
+            };
+            /* update the calendar with the correct options */
             function update() {
-              //Default View Options
+              //calendar object exposed on scope
+              scope.calendar = elm.html('');
+              var view = scope.calendar.fullCalendar('getView');
+              if(view){
+                view = view.name; //setting the default view to be whatever the current view is. This can be overwritten. 
+              }
+              /* If the calendar has options added then render them */
               var expression,
                 options = {
-                  header: {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'month,agendaWeek,agendaDay'
-                },
-              // add event name to title attribute on mouseover. 
-              eventMouseover: function(event, jsEvent, view) {
-              if (view.name !== 'agendaDay') {
-                $(jsEvent.target).attr('title', event.title);
-               }
-              },
-          
-              // Calling the events from the scope through the ng-model binding attribute. 
-              events: scope.events
-              };          
-              //if attrs have been entered to the directive, then create a relative expression. 
-              if ($attrs.uiCalendar){
-                 expression = scope.$eval($attrs.uiCalendar);
-              }
-              else{
+                  defaultView : view,
+                  eventSources: sources
+                };
+              if (attrs.uiCalendar) {
+                expression = scope.$eval(attrs.uiCalendar);
+              } else {
                 expression = {};
-              } 
-              //extend the options to suite the custom directive.
+              }
               angular.extend(options, uiConfig.uiCalendar, expression);
-              //call fullCalendar from an empty html tag, to keep angular happy.
-              elm.html('').fullCalendar(options);
+              scope.calendar.fullCalendar(options);
             }
-            //on load update call.
             update();
-            //watching the length of the array to create a more efficient update process. 
-            scope.$watch( 'events.length', function( newVal, oldVal )
-            {
-              //update the calendar on every change to events.length
-              update();
-            });
-        }
+              /* watches all eventSources */
+              scope.$watch(getSources, function( newVal, oldVal )
+              {
+                update();
+              });
+         }
     };
 }]);
