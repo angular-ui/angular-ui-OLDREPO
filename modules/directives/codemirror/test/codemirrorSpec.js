@@ -68,8 +68,7 @@ describe('uiCodemirror', function () {
 		beforeEach(function () {
 			var fromTextArea = CodeMirror.fromTextArea;
 			spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
-				codemirror = fromTextArea.apply(this, arguments);
-				return codemirror;
+				return fromTextArea.apply(this, arguments);
 			});
 		});
 
