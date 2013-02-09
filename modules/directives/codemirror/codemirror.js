@@ -17,7 +17,6 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 			if (elm[0].type !== 'textarea') {
 				throw new Error('uiCodemirror3 can only be applied to a textarea element');
 			}
-
 			options = uiConfig.codemirror || {};
 			opts = angular.extend({}, options, scope.$eval(attrs.uiCodemirror));
 
@@ -64,8 +63,10 @@ angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeou
 
 				// Watch ui-refresh and refresh the directive
 				if (attrs.uiRefresh) {
-					scope.$watch(attrs.uiRefresh, function(){
-						$timeout(codemirror.refresh);
+					scope.$watch(attrs.uiRefresh, function(newVal, oldVal){
+						// Skip the initial watch firing
+						if (newVal !== oldVal)
+							$timeout(codeMirror.refresh);
 					});
 				}
 
