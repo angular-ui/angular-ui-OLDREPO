@@ -1,10 +1,14 @@
 /*global beforeEach, afterEach, describe, it, inject, expect, module, spyOn, CodeMirror, angular, $*/
-
+/**
+ * TODO Test all the CodeMirror events : cursorActivity viewportChange gutterClick focus blur scroll update.
+ *      with  <textarea ui-codemirror="{onChange: doChange ,onCursorActivity: doSomething}" ng-model="foo">
+ *
+ */
 describe('uiCodemirror', function () {
-  'use strict';
+	'use strict';
 
 	// declare these up here to be global to all tests
-	var $rootScope, $compile, $timeout, uiConfig = angular.module('ui.config');
+	var scope, $compile, $timeout, uiConfig = angular.module('ui.config');
 
 	beforeEach(module('ui.directives'));
 	beforeEach(function () {
@@ -14,7 +18,7 @@ describe('uiCodemirror', function () {
 	// inject in angular constructs. Injector knows about leading/trailing underscores and does the right thing
 	// otherwise, you would need to inject these into each test
 	beforeEach(inject(function (_$rootScope_, _$compile_, _$timeout_) {
-		$rootScope = _$rootScope_.$new();
+		scope = _$rootScope_.$new();
 		$compile = _$compile_;
 		$timeout = _$timeout_;
 	}));
@@ -23,121 +27,132 @@ describe('uiCodemirror', function () {
 		uiConfig.value('ui.config', {}); // cleanup
 	});
 
-  describe('compiling this directive', function () {
-    it('should throw an error if used against a non-textarea', function () {
-      function compile() {
-        $compile('<div ui-codemirror ng-model="foo"></div>')($rootScope);
-      }
+	describe('compiling this directive', function () {
+		it('should throw an error if used against a non-textarea', function () {
+			function compile() {
+				$compile('<div ui-codemirror ng-model="foo"></div>')(scope);
+			}
 
-      expect(compile).toThrow();
-    });
+			expect(compile).toThrow();
+		});
 
-    it('should not throw an error when used against a textarea', function () {
-      function compile() {
-        $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-      }
+		it('should not throw an error when used against a textarea', function () {
+			function compile() {
+				$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+			}
 
-      expect(compile).not.toThrow();
-    });
+			expect(compile).not.toThrow();
+		});
 
-    it('should throw an error when no ngModel attribute defined', function () {
-      function compile() {
-        $compile('<textarea ui-codemirror></textarea>')($rootScope);
-      }
+		it('should throw an error when no ngModel attribute defined', function () {
+			function compile() {
+				$compile('<textarea ui-codemirror></textarea>')(scope);
+			}
 
-      expect(compile).toThrow();
-    });
+			expect(compile).toThrow();
+		});
 
-    it('should watch the uiCodemirror attribute', function () {
-      spyOn($rootScope, '$watch');
-      $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-	    $timeout.flush();
-      expect($rootScope.$watch).toHaveBeenCalled();
-    });
-	  
-    it('should include the passed options', function () {
-	    var codemirror, options,
-		    fromTextArea = CodeMirror.fromTextArea;
-	    spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
-		    codemirror = fromTextArea.apply(this, arguments);
-		    return codemirror;
-	    });
-      $compile('<textarea ui-codemirror="{fooo: \'baar\'}" ng-model="foo"></textarea>')($rootScope);
-	    $timeout.flush();
-      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].fooo).toEqual("baar");
-    });
+		it('should watch the uiCodemirror attribute', function () {
+			spyOn(scope, '$watch');
+			$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+			$timeout.flush();
+			expect(scope.$watch).toHaveBeenCalled();
+		});
 
-    it('should include the default options', function () {var codemirror, options,
-	    fromTextArea = CodeMirror.fromTextArea;
-	    spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
-		    codemirror = fromTextArea.apply(this, arguments);
-		    return codemirror;
-	    });
-	    $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-	    $timeout.flush();
-      expect(CodeMirror.fromTextArea.mostRecentCall.args[1].bar).toEqual('baz');
-    });
-  });
+	});
 
-  describe('when the model changes', function () {
-    it('should update the IDE', function () {
-      var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-      $rootScope.foo = 'bar';
-      $rootScope.$apply();
-	    $timeout.flush();
-      expect(element[0].nextSibling.CodeMirror.getValue()).toBe($rootScope.foo);
-    });
-  });
+	describe('while spying on the CodeMirror instance', function () {
 
-  describe('when the IDE changes', function () {
-    it('should update the model', function () {
-      var codemirror,
-        fromTextArea = CodeMirror.fromTextArea;
-      spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
-        codemirror = fromTextArea.apply(this, arguments);
-        return codemirror;
-      });
-      $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-      $rootScope.foo = 'bar';
-      $rootScope.$apply();
-	    $timeout.flush();
-      var value = 'baz';
-      codemirror.setValue(value);
-      expect($rootScope.foo).toBe(value);
-    });
-  });
+		var codemirror;
 
-  describe('when the model is undefined/null', function () {
-    it('should update the IDE with an empty string', function () {
-      var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-      $rootScope.$apply();
-      expect($rootScope.foo).toBe(undefined);
-      expect($.trim(element.siblings().text())).toBe('');
-      $rootScope.foo = null;
-      $rootScope.$apply();
-      expect($rootScope.foo).toBe(null);
-      expect($.trim(element.siblings().text())).toBe('');
-    });
-  });
+		beforeEach(function () {
+			var fromTextArea = CodeMirror.fromTextArea;
+			spyOn(CodeMirror, 'fromTextArea').andCallFake(function () {
+				codemirror = fromTextArea.apply(this, arguments);
+				return codemirror;
+			});
+		});
 
-  describe('when the model is an object or an array', function () {
-    it('should throw an error', function () {
-      function compileWithObject() {
-        $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-	      $timeout.flush();
-        $rootScope.foo = {};
-        $rootScope.$apply();
-      }
+		describe('verify the directive options', function () {
+			it('should include the passed options', function () {
+				$compile('<textarea ui-codemirror="{oof: \'baar\'}" ng-model="foo"></textarea>')(scope);
+				$timeout.flush();
+				expect(CodeMirror.fromTextArea.mostRecentCall.args[1].oof).toEqual("baar");
+			});
 
-      function compileWithArray() {
-        $compile('<textarea ui-codemirror ng-model="foo"></textarea>')($rootScope);
-	      $timeout.flush();
-        $rootScope.foo = [];
-        $rootScope.$apply();
-      }
+			it('should include the default options', function () {
+				$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				$timeout.flush();
+				expect(CodeMirror.fromTextArea.mostRecentCall.args[1].bar).toEqual('baz');
+			});
+		});
 
-      expect(compileWithObject).toThrow();
-      expect(compileWithArray).toThrow();
-    });
-  });
+		describe('when uiRefresh is added', function () {
+			it('should trigger the CodeMirror.refresh() method', function () {
+				$compile('<textarea ui-codemirror ng-model="foo" ui-refresh="bar"></textarea>')(scope);
+				$timeout.flush();
+				spyOn(codemirror, 'refresh');
+				scope.$apply('bar = true');
+				$timeout.flush();
+				expect(codemirror.refresh).toHaveBeenCalled();
+			});
+		});
+
+
+		describe('when the IDE changes', function () {
+			it('should update the model', function () {
+				$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				scope.$apply("foo = 'bar'");
+				$timeout.flush();
+				var value = 'baz';
+				codemirror.setValue(value);
+				expect(scope.foo).toBe(value);
+			});
+		});
+	});
+
+	describe('when the model changes', function () {
+		it('should update the IDE', function () {
+			var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+			scope.foo = 'bar';
+			scope.$apply();
+			$timeout.flush();
+			expect($.trim(element.siblings().text())).toBe(scope.foo);
+		});
+	});
+
+
+	describe('when the model is undefined/null', function () {
+		it('should update the IDE with an empty string', function () {
+			var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+			scope.$apply();
+			expect(scope.foo).toBe(undefined);
+			expect($.trim(element.siblings().text())).toBe('');
+			scope.foo = null;
+			scope.$apply();
+			expect(scope.foo).toBe(null);
+			expect($.trim(element.siblings().text())).toBe('');
+		});
+	});
+
+	describe('when the model is an object or an array', function () {
+		it('should throw an error', function () {
+			function compileWithObject() {
+				$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				$timeout.flush();
+				scope.foo = {};
+				scope.$apply();
+			}
+
+			function compileWithArray() {
+				$compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				$timeout.flush();
+				scope.foo = [];
+				scope.$apply();
+			}
+
+			expect(compileWithObject).toThrow();
+			expect(compileWithArray).toThrow();
+		});
+	});
 });
