@@ -5,60 +5,62 @@
 */
 angular.module('ui.directives').directive('uiSortable', [
   'ui.config', function(uiConfig) {
-    var options;
-    options = {};
-    if (uiConfig.sortable)
-      angular.extend(options, uiConfig.sortable);
-
     return {
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
         var onReceive, onRemove, onStart, onUpdate, opts, _receive, _remove, _start, _update;
 
-        opts = angular.extend({}, options, scope.$eval(attrs.uiSortable));
+        opts = angular.extend({}, uiConfig.sortable, scope.$eval(attrs.uiSortable));
 
         if (ngModel) {
 
+          ngModel.$render = function() {
+            element.sortable( "refresh" );
+          };
+
           onStart = function(e, ui) {
             // Save position of dragged item
-            ui.item.data('ui-sortable-start', ui.item.index());
+            ui.item.sortable = { index: ui.item.index() };
           };
 
           onUpdate = function(e, ui) {
-            // Fetch saved and current position of dropped element
-            var end, start;
-            start = ui.item.data('ui-sortable-start');
-            end = ui.item.index();
-            ui.item.indexs = ui.item.index();
-
-            // if item is received not sort it again as it is in correct position
-            if (ui.item.received === true) {
-              ui.item.received = false;
-            } else {
-              // Reorder array and apply change to scope
-              ngModel.$modelValue.splice(end, 0, ngModel.$modelValue.splice(start, 1)[0]);
-            }
-
-            scope.$apply();
+            // For some reason the reference to ngModel in stop() is wrong
+            ui.item.sortable.resort = ngModel;
           };
 
           onReceive = function(e, ui) {
+            ui.item.sortable.relocate = true;
             // added item to array into correct position and set up flag
-            ngModel.$modelValue.splice(ui.item.indexs, 0, ui.item.connectedData);
-            ui.item.received = true;
-
-            scope.$apply();
+            ngModel.$modelValue.splice(ui.item.index(), 0, ui.item.sortable.moved);
           };
 
           onRemove = function(e, ui) {
-            // copy data into item 
+            // copy data into item
             if (ngModel.$modelValue.length === 1) {
-              ui.item.connectedData = ngModel.$modelValue.splice(0, 1)[0];
+              ui.item.sortable.moved = ngModel.$modelValue.splice(0, 1)[0];
             } else {
-              ui.item.connectedData = ngModel.$modelValue.splice(ui.item.index(), 1)[0];
+              ui.item.sortable.moved =  ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0];
             }
+          };
 
-            scope.$apply();
+          onStop = function(e, ui) {
+            // digest all prepared changes
+            if (ui.item.sortable.resort && !ui.item.sortable.relocate) {
+
+              // Fetch saved and current position of dropped element
+              var end, start;
+              start = ui.item.sortable.index;
+              end = ui.item.index();
+              if (start < end)
+                end--;
+
+              // Reorder array and apply change to scope
+              ui.item.sortable.resort.$modelValue.splice(end, 0, ui.item.sortable.resort.$modelValue.splice(start, 1)[0]);
+
+            }
+            if (ui.item.sortable.resort || ui.item.sortable.relocate) {
+              scope.$apply();
+            }
           };
 
           // If user provided 'start' callback compose it with onStart function
@@ -67,8 +69,14 @@ angular.module('ui.directives').directive('uiSortable', [
             onStart(e, ui);
             if (typeof _start === "function")
               _start(e, ui);
+          };
 
-            scope.$apply();
+          // If user provided 'start' callback compose it with onStart function
+          _stop = opts.stop;
+          opts.stop = function(e, ui) {
+            onStop(e, ui);
+            if (typeof _stop === "function")
+              _stop(e, ui);
           };
 
           // If user provided 'update' callback compose it with onUpdate function
@@ -77,8 +85,6 @@ angular.module('ui.directives').directive('uiSortable', [
             onUpdate(e, ui);
             if (typeof _update === "function")
               _update(e, ui);
-
-            scope.$apply();
           };
 
           // If user provided 'receive' callback compose it with onReceive function
@@ -87,8 +93,6 @@ angular.module('ui.directives').directive('uiSortable', [
             onReceive(e, ui);
             if (typeof _receive === "function")
               _receive(e, ui);
-
-            scope.$apply();
           };
 
           // If user provided 'remove' callback compose it with onRemove function
@@ -97,8 +101,6 @@ angular.module('ui.directives').directive('uiSortable', [
             onRemove(e, ui);
             if (typeof _remove === "function")
               _remove(e, ui);
-
-            scope.$apply();
           };
         }
 
