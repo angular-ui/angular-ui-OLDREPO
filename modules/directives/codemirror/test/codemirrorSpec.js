@@ -109,29 +109,31 @@ describe('uiCodemirror', function () {
 				expect(scope.foo).toBe(value);
 			});
 		});
-	});
 
-	describe('when the model changes', function () {
-		it('should update the IDE', function () {
-			var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
-			scope.foo = 'bar';
-			scope.$apply();
-			$timeout.flush();
-			expect($.trim(element.siblings().text())).toBe(scope.foo);
+		describe('when the model changes', function () {
+			it('should update the IDE', function () {
+				var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				scope.foo = 'bar';
+				scope.$apply();
+				$timeout.flush();
+				expect(codemirror.getValue()).toBe(scope.foo);
+			});
 		});
-	});
 
-
-	describe('when the model is undefined/null', function () {
-		it('should update the IDE with an empty string', function () {
-			var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
-			scope.$apply();
-			expect(scope.foo).toBe(undefined);
-			expect($.trim(element.siblings().text())).toBe('');
-			scope.foo = null;
-			scope.$apply();
-			expect(scope.foo).toBe(null);
-			expect($.trim(element.siblings().text())).toBe('');
+		describe('when the model is undefined/null', function () {
+			it('should update the IDE with an empty string', function () {
+				var element = $compile('<textarea ui-codemirror ng-model="foo"></textarea>')(scope);
+				scope.$apply();
+				$timeout.flush();
+				expect(scope.foo).toBe(undefined);
+				expect(codemirror.getValue()).toBe('');
+				scope.$apply('foo = "bar"');
+				expect(scope.foo).toBe('bar');
+				expect(codemirror.getValue()).toBe('bar');
+				scope.$apply('foo = null');
+				expect(scope.foo).toBe(null);
+				expect(codemirror.getValue()).toBe('');
+			});
 		});
 	});
 
