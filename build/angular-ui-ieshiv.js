@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.3.2 - 2012-12-04
+ * @version v0.3.2 - 2013-02-12
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -31,21 +31,7 @@
   window.myCustomTags =  window.myCustomTags || []; // externally defined by developer using angular-ui directives
   tags.push.apply(tags, window.myCustomTags);
 
-  var getIE = function () {
-    // Returns the version of Internet Explorer or a -1
-    // (indicating the use of another browser).
-    var rv = -1; // Return value assumes failure.
-    if (navigator.appName == 'Microsoft Internet Explorer') {
-      var ua = navigator.userAgent;
-      var re = new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");
-      if (re.exec(ua) !== null) {
-        rv = parseFloat(RegExp.$1);
-      }
-    }
-    return rv;
-  };
-
-  var toCustomElements = function (str, delim) {
+  var toCustomElements = function (str) {
     var result = [];
     var dashed = str.replace(/([A-Z])/g, function ($1) {
       return " " + $1.toLowerCase();
@@ -62,20 +48,12 @@
     return result;
   };
 
-  var shiv = function () {
-    for (var i = 0, tlen = tags.length; i < tlen; i++) {
-      var customElements = toCustomElements(tags[i], ':');
-      for (var j = 0, clen = customElements.length; j < clen; j++) {
-        var customElement = customElements[j];
-        document.createElement(customElement);
-      }
+  for (var i = 0, tlen = tags.length; i < tlen; i++) {
+    var customElements = toCustomElements(tags[i]);
+    for (var j = 0, clen = customElements.length; j < clen; j++) {
+      var customElement = customElements[j];
+      document.createElement(customElement);
     }
-  };
-
-  var ieVersion = getIE();
-
-  if ((ieVersion > -1 && ieVersion < 9) || debug) {
-    shiv();
   }
 
 })(window);
