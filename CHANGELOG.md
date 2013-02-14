@@ -20,6 +20,7 @@
   * FINALLY have unit-tests for Select2!
 * **IEShiv** has been simplified and stripped of browser-sniffing code (just use conditional comments)
 * **Calendar directive** now performs better watching of events data
+  * Added optional equalsTracker attr (increment to force update from scope)
 * **Sortable directive** now properly supports connectWith option
 * New **route directive** that sets a boolean based on a pattern match of the current route (useful for tabs/navigation)
 * Refactored **If directive** to be tidier
