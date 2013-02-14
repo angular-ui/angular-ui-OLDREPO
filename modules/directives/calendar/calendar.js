@@ -20,6 +20,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             var tracker = 0;
             /* returns the length of all source arrays plus the length of eventSource itself */
             var getSources = function () {
+              var equalsTracker = scope.$eval(attrs.equalsTracker);
               tracker = 0;
               angular.forEach(sources,function(value,key){
                 if(angular.isArray(value)){
