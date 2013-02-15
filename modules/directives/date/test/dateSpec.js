@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it, inject, expect, module, $*/
+/*global describe, beforeEach, afterEach, it, inject, expect, module, dump, $*/
 describe('uiDate', function() {
   'use strict';
   var selectDate;
@@ -99,6 +99,24 @@ describe('uiDate', function() {
       });
   });
 
+  describe('jQuery widget', function() {
+    var element;
+
+    beforeEach(inject(function($compile, $rootScope) {
+      element = $compile('<div><input ui-date="{showOn:\'button\'}"><span>{{5+7}}</span></div>')($rootScope);
+      $(document.body).append(element);
+      $rootScope.$digest();
+    }));
+
+    it('should not stop following elements from linking', function () {
+      dump(element);
+      expect(element.find('span').text()).toEqual('12');
+    });
+
+    afterEach(function() {
+      element.remove();
+    });
+  });
   describe("use with user events", function() {
     it('should call the user onSelect event within a scope.$apply context', function() {
       inject(function($compile, $rootScope) {
