@@ -1,6 +1,6 @@
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.3.2 - 2013-02-12
+ * @version v0.4.0 - 2013-02-15
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -70,6 +70,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             var tracker = 0;
             /* returns the length of all source arrays plus the length of eventSource itself */
             var getSources = function () {
+              var equalsTracker = scope.$eval(attrs.equalsTracker);
               tracker = 0;
               angular.forEach(sources,function(value,key){
                 if(angular.isArray(value)){
