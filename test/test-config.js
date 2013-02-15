@@ -13,6 +13,7 @@ files = [
   JASMINE_ADAPTER,
   'test/lib/jquery/jquery-1.7.2.js',
   'test/lib/jquery/jquery-ui-1.8.18.js',
+	'http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js',
   'test/lib/angular-1.0.1/angular.js',
   'test/lib/angular-1.0.1/angular-mocks.js',
   'test/lib/codemirror/codemirror.js',
