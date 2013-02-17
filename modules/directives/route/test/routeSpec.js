@@ -27,17 +27,17 @@ describe('uiRoute', function () {
     function compileRoute(template) {
       var elm = $(template);
       if (routeModel) elm.attr('ng-model', routeModel);
-      return $compile(elm[0])(scope);
+      return $compile(elm[0])(scope).children().scope();
     }
     var modelProp = routeModel || '$uiRoute';
     describe('with uiRoute defined', function(){
       it('should use the uiRoute property', function(){
-        compileRoute('<div ui-route="/foo">');
+        compileRoute('<div ui-route="/foo"></div>');
       });
       it('should update model on $observe', function(){
         setPath('/bar');
         scope.$apply('foobar = "foo"');
-        compileRoute('<div ui-route="/{{foobar}}">');
+        compileRoute('<div ui-route="/{{foobar}}"></div>');
         expect(scope[modelProp]).toBeFalsy();
         scope.$apply('foobar = "bar"');
         expect(scope[modelProp]).toBe(true);
@@ -46,7 +46,7 @@ describe('uiRoute', function () {
       });
       it('should support regular expression', function(){
         setPath('/foo/123');
-        compileRoute('<div ui-route="/foo/[0-9]*">');
+        compileRoute('<div ui-route="/foo/[0-9]*"></div>');
         expect(scope[modelProp]).toBe(true);
       });
     });
@@ -55,13 +55,13 @@ describe('uiRoute', function () {
 
       it('should use the ngHref property', function(){
         setPath('/foo');
-        compileRoute('<a ng-href="/foo" ui-route>');
+        compileRoute('<a ng-href="/foo" ui-route></a>');
         expect(scope[modelProp]).toBe(true);
       });
       it('should update model on $observe', function(){
         setPath('/bar');
         scope.$apply('foobar = "foo"');
-        compileRoute('<a ng-href="/{{foobar}}" ui-route>');
+        compileRoute('<a ng-href="/{{foobar}}" ui-route></a>');
         expect(scope[modelProp]).toBeFalsy();
         scope.$apply('foobar = "bar"');
         expect(scope[modelProp]).toBe(true);
@@ -74,20 +74,20 @@ describe('uiRoute', function () {
 
       it('should use the href property', function(){
         setPath('/foo');
-        compileRoute('<a href="/foo" ui-route>');
+        compileRoute('<a href="/foo" ui-route></a>');
         expect(scope[modelProp]).toBe(true);
       });
     });
 
     it('should throw an error if no route property available', function(){
       expect(function(){
-        compileRoute('<div ui-route>');
+        compileRoute('<div ui-route></div>');
       }).toThrow();
     });
 
     it('should update model on route change', function(){
       setPath('/bar');
-      compileRoute('<div ui-route="/foo">');
+      compileRoute('<div ui-route="/foo"></div>');
       expect(scope[modelProp]).toBeFalsy();
       setPath('/foo');
       expect(scope[modelProp]).toBe(true);
