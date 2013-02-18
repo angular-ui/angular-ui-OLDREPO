@@ -29,7 +29,11 @@ angular.module('ui.directives').directive('uiMask', [
          */
         element.bind('keyup', function () {
           $scope.$apply(function () {
-            controller.$setViewValue(element.mask());
+            if (element.data('keep-masked')) {
+              controller.$setViewValue(element.val());
+            } else {
+              controller.$setViewValue(element.mask());
+            }            
           });
         });
       }
