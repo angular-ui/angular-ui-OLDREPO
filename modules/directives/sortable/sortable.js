@@ -51,8 +51,6 @@ angular.module('ui.directives').directive('uiSortable', [
               var end, start;
               start = ui.item.sortable.index;
               end = ui.item.index();
-              if (start < end)
-                end--;
 
               // Reorder array and apply change to scope
               ui.item.sortable.resort.$modelValue.splice(end, 0, ui.item.sortable.resort.$modelValue.splice(start, 1)[0]);
