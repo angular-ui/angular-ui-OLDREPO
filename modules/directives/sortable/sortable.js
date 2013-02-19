@@ -85,6 +85,7 @@ angular.module('ui.directives').directive('uiSortable', [
               onUpdate(e, ui);
               if (typeof _update === "function")
                 _update(e, ui);
+            }
           })(opts.update);
 
           // If user provided 'receive' callback compose it with onReceive function
