@@ -41,8 +41,9 @@ angular.module('ui.directives').directive('uiMask', [
         /* Add a parser that extracts the masked value into the model but only if the mask is valid
          */
         controller.$parsers.unshift(function (value) {
-            //the second check (or) is only needed due to the fact that element.isMaskValid() will keep returning undefined
-            //until there was at least one key event
+            //force use mask value instead of model value,
+            //which may be incorrect in some browsers
+            value = element.mask();
             var isValid = validateValue(value);
             controller.$setValidity('mask', isValid);
             return isValid ? value : undefined;
