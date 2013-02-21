@@ -44,4 +44,22 @@ xdescribe('uiMask', function () {
       expect($rootScope.$digest).toThrow('The Mask widget is not correctly set up');
     });
   });
+
+  describe('partitial mask work', function() {
+      it('should return valid paritial value', function() {
+        $rootScope.x = 12;
+        var paritialInputHtml = "<input ui-mask=\"(9)9?9\" ng-model='x'>";
+        element = $compile(paritialInputHtml)($rootScope);
+        $rootScope.$digest();
+        expect(element.val()).toBe('(1)2');
+        $rootScope.$apply(function () {
+          $rootScope.x = 1;
+        });
+        expect(element.val()).toBe('');
+        $rootScope.$apply(function () {
+          $rootScope.x = 123;
+        });
+        expect(element.val()).toBe('(1)23');
+      })
+  });
 });
