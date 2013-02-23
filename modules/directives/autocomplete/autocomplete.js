@@ -9,22 +9,23 @@
 
 angular.module('ui.directives')
 
-.directive('uiAutocomplete', [function() {
+.directive('uiAutocomplete', ['ui.config', function(uiConfig) {
   var directive = {
 		require: '?ngModel',
 		link: function(scope, element, attrs, controller) {
-			var getOptions = function() {
-				return angular.extend({}, scope.$eval(attrs.uiAutocomplete));
-			};
+			var options = {};
+			if (uiConfig.autocomplete) {
+				angular.extend(options, uiConfig.autocomplete);
+			}
 			var initAutocompleteWidget = function () {
-				var opts = getOptions();
+				var opts = angular.extend({}, options, scope.$eval(attrs.uiAutocomplete));
 				element.autocomplete(opts);
 				if (opts._renderItem) {
 					element.data("autocomplete")._renderItem = opts._renderItem;
 				}
 			};
 			// Watch for changes to the directives options
-			scope.$watch(getOptions, initAutocompleteWidget, true);
+			scope.$watch(attrs.uiAutocomplete, initAutocompleteWidget, true);
 		}
 	};
   return directive;
