@@ -1,20 +1,20 @@
 // a helper directive for injecting formatters and parsers
 angular.module('ui.directives').directive('injectTransformers', [ function () {
-          return {
-            restrict: 'A',
-            require: 'ngModel',
-            priority: -1,
-            link: function (scope, element, attr, ngModel) {
-                var local = scope.$eval(attr.injectTransformers);
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    priority: -1,
+    link: function (scope, element, attr, ngModel) {
+      var local = scope.$eval(attr.injectTransformers);
 
-                if (!angular.isObject(local) || !angular.isFunction(local.fromModel) || !angular.isFunction(local.fromElement)) {
-                    throw "The injectTransformers directive must be bound to an object with two functions (`fromModel` and `fromElement`)";
-                }
+      if (!angular.isObject(local) || !angular.isFunction(local.fromModel) || !angular.isFunction(local.fromElement)) {
+          throw "The injectTransformers directive must be bound to an object with two functions (`fromModel` and `fromElement`)";
+      }
 
-                ngModel.$parsers.push(local.fromElement);
-                ngModel.$formatters.push(local.fromModel);
-            }
-        };
+      ngModel.$parsers.push(local.fromElement);
+      ngModel.$formatters.push(local.fromModel);
+    }
+  };
 }]);
 
 /*global describe, beforeEach, module, inject, it, spyOn, expect, $ */
@@ -37,51 +37,50 @@ describe('uiSelect2', function () {
     };
 
     scope.transformers = {
-        fromModel: function (modelValue) {
-            if (!modelValue) {
-                return modelValue;
-            }
-
-            if (angular.isArray(modelValue)) {
-                return modelValue.map(function (val) {
-                    val.text += " - I've been formatted";
-                    return val;
-                });
-            }
-
-            if (angular.isObject(modelValue)) {
-                modelValue.text += " - I've been formatted";
-                return modelValue;
-            }
-
-            return modelValue + " - I've been formatted";
-        },
-        fromElement: function (elementValue) {
-            var suffix = " - I've been formatted";
-
-            if (!elementValue) {
-                return elementValue;
-            }
-
-            if (angular.isArray(elementValue)) {
-                return elementValue.map(function (val) {
-                    val.text += val.text.slice(0, val.text.indexOf(" - I've been formatted"));
-                    return val;
-                });
-            }
-
-            if (angular.isObject(elementValue)) {
-
-                elementValue.text = elementValue.text.slice(0, elementValue.text.indexOf(suffix));
-                return elementValue;
-            }
-
-            if (elementValue) {
-                return elementValue.slice(0, elementValue.indexOf(suffix));
-            }
-
-            return undefined;
+      fromModel: function (modelValue) {
+        if (!modelValue) {
+          return modelValue;
         }
+
+        if (angular.isArray(modelValue)) {
+          return modelValue.map(function (val) {
+            val.text += " - I've been formatted";
+            return val;
+          });
+        }
+
+        if (angular.isObject(modelValue)) {
+          modelValue.text += " - I've been formatted";
+          return modelValue;
+        }
+
+        return modelValue + " - I've been formatted";
+      },
+      fromElement: function (elementValue) {
+        var suffix = " - I've been formatted";
+
+        if (!elementValue) {
+          return elementValue;
+        }
+
+        if (angular.isArray(elementValue)) {
+          return elementValue.map(function (val) {
+            val.text += val.text.slice(0, val.text.indexOf(" - I've been formatted"));
+            return val;
+          });
+        }
+
+        if (angular.isObject(elementValue)) {
+          elementValue.text = elementValue.text.slice(0, elementValue.text.indexOf(suffix));
+          return elementValue;
+        }
+
+        if (elementValue) {
+          return elementValue.slice(0, elementValue.indexOf(suffix));
+        }
+
+        return undefined;
+      }
     };
   }));
 
@@ -110,21 +109,53 @@ describe('uiSelect2', function () {
       });
     });
     describe('when model is changed programmatically', function(){
-      it('should set select2 to the value', function(){
-        scope.foo = 'First';
-        var element = compile('<select ui-select2 ng-model="foo"><option>First</option><option>Second</option></select>');
-        expect(element.select2('val')).toBe('First');
-        scope.$apply('foo = "Second"');
-        expect(element.select2('val')).toBe('Second');
+      describe('for single select', function(){
+        it('should set select2 to the value', function(){
+          scope.foo = 'First';
+          var element = compile('<select ui-select2 ng-model="foo"><option>First</option><option>Second</option></select>');
+          expect(element.select2('val')).toBe('First');
+          scope.$apply('foo = "Second"');
+          expect(element.select2('val')).toBe('Second');
+        });
+        it('should handle falsey values', function(){
+          scope.foo = 'First';
+          var element = compile('<select ui-select2="{allowClear:true}" ng-model="foo"><option>First</option><option>Second</option></select>');
+          expect(element.select2('val')).toBe('First');
+          scope.$apply('foo = false');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(false);
+          scope.$apply('foo = null');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(null);
+          scope.$apply('foo = undefined');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(undefined);
+        });
       });
-      it('should set select2 to the value for multiples', function(){
-        scope.foo = 'First';
-        var element = compile('<select ui-select2 multiple ng-model="foo"><option>First</option><option>Second</option><option>Third</option></select>');
-        expect(element.select2('val')).toEqual(['First']);
-        scope.$apply('foo = ["Second"]');
-        expect(element.select2('val')).toEqual(['Second']);
-        scope.$apply('foo = ["Second","Third"]');
-        expect(element.select2('val')).toEqual(['Second','Third']);
+      describe('for multiple select', function(){
+        it('should set select2 to multiple value', function(){
+          scope.foo = 'First';
+          var element = compile('<select ui-select2="{allowClear:true}" multiple ng-model="foo"><option>First</option><option>Second</option><option>Third</option></select>');
+          expect(element.select2('val')).toEqual(['First']);
+          scope.$apply('foo = ["Second"]');
+          expect(element.select2('val')).toEqual(['Second']);
+          scope.$apply('foo = ["Second","Third"]');
+          expect(element.select2('val')).toEqual(['Second','Third']);
+        });
+        it('should set select2 to the value for multiples', function(){
+          scope.foo = 'First';
+          var element = compile('<select ui-select2 multiple ng-model="foo"><option>First</option><option>Second</option><option>Third</option></select>');
+          expect(element.select2('val')).toEqual(['First']);
+          scope.$apply('foo = false');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(false);
+          scope.$apply('foo = null');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(null);
+          scope.$apply('foo = undefined');
+          expect(element.select2('val')).toBe(scope.foo);
+          expect(element.select2('val')).toBe(undefined);
+        });
       });
     });
     it('should observe the disabled attribute', function () {
