@@ -20,7 +20,7 @@ angular.module('ui.directives').directive('uiValidate', function () {
     restrict: 'A',
     require: 'ngModel',
     link: function (scope, elm, attrs, ctrl) {
-      var validateFn, watch, validators = {},
+      var validateFn, watches, validators = {},
         validateExpr = scope.$eval(attrs.uiValidate);
 
       if (!validateExpr) return;
@@ -46,20 +46,15 @@ angular.module('ui.directives').directive('uiValidate', function () {
 
       // Support for ui-validate-watch
       if (attrs.uiValidateWatch) {
-        watch = scope.$eval(attrs.uiValidateWatch);
-        if (angular.isString(watch)) {
-          scope.$watch(watch, function(){
-            angular.forEach(validators, function(validatorFn, key){
-              validatorFn(ctrl.$modelValue);
-            });
-          });
-        } else {
-          angular.forEach(watch, function(expression, key){
-            scope.$watch(expression, function(){
-              validators[key](ctrl.$modelValue);
-            });
-          });
+        watches = scope.$eval(attrs.uiValidateWatch);
+        if (angular.isString(watches)) {
+          watches = [ watches ];
         }
+        angular.forEach(watches, function(watch, key) {
+          scope.$watch(watch, function() {
+            ctrl.$setViewValue(ctrl.$viewValue);
+          });
+        });
       }
     }
   };
