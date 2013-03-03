@@ -7,46 +7,48 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    builddir: 'build',
+    dist: 'build',
     pkg: '<json:package.json>',
     meta: {
-      banner: '/**\n' + ' * <%= pkg.description %>\n' +
-      ' * @version v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      ' * @link <%= pkg.homepage %>\n' +
-      ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
+      banner: ['/**',
+      ' * <%= pkg.description %>',
+      ' * @version v<%= pkg.version %> - ',
+      '<%= grunt.template.today("yyyy-mm-dd") %>',
+      ' * @link <%= pkg.homepage %>',
+      ' * @license MIT License, http://www.opensource.org/licenses/MIT',
+      ' */'].join('\n')
     },
     concat: {
       build: {
         src: ['<banner:meta.banner>', 'common/*.js'],
-        dest: '<%= builddir %>/<%= pkg.name %>.js'
+        dest: '<%= dist %>/<%= pkg.name %>.js'
       },
       ieshiv: {
         src: ['<banner:meta.banner>', 'common/ieshiv/*.js'],
-        dest: '<%= builddir %>/<%= pkg.name %>-ieshiv.js'
+        dest: '<%= dist %>/<%= pkg.name %>-ieshiv.js'
       }
     },
     min: {
       build: {
         src: ['<banner:meta.banner>', '<config:concat.build.dest>'],
-        dest: '<%= builddir %>/<%= pkg.name %>.min.js'
+        dest: '<%= dist %>/<%= pkg.name %>.min.js'
       },
       ieshiv: {
         src: ['<banner:meta.banner>', '<config:concat.ieshiv.dest>'],
-        dest: '<%= builddir %>/<%= pkg.name %>-ieshiv.min.js'
+        dest: '<%= dist %>/<%= pkg.name %>-ieshiv.min.js'
       }
     },
     recess: {
       build: {
         src: ['common/**/*.less'],
-        dest: '<%= builddir %>/<%= pkg.name %>.css',
+        dest: '<%= dist %>/<%= pkg.name %>.css',
         options: {
           compile: true
         }
       },
       min: {
         src: '<config:recess.build.dest>',
-        dest: '<%= builddir %>/<%= pkg.name %>.min.css',
+        dest: '<%= dist %>/<%= pkg.name %>.min.css',
         options: {
           compress: true
         }
@@ -92,33 +94,50 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dist', 'change dist location', function() {
     var dir = this.args[0];
-    if (dir) { grunt.config('builddir', dir); }
+    if (dir) { grunt.config('dist', dir); }
   });
 
-  grunt.registerTask('server', 'start testacular server', function () {
-    //Mark the task as async but never call done, so the server stays up
-    var done = this.async();
-    testacular.server.start({ configFile: 'test/test-config.js'});
+  grunt.registerTask('test', 'run tests on single-run server', function() {
+    var options = ['--single-run', '--no-auto-watch', '--log-level=warn'];
+    if (process.env.TRAVIS) {
+      options =  options.concat(['--browsers=Firefox']);
+    } else {
+      //Can augment options with command line arguments
+      options =  options.concat(this.args);
+    }
+    runTestacular('start', options);
   });
 
-  grunt.registerTask('test', 'run tests (make sure server task is run first)', function () {
-    var done = this.async();
-    grunt.utils.spawn({
-      cmd: process.platform === 'win32' ? 'testacular.cmd' : 'testacular',
-      args: process.env.TRAVIS ? ['start', 'test/test-config.js', '--single-run', '--no-auto-watch', '--reporters=dots', '--browsers=Firefox'] : ['run']
-    }, function (error, result, code) {
-      if (error) {
-        grunt.warn("Make sure the testacular server is online: run `grunt server`.\n" +
-          "Also make sure you have a browser open to http://localhost:8080/.\n" +
-          error.stdout + error.stderr);
-        //the testacular runner somehow modifies the files if it errors(??).
-        //this causes grunt's watch task to re-fire itself constantly,
-        //unless we wait for a sec
-        setTimeout(done, 1000);
+  grunt.registerTask('server', 'start testacular server', function() {
+    var options = ['--no-single-run', '--no-auto-watch'].concat(this.args);
+    runTestacular('start', options);
+  });
+
+  grunt.registerTask('test-run', 'run tests against continuous testacular server', function() {
+    var options = ['--single-run', '--no-auto-watch'].concat(this.args);
+    runTestacular('run', options);
+  });
+
+  grunt.registerTask('test-watch', 'start testacular server, watch & execute tests', function() {
+    var options = ['--no-single-run', '--auto-watch'].concat(this.args);
+    runTestacular('start', options);
+  });
+  
+  function runTestacular(command, options) {
+    var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
+    var args = [command, 'test/test-config.js'].concat(options);
+    var done = grunt.task.current.async();
+    var child = grunt.utils.spawn({
+      cmd: testacularCmd,
+      args: args
+    }, function(err, result, code) {
+      if (code) {
+        done(false);
       } else {
-        grunt.log.write(result.stdout);
         done();
       }
     });
-  });
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+  }
 };
