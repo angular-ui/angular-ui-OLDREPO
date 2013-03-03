@@ -46,14 +46,8 @@ angular.module('ui.directives').directive('uiValidate', function () {
 
       // Support for ui-validate-watch
       if (attrs.uiValidateWatch) {
-        watches = scope.$eval(attrs.uiValidateWatch);
-        if (angular.isString(watches)) {
-          watches = [ watches ];
-        }
-        angular.forEach(watches, function(watch, key) {
-          scope.$watch(watch, function() {
-            ctrl.$setViewValue(ctrl.$viewValue);
-          });
+        scope.$watch(attrs.uiValidateWatch, function() {
+          ctrl.$setViewValue(ctrl.$viewValue);
         });
       }
     }
