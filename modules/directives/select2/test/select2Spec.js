@@ -107,6 +107,9 @@ describe('uiSelect2', function () {
         var element = compile('<select ui-select2 ng-model="foo"></select>');
         expect(element.siblings().is('div.select2-container')).toBe(true);
       });
+      it('should not modify the model if there is no initial value', function(){
+        //TODO 
+      });
     });
     describe('when model is changed programmatically', function(){
       describe('for single select', function(){
@@ -195,6 +198,9 @@ describe('uiSelect2', function () {
       it('should create proper DOM structure', function () {
         var element = compile('<input ui-select2="options" ng-model="foo"/>');
         expect(element.siblings().is('div.select2-container')).toBe(true);
+      });
+      it('should not modify the model if there is no initial value', function(){
+        //TODO 
       });
     });
     describe('when model is changed programmatically', function(){
