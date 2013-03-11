@@ -80,7 +80,7 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
           keys: {}
         };
         angular.forEach(variation.split('-'), function (value) {
-          combination.keys[value] = true;
+          combination.keys[value.toLowerCase()] = true;
         });
         combinations.push(combination);
       });
@@ -94,7 +94,7 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
       var shiftPressed = event.shiftKey;
       var keyCode = event.which || event.keyCode;
 
-      if (mode !== 'keypress' && keyCode >= 65 && keyCode <= 90)
+      if (keyCode >= 65 && keyCode <= 90)
       {
         keyCode = keyCode + 32;
       }

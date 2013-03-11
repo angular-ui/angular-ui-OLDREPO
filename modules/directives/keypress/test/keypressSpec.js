@@ -72,6 +72,13 @@ describe('uiKeypress', function () {
     expect($scope.event).toBe(true);
   });
 
+  it('should support pressing shift and a text character', function() {
+
+    var elm = createElement({'shift-a': 'event=true'}).trigger(createKeyEvent(65,false,false,true)); // 65 is keypress code for A
+    expect($scope.event).toBe(true);
+  });
+
+
   it('should support pressing a non-text keyboard character', function() {
 
     var elm = createElement({',': 'event=true'}).trigger(createKeyEvent(44)); // 44 is keypress code for ,
