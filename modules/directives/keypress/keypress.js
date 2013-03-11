@@ -1,20 +1,64 @@
 angular.module('ui.directives').factory('keypressHelper', ['$parse', function keypress($parse){
+  // keymaps from http://unixpapa.com/js/key.html
+  var keyupdownmap = {
+      8: 'backspace',
+      9: 'tab',
+      13: 'enter',
+      27: 'esc',
+      32: 'space',
+      33: 'pageup',
+      34: 'pagedown',
+      35: 'end',
+      36: 'home',
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down',
+      44: ',',
+      45: 'insert',
+      46: 'delete',
+      91: 'leftwindows',
+      92: 'rightwindows',
+      93: 'windowsmenu',
+      96: '0',
+      97: '1',
+      98: '2',
+      99: '3',
+      100: '4',
+      101: '5',
+      102: '6',
+      103: '7',
+      104: '8',
+      105: '9',
+      106: '*',
+      107: '+',
+      109: '-',
+      110: '.',
+      111: '/',
+      186: ';',
+      187: '=',
+      188: ',',
+      189: '-',
+      190: '.',
+      191: '/',
+      192: '`',
+      219: '[',
+      220: '\\',
+      221: ']',
+      222: '\'',
+      224: 'command'
+    };
+
   var keysByCode = {
-    8: 'backspace',
-    9: 'tab',
-    13: 'enter',
-    27: 'esc',
-    32: 'space',
-    33: 'pageup',
-    34: 'pagedown',
-    35: 'end',
-    36: 'home',
-    37: 'left',
-    38: 'up',
-    39: 'right',
-    40: 'down',
-    45: 'insert',
-    46: 'delete'
+    'keyup' : keyupdownmap,
+    'keydown': keyupdownmap,
+    'keypress' : {
+      8: 'backspace',
+      9: 'tab',
+      13: 'enter',
+      27: 'esc',
+      32: 'space'      
+    }
   };
 
   var capitaliseFirstLetter = function (string) {
@@ -48,17 +92,16 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
       var altPressed = event.metaKey || event.altKey;
       var ctrlPressed = event.ctrlKey;
       var shiftPressed = event.shiftKey;
-      var keyCode = event.keyCode;
+      var keyCode = event.which || event.keyCode;
 
-      // normalize keycodes
-      if (mode === 'keypress' && !shiftPressed && keyCode >= 97 && keyCode <= 122) {
-        keyCode = keyCode - 32;
+      if (mode !== 'keypress' && keyCode >= 65 && keyCode <= 90)
+      {
+        keyCode = keyCode + 32;
       }
-
       // Iterate over prepared combinations
       angular.forEach(combinations, function (combination) {
 
-        var mainKeyPressed = (combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()]) || false;
+        var mainKeyPressed = (combination.keys[keysByCode[mode][keyCode]] || combination.keys[keyCode.toString()] || combination.keys[String.fromCharCode(keyCode)]) || false;
 
         var altRequired = combination.keys.alt || false;
         var ctrlRequired = combination.keys.ctrl || false;
