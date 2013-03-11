@@ -1,5 +1,5 @@
 /*
- Attaches jquery-ui input mask onto input element
+ Attaches input mask onto input element
  */
 angular.module('ui.directives').directive('uiMask', [
   function () {
@@ -28,8 +28,7 @@ angular.module('ui.directives').directive('uiMask', [
             unbindEventListeners();
             return false;
           }
-          mask = scope.$eval(maskAttr);
-          processRawMask(mask);
+          processRawMask(maskAttr);
           if (!maskProcessed) {
             unbindEventListeners();
             return false;
@@ -128,7 +127,7 @@ angular.module('ui.directives').directive('uiMask', [
         function unmaskValue(value) {
           var valueUnmasked    = '',
               maskPatternCopys = maskPatterns.slice();
-          angular.forEach(value.split(''), function(chr, i) {
+          angular.forEach(value.toString().split(''), function(chr, i) {
             if (maskPatternCopys.length && maskPatternCopys[0].test(chr)) {
               valueUnmasked += chr;
               maskPatternCopys.shift();
@@ -293,7 +292,7 @@ angular.module('ui.directives').directive('uiMask', [
         if (!Array.prototype.indexOf) {
           Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
             "use strict";
-            if (this == null) {
+            if (this === null) {
               throw new TypeError();
             }
             var t = Object(this);
@@ -306,7 +305,7 @@ angular.module('ui.directives').directive('uiMask', [
               n = Number(arguments[1]);
               if (n != n) { // shortcut for verifying if it's NaN
                 n = 0;
-              } else if (n != 0 && n != Infinity && n != -Infinity) {
+              } else if (n !== 0 && n !== Infinity && n !== -Infinity) {
                 n = (n > 0 || -1) * Math.floor(Math.abs(n));
               }
             }

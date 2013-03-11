@@ -1,47 +1,51 @@
-xdescribe('uiMask', function () {
+describe('uiMask', function () {
 
-  var inputHtml = "<input ui-mask=\"'(9)9'\" ng-model='x'>";
-  var $compile, $rootScope, element;
+  var staticMaskHtml = "<input ui-mask='(9)9' ng-model='x'>";
+  var dynamicMaskHtml = "<input ui-mask='{{mask}}' ng-model='x'>";
+  var compileElement, scope;
 
   beforeEach(module('ui.directives'));
-  beforeEach(inject(function (_$rootScope_, _$compile_) {
-    $rootScope = _$rootScope_;
-    $compile = _$compile_;
+  beforeEach(inject(function ($rootScope, $compile) {
+    scope = $rootScope;
+    compileElement = function(html) {
+      return $compile(html)(scope);
+    };
   }));
 
   describe('ui changes on model changes', function () {
     it('should update ui valid model value', function () {
-      $rootScope.x = undefined;
-      element = $compile(inputHtml)($rootScope);
-      $rootScope.$digest();
-      expect(element.val()).toBe('');
-      $rootScope.$apply(function () {
-        $rootScope.x = 12;
-      });
+      var element = compileElement(staticMaskHtml);
+      scope.$digest();
+      expect(element.val()).toBe('(_)_');
+      scope.$apply('x = 12');
       expect(element.val()).toBe('(1)2');
     });
     it('should wipe out ui on invalid model value', function () {
-      $rootScope.x = 12;
-      element = $compile(inputHtml)($rootScope);
-      $rootScope.$digest();
+      var element = compileElement(staticMaskHtml);
+      scope.$apply('x = 12');
       expect(element.val()).toBe('(1)2');
-      $rootScope.$apply(function () {
-        $rootScope.x = 1;
-      });
+      scope.$apply('x = 1');
       expect(element.val()).toBe('');
     });
   });
 
-  describe('model binding on ui change', function () {
-    //TODO: was having har time writing those tests, will open a separate issue for those
-  });
-
-  describe('should fail', function() {
-    it('errors on missing quotes', function() {
-      $rootScope.x = 42;
-      var errorInputHtml = "<input ui-mask=\"(9)9\" ng-model='x'>";
-      element = $compile(errorInputHtml)($rootScope);
-      expect($rootScope.$digest).toThrow('The Mask widget is not correctly set up');
+  describe('interpolated masks', function() {
+    it('should allow mask to change', function() {
+      var element = compileElement(dynamicMaskHtml);
+      scope.$apply('mask = "(99)99"; x = 1234');
+      expect(element.val()).toBe('(12)34');
+      scope.$apply('mask = "(9)9"');
+      expect(element.val()).toBe('(1)2');
     });
   });
+
+  xdescribe('model binding on ui change', function () {
+    it('should change model when element value changes', function() {
+      var element = compileElement(staticMaskHtml);
+      element.val('(2)4');
+      element.trigger('blur');
+      expect(scope.x).toBe(24);
+    });
+  });
+
 });
