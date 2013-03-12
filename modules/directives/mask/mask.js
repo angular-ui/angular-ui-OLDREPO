@@ -14,8 +14,12 @@ angular.module('ui.directives').directive('uiMask', [
       restrict: 'A',
       link: function (scope, iElement, iAttrs, controller) {
         var maskProcessed = false, eventsBound = false,
-            mask, maskCaretMap, maskPatterns, maskPlaceholder, characterCount,
+            maskCaretMap, maskPatterns, maskPlaceholder,
             value, valueMasked, isValid,
+            // Vars for initializing/uninitializing
+            originalPlaceholder = iAttrs.placeholder,
+            originalMaxlength   = iAttrs.maxlength,
+            // Vars used exclusively in eventHandler()
             oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
 
         iAttrs.$observe('uiMask', initialize);
@@ -23,25 +27,37 @@ angular.module('ui.directives').directive('uiMask', [
         controller.$parsers.push(parser);
 
         function initialize(maskAttr) {
-          if (typeof maskAttr == 'undefined') {
-            maskProcessed = false;
-            unbindEventListeners();
-            return false;
-          }
+          if (!angular.isDefined(maskAttr))
+            return uninitialize();
           processRawMask(maskAttr);
-          if (!maskProcessed) {
-            unbindEventListeners();
-            return false;
-          }
+          if (!maskProcessed)
+            return uninitialize();
           initializeElement();
           bindEventListeners();
         }
 
+        function uninitialize() {
+          maskProcessed = false;
+          unbindEventListeners();
+
+          if (angular.isDefined(originalPlaceholder))
+            iElement.attr('placeholder', originalPlaceholder);
+          else
+            iElement.removeAttr('placeholder');
+
+          if (angular.isDefined(originalMaxlength))
+            iElement.attr('maxlength', originalMaxlength);
+          else
+            iElement.removeAttr('maxlength');
+
+          return false;
+        }
+
         function processRawMask(mask) {
-          maskCaretMap    = [];
-          maskPatterns    = [];
-          maskPlaceholder = '';
-          characterCount  = 0;
+          var characterCount = 0;
+          maskCaretMap       = [];
+          maskPatterns       = [];
+          maskPlaceholder    = '';
 
           // If mask is an array, it's a complex mask!
           if (mask instanceof Array) {
@@ -77,13 +93,13 @@ angular.module('ui.directives').directive('uiMask', [
         }
 
         function initializeElement() {
-          value       = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
-          valueMasked = oldValue         = maskValue(value);
-          isValid     = validateValue(value);
-          if (iAttrs.maxlength)
-            iElement.attr('maxlength', maskCaretMap[maskCaretMap.length-1]*2); // Double maxlength to allow pasting at end of mask
+          value               = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
+          valueMasked         = oldValue         = maskValue(value);
+          isValid             = validateValue(value);
+          if (iAttrs.maxlength) // Double maxlength to allow pasting new val at end of mask
+            iElement.attr('maxlength', maskCaretMap[maskCaretMap.length-1]*2);
           iElement.attr('placeholder', maskPlaceholder);
-          iElement.val(isValid ? valueMasked : '');
+          iElement.val(isValid && value.length ? valueMasked : '');
         }
 
         function bindEventListeners() {
@@ -95,7 +111,14 @@ angular.module('ui.directives').directive('uiMask', [
         }
 
         function unbindEventListeners() {
-          iElement.unbind('.uiMask');
+          if (!eventsBound)
+            return true;
+          iElement.unbind('blur', blurHandler);
+          iElement.unbind('input', eventHandler);
+          iElement.unbind('propertychange', eventHandler);
+          iElement.unbind('keyup', eventHandler);
+          iElement.unbind('click', eventHandler);
+          iElement.unbind('mouseout', eventHandler);
           eventsBound = false;
         }
 
@@ -120,7 +143,7 @@ angular.module('ui.directives').directive('uiMask', [
         }
 
         function validateValue(value) {
-          // Allow zero-length values (this is required's responsibility)
+          // Zero-length value validity is ngRequired's determination
           return value.length ? value.length === maskCaretMap.length - 1 : true;
         }
 
@@ -153,7 +176,7 @@ angular.module('ui.directives').directive('uiMask', [
         function blurHandler(e) {
           oldCaretPosition   = 0;
           oldSelectionLength = 0;
-          if (!isValid) {
+          if (!isValid || value.length === 0) {
             valueMasked = '';
             iElement.val('');
             scope.$apply(function() {
@@ -167,7 +190,7 @@ angular.module('ui.directives').directive('uiMask', [
           var eventWhich = e.which,
               eventType  = e.type;
 
-          // Shift and ctrl aren't going to ruin our party.
+          // Prevent shift and ctrl from mucking with old values
           if (eventWhich == 16 || eventWhich == 91) return true;
 
           var elem            = iElement,
@@ -205,7 +228,7 @@ angular.module('ui.directives').directive('uiMask', [
               // a character when clicking within a filled input.
               caretBumpBack   = (isKeyLeftArrow || isKeyBackspace || eventType == 'click') && caretPos > caretPosMin;
 
-          oldSelectionLength = selectionLen;
+          oldSelectionLength  = selectionLen;
 
           // These events don't require any action
           if (eventType == 'mouseout' || isSelection || (isSelected && (eventType == 'click' || eventType == 'keyup')))
@@ -213,6 +236,7 @@ angular.module('ui.directives').directive('uiMask', [
 
           // Value Handling
           // ==============
+
           // User attempted to delete but raw value was unaffected--correct this grievous offense
           if ((eventType == 'input' || eventType == 'propertychange') && isDeletion && !wasSelected && valUnmasked === valUnmaskedOld) {
             while (isKeyBackspace && caretPos > 0 && !isValidCaretPosition(caretPos))
@@ -220,10 +244,11 @@ angular.module('ui.directives').directive('uiMask', [
             while (isKeyDelete && caretPos < maskPlaceholder.length && maskCaretMap.indexOf(caretPos) == -1)
               caretPos++;
             var charIndex = maskCaretMap.indexOf(caretPos);
-            // Strip out character that user inteded to delete if mask hadn't been in the way.
+            // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
             valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
           }
 
+          // Update values
           valMasked        = maskValue(valUnmasked);
           oldValue         = valMasked;
           oldValueUnmasked = valUnmasked;
@@ -232,17 +257,18 @@ angular.module('ui.directives').directive('uiMask', [
           // Caret Repositioning
           // ===================
 
-          // Ensure that typing always places caret ahead of typed character
+          // Ensure that typing always places caret ahead of typed character in cases where the first char of
+          // the input is a mask char and the caret is placed at the 0 position.
           if (isAddition && (caretPos <= caretPosMin))
             caretPos = caretPosMin + 1;
 
           if (caretBumpBack)
             caretPos--;
 
-          // Make sure caret is within min and max positions
+          // Make sure caret is within min and max position limits
           caretPos = caretPos > caretPosMax ? caretPosMax : caretPos < caretPosMin ? caretPosMin : caretPos;
 
-          // Scoot the caret around until it's in a valid position and within min/max limits
+          // Scoot the caret back or forth until it's in a non-mask position and within min/max position limits
           while (!isValidCaretPosition(caretPos) && caretPos > caretPosMin && caretPos < caretPosMax)
             caretPos += caretBumpBack ? -1 : 1;
 

@@ -5,8 +5,24 @@
       angular.module('ui.directives',[]);
     </script>
     <script type="text/javascript" src="../mask.js"></script>
+    <style type="text/css">
+      input, button { font-size: 14px; font-family: helvetica, arial; width:300px; text-align: left }
+    </style>
   </head>
   <body ng-app="ui.directives">
-    <input ui-mask="'(9)9'" ng-model="x">
+
+    <label>
+      Masked Input:<br>
+      <input ui-mask="{{y}}" ng-model="x" placeholder="Specify a mask or click a button">
+    </label><br>
+    <label>
+      Mask Defintion:<br>
+      <input ng-model="y">
+    </label><br><br>
+
+    <button ng-click="y = undefined">Set mask to undefined (uninitialize)</button><br>
+    <button ng-click="y = '999-9999'">Set mask to 999-9999</button><br>
+    <button ng-click="y = '(999) 999-9999'">Set mask to (999) 999-9999</button><br>
+    <button ng-click="y = '(999) 999-9999 ext. 999'">Set mask to (999) 999-9999 ext. 999</button>
   </body>
 </html>
