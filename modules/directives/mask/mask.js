@@ -88,7 +88,8 @@ angular.module('ui.directives').directive('uiMask', [
               characterCount++;
             });
           }
-          maskCaretMap.push(characterCount);
+          // Caret position immediately following last position is valid.
+          maskCaretMap.push(maskCaretMap.slice().pop() + 1);
           maskProcessed = maskCaretMap.length > 1 ? true : false;
         }
 
