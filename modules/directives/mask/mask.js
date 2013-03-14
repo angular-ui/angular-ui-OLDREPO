@@ -137,6 +137,7 @@ angular.module('ui.directives').directive('uiMask', [
             return viewValue;
           value   = unmaskValue(viewValue || '');
           isValid = validateValue(value);
+          controller.$viewValue = maskValue(value);
           controller.$setValidity('mask', isValid);
           if (value === '' && controller.$error.required !== undefined)
             controller.$setValidity('required', false);
@@ -200,6 +201,7 @@ angular.module('ui.directives').directive('uiMask', [
               valMasked,
               valUnmasked     = unmaskValue(val),
               valUnmaskedOld  = oldValueUnmasked,
+              valAltered      = false,
 
               caretPos        = getCaretPosition(this) || 0,
               caretPosOld     = oldCaretPosition || 0,
@@ -247,6 +249,7 @@ angular.module('ui.directives').directive('uiMask', [
             var charIndex = maskCaretMap.indexOf(caretPos);
             // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
             valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
+            valAltered  = true;
           }
 
           // Update values
@@ -254,6 +257,12 @@ angular.module('ui.directives').directive('uiMask', [
           oldValue         = valMasked;
           oldValueUnmasked = valUnmasked;
           elem.val(valMasked);
+          if (valAltered) {
+            // We've altered the raw value after it's been $digest'ed, we need to $apply the new value.
+            scope.$apply(function() {
+              controller.$setViewValue(valUnmasked);
+            });
+          }
 
           // Caret Repositioning
           // ===================
