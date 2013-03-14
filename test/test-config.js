@@ -21,7 +21,6 @@ files = [
   'test/lib/googlemaps/googlemaps.js',
   'test/lib/bootstrap/bootstrap-modal.js',
   'test/lib/select2/select2.js',
-  'test/lib/maskedinput/jquery.maskedinput-1.3.js',
   'test/lib/calendar/calendar.js.min',
   'common/module.js',
   'modules/*/*/*.js',
