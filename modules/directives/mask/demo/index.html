@@ -5,24 +5,58 @@
       angular.module('ui.directives',[]);
     </script>
     <script type="text/javascript" src="../mask.js"></script>
-    <style type="text/css">
-      input, button { font-size: 14px; font-family: helvetica, arial; width:300px; text-align: left }
-    </style>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
   </head>
   <body ng-app="ui.directives">
 
-    <label>
-      Masked Input:<br>
-      <input ui-mask="{{y}}" ng-model="x" placeholder="Specify a mask or click a button">
-    </label><br>
-    <label>
-      Mask Defintion:<br>
-      <input ng-model="y">
-    </label><br><br>
+    <div class="container-fluid">
 
-    <button ng-click="y = undefined">Set mask to undefined (uninitialize)</button><br>
-    <button ng-click="y = '999-9999'">Set mask to 999-9999</button><br>
-    <button ng-click="y = '(999) 999-9999'">Set mask to (999) 999-9999</button><br>
-    <button ng-click="y = '(999) 999-9999 ext. 999'">Set mask to (999) 999-9999 ext. 999</button>
+        <form class="form-horizontal">
+          <div class="control-group">
+
+            <div class="controls">
+              <p class="lead" style="margin-top:60px">uiMask Directive Demo</p>
+            </div>
+
+            <label class="control-label">Masked Input:</label>
+            <div class="controls">
+              <input ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" class="input-large">
+              <span class="help-inline" ng-show="x.length">Model value: <code>{{ x }}</code></span>
+              <span class="help-inline" ng-hide="x.length">Model value: <code>undefined</code></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Mask Definition:</label>
+            <div class="controls">
+              <input ng-model="y" class="input-large" style="vertical-align: top;">
+              <span class="help-inline"><code>A</code> Any letter.<br><code>9</code> Any number.<br><code>*</code> Any letter or number.</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Masks:</label>
+            <div class="controls">
+              <p><button class="btn" ng-click="y = undefined">Set to undefined (uninitialize)</button></p>
+            </div>
+            <div class="controls">
+              <p><button class="btn" ng-click="y = '(999) 999-9999'">Set to (999) 999-9999</button></p>
+            </div>
+            <div class="controls">
+              <p><button class="btn" ng-click="y = '(999) 999-9999 ext. 999'">Set to (999) 999-9999 ext. 999</button></p>
+            </div>
+            <div class="controls">
+              <p><button class="btn" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button></p>
+            </div>
+          </div>
+
+
+        </form>
+
+    </div>
+
+
+    <p><br></p>
+    <p><br></p>
+    
   </body>
 </html>
