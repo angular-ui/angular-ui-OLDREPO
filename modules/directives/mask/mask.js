@@ -73,7 +73,7 @@ angular.module('ui.directives').directive('uiMask', [
           if (eventsBound)
             return true;
           iElement.bind('blur', blurHandler);
-          iElement.bind('input propertychange keyup click mouseout', eventHandler);
+          iElement.bind('input keyup click mouseout', eventHandler);
           eventsBound = true;
         }
 
@@ -82,7 +82,6 @@ angular.module('ui.directives').directive('uiMask', [
             return true;
           iElement.unbind('blur', blurHandler);
           iElement.unbind('input', eventHandler);
-          iElement.unbind('propertychange', eventHandler);
           iElement.unbind('keyup', eventHandler);
           iElement.unbind('click', eventHandler);
           iElement.unbind('mouseout', eventHandler);
@@ -199,6 +198,7 @@ angular.module('ui.directives').directive('uiMask', [
         }
 
         function eventHandler(e) {
+          e = e || {};
           // Allows more efficient minification
           var eventWhich = e.which,
               eventType  = e.type;
@@ -295,7 +295,6 @@ angular.module('ui.directives').directive('uiMask', [
 
           if ((caretBumpBack && caretPos < caretPosMax) || (isAddition && !isValidCaretPosition(caretPosOld)))
             caretPos++;
-
           oldCaretPosition = caretPos;
           setCaretPosition(this, caretPos);
         }
@@ -315,6 +314,8 @@ angular.module('ui.directives').directive('uiMask', [
         }
 
         function setCaretPosition(input, pos) {
+          if (input.offsetWidth === 0 || input.offsetHeight === 0)
+            return true; // Input's hidden
           if (input.setSelectionRange) {
             input.focus();
             input.setSelectionRange(pos,pos); }

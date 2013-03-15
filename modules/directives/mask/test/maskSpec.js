@@ -1,50 +1,139 @@
 describe('uiMask', function () {
 
-  var staticMaskHtml = "<input ui-mask='(9)9' ng-model='x'>";
-  var dynamicMaskHtml = "<input ui-mask='{{mask}}' ng-model='x'>";
+  var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
+  var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
   var compileElement, scope;
 
   beforeEach(module('ui.directives'));
   beforeEach(inject(function ($rootScope, $compile) {
+    c = console.log;
     scope = $rootScope;
     compileElement = function(html) {
       return $compile(html)(scope);
     };
   }));
 
-  describe('ui changes on model changes', function () {
-    it('should update ui valid model value', function () {
-      var element = compileElement(staticMaskHtml);
-      scope.$digest();
-      expect(element.val()).toBe('(_)_');
-      scope.$apply('x = 12');
-      expect(element.val()).toBe('(1)2');
+  describe('initialization', function () {
+
+    it("should not not happen if the mask is undefined or invalid", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = 'abc123'");
+      expect(input.val()).toBe('abc123');
+      scope.$apply("mask = '()_abc123'");
+      expect(input.val()).toBe('abc123');
     });
-    it('should wipe out ui on invalid model value', function () {
-      var element = compileElement(staticMaskHtml);
-      scope.$apply('x = 12');
-      expect(element.val()).toBe('(1)2');
-      scope.$apply('x = 1');
-      expect(element.val()).toBe('');
+
+    it("should mask the value only if it's valid", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(A) * 9'");
+      expect(input.val()).toBe('(a) b 1');
+      scope.$apply("mask = '(A) * 9 A'");
+      expect(input.val()).toBe('');
+    });
+
+    it("should not dirty or invalidate the input", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(9) * A'");
+      expect(input.hasClass('ng-pristine ng-valid')).toBeTruthy();
+      scope.$apply("mask = '(9) * A 9'");
+      expect(input.hasClass('ng-pristine ng-valid')).toBeTruthy();
+    });
+
+    it("should not change the model value", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(A) * 9'");
+      expect(scope.x).toBe('abc123');
+      scope.$apply("mask = '(A) * 9 A'");
+      expect(scope.x).toBe('abc123');
+    });
+
+    it("should set ngModelController.$viewValue to match input value", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(A) * 9'");
+      expect(scope.test.input.$viewValue).toBe('(a) b 1');
+      scope.$apply("mask = '(A) * 9 A'");
+      expect(scope.test.input.$viewValue).toBe('');
+    });
+
+  });
+
+  describe('user input', function () {
+    it("should mask-as-you-type", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val('a').triggerHandler('input');
+      expect(input.val()).toBe('(a) _ _');
+      input.val('ab').triggerHandler('input');
+      expect(input.val()).toBe('(a) b _');
+      input.val('ab1').triggerHandler('input');
+      expect(input.val()).toBe('(a) b 1');
+    });
+
+    it("should set ngModelController.$viewValue to match input value", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('change'); // Because IE8 and below are terrible
+      expect(scope.test.input.$viewValue).toBe('(a) _ _');
+    });
+
+    it("should parse unmasked value to model", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val('abc123').triggerHandler('input');
+      input.triggerHandler('change'); // Because IE8 and below are terrible
+      expect(scope.x).toBe('ab1');
+    });
+
+    it("should set model to undefined if masked value is invalid", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('change'); // Because IE8 and below are terrible
+      expect(scope.x).toBeUndefined();
+    });
+
+    it("should not set model to an empty mask", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.triggerHandler('input');
+      expect(scope.x).toBe('');
     });
   });
 
-  describe('interpolated masks', function() {
-    it('should allow mask to change', function() {
-      var element = compileElement(dynamicMaskHtml);
-      scope.$apply('mask = "(99)99"; x = 1234');
-      expect(element.val()).toBe('(12)34');
-      scope.$apply('mask = "(9)9"');
-      expect(element.val()).toBe('(1)2');
+  describe('blurring', function () {
+    it("should clear an invalid value from the input", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(9) * A'");
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(input.val()).toBe('');
     });
-  });
 
-  xdescribe('model binding on ui change', function () {
-    it('should change model when element value changes', function() {
-      var element = compileElement(staticMaskHtml);
-      element.val('(2)4');
-      element.trigger('blur');
-      expect(scope.x).toBe(24);
+    it("should clear an invalid value from the ngModelController.$viewValue", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find('input');
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val('a').triggerHandler('input');
+      input.triggerHandler('blur');
+      expect(scope.test.input.$viewValue).toBe('');
     });
   });
 
