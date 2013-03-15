@@ -2,13 +2,13 @@ describe('uiKeydown', function () {
 
   var $scope, $compile;
 
-  var createKeyEvent = function (mainKey, alt, ctrl, shif) {
+  var createKeyEvent = function (mainKey, alt, ctrl, shift) {
     var keyEvent = jQuery.Event("keydown");
 
     keyEvent.keyCode = mainKey;
-    keyEvent.altKey = alt || false;
-    keyEvent.ctrlKey = ctrl || false;
-    keyEvent.shiftKey = shif || false;
+    keyEvent.altKey = alt;
+    keyEvent.ctrlKey = ctrl;
+    keyEvent.shiftKey = shift;
 
     return keyEvent;
   };
