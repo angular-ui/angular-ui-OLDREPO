@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
   </head>
   <body ng-app="ui.directives">
-
     <div class="container-fluid">
-
-        <form class="form-horizontal">
+        <form name="demo" class="form-horizontal">
           <div class="control-group">
 
             <div class="controls">
@@ -20,9 +18,14 @@
 
             <label class="control-label">Masked Input:</label>
             <div class="controls">
-              <input ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" class="input-large">
-              <span class="help-inline" ng-show="x.length">Model value: <code>{{ x }}</code></span>
-              <span class="help-inline" ng-hide="x.length">Model value: <code>undefined</code></span>
+              <input name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" class="input-large" style="vertical-align: top;">
+              <span class="help-inline">
+
+                <div ng-show="x.length">Model value: <code>{{ x }}</code></div>
+                <div ng-hide="x.length">Model value: <code>undefined</code></div>
+                <div ng-show="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>{{ demo.masked.$viewValue }}</code></div>
+                <div ng-hide="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>undefined</code></div>
+              </span>
             </div>
           </div>
           <div class="control-group">
@@ -48,15 +51,7 @@
               <p><button class="btn" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button></p>
             </div>
           </div>
-
-
         </form>
-
     </div>
-
-
-    <p><br></p>
-    <p><br></p>
-    
   </body>
 </html>

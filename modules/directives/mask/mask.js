@@ -50,7 +50,100 @@ angular.module('ui.directives').directive('uiMask', [
           else
             iElement.removeAttr('maxlength');
 
+          iElement.val(controller.$modelValue);
+          controller.$viewValue = controller.$modelValue;
           return false;
+        }
+
+        function initializeElement() {
+          value       = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
+          valueMasked = oldValue         = maskValue(value);
+          isValid     = validateValue(value);
+          viewValue   = isValid && value.length ? valueMasked : '';
+          if (iAttrs.maxlength) // Double maxlength to allow pasting new val at end of mask
+            iElement.attr('maxlength', maskCaretMap[maskCaretMap.length-1]*2);
+          iElement.attr('placeholder', maskPlaceholder);
+          iElement.val(viewValue);
+          controller.$viewValue = viewValue;
+          // Not using $setViewValue so we don't clobber the model value and dirty the form
+          // without any kind of user interaction.
+        }
+
+        function bindEventListeners() {
+          if (eventsBound)
+            return true;
+          iElement.bind('blur', blurHandler);
+          iElement.bind('input propertychange keyup click mouseout', eventHandler);
+          eventsBound = true;
+        }
+
+        function unbindEventListeners() {
+          if (!eventsBound)
+            return true;
+          iElement.unbind('blur', blurHandler);
+          iElement.unbind('input', eventHandler);
+          iElement.unbind('propertychange', eventHandler);
+          iElement.unbind('keyup', eventHandler);
+          iElement.unbind('click', eventHandler);
+          iElement.unbind('mouseout', eventHandler);
+          eventsBound = false;
+        }
+
+        function formatter(fromModelValue) {
+          if (!maskProcessed)
+            return fromModelValue;
+          value   = unmaskValue(fromModelValue || '');
+          isValid = validateValue(value);
+          controller.$setValidity('mask', isValid);
+          return isValid ? maskValue(value) : undefined;
+        }
+
+        function parser(fromViewValue) {
+          if (!maskProcessed)
+            return fromViewValue;
+          value     = unmaskValue(fromViewValue || '');
+          isValid   = validateValue(value);
+          viewValue = value.length ? maskValue(value) : '';
+          // We have to set viewValue manually as the reformatting of the input
+          // value performed by eventHandler() doesn't happen until after
+          // this parser is called, which causes what the user sees in the input
+          // to be out-of-sync with what the controller's $viewValue is set to.
+          controller.$viewValue = viewValue;
+          controller.$setValidity('mask', isValid);
+          if (value === '' && controller.$error.required !== undefined)
+            controller.$setValidity('required', false);
+          return isValid ? value : undefined;
+        }
+
+        function validateValue(value) {
+          // Zero-length value validity is ngRequired's determination
+          return value.length ? value.length === maskCaretMap.length - 1 : true;
+        }
+
+        function unmaskValue(value) {
+          var valueUnmasked    = '',
+              maskPatternCopys = maskPatterns.slice();
+          angular.forEach(value.toString().split(''), function(chr, i) {
+            if (maskPatternCopys.length && maskPatternCopys[0].test(chr)) {
+              valueUnmasked += chr;
+              maskPatternCopys.shift();
+            }
+          });
+          return valueUnmasked;
+        }
+
+        function maskValue(unmaskedValue) {
+          var valueMasked      = '',
+              maskCaretMapCopy = maskCaretMap.slice();
+          angular.forEach(maskPlaceholder.split(''), function(chr, i) {
+            if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
+              valueMasked  += unmaskedValue.charAt(0) || '_';
+              unmaskedValue = unmaskedValue.substr(1);
+              maskCaretMapCopy.shift(); }
+            else
+              valueMasked += chr;
+          });
+          return valueMasked;
         }
 
         function processRawMask(mask) {
@@ -91,88 +184,6 @@ angular.module('ui.directives').directive('uiMask', [
           // Caret position immediately following last position is valid.
           maskCaretMap.push(maskCaretMap.slice().pop() + 1);
           maskProcessed = maskCaretMap.length > 1 ? true : false;
-        }
-
-        function initializeElement() {
-          value               = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
-          valueMasked         = oldValue         = maskValue(value);
-          isValid             = validateValue(value);
-          if (iAttrs.maxlength) // Double maxlength to allow pasting new val at end of mask
-            iElement.attr('maxlength', maskCaretMap[maskCaretMap.length-1]*2);
-          iElement.attr('placeholder', maskPlaceholder);
-          iElement.val(isValid && value.length ? valueMasked : '');
-        }
-
-        function bindEventListeners() {
-          if (eventsBound)
-            return true;
-          iElement.bind('blur', blurHandler);
-          iElement.bind('input propertychange keyup click mouseout', eventHandler);
-          eventsBound = true;
-        }
-
-        function unbindEventListeners() {
-          if (!eventsBound)
-            return true;
-          iElement.unbind('blur', blurHandler);
-          iElement.unbind('input', eventHandler);
-          iElement.unbind('propertychange', eventHandler);
-          iElement.unbind('keyup', eventHandler);
-          iElement.unbind('click', eventHandler);
-          iElement.unbind('mouseout', eventHandler);
-          eventsBound = false;
-        }
-
-        function formatter(modelValue) {
-          if (!maskProcessed)
-            return modelValue;
-          value   = unmaskValue(modelValue || '');
-          isValid = validateValue(value);
-          controller.$setValidity('mask', isValid);
-          return isValid ? maskValue(value) : undefined;
-        }
-
-        function parser(viewValue) {
-          if (!maskProcessed)
-            return viewValue;
-          value   = unmaskValue(viewValue || '');
-          isValid = validateValue(value);
-          controller.$viewValue = maskValue(value);
-          controller.$setValidity('mask', isValid);
-          if (value === '' && controller.$error.required !== undefined)
-            controller.$setValidity('required', false);
-          return isValid ? value : undefined;
-        }
-
-        function validateValue(value) {
-          // Zero-length value validity is ngRequired's determination
-          return value.length ? value.length === maskCaretMap.length - 1 : true;
-        }
-
-        function unmaskValue(value) {
-          var valueUnmasked    = '',
-              maskPatternCopys = maskPatterns.slice();
-          angular.forEach(value.toString().split(''), function(chr, i) {
-            if (maskPatternCopys.length && maskPatternCopys[0].test(chr)) {
-              valueUnmasked += chr;
-              maskPatternCopys.shift();
-            }
-          });
-          return valueUnmasked;
-        }
-
-        function maskValue(unmaskedValue) {
-          var valueMasked      = '',
-              maskCaretMapCopy = maskCaretMap.slice();
-          angular.forEach(maskPlaceholder.split(''), function(chr, i) {
-            if (unmaskedValue.length && i === maskCaretMapCopy[0]) {
-              valueMasked  += unmaskedValue.charAt(0) || '_';
-              unmaskedValue = unmaskedValue.substr(1);
-              maskCaretMapCopy.shift(); }
-            else
-              valueMasked += chr;
-          });
-          return valueMasked;
         }
 
         function blurHandler(e) {
