@@ -2,13 +2,13 @@ describe('uiKeyup', function () {
 
   var $scope, $compile;
 
-  var createKeyEvent = function (mainKey, alt, ctrl, shif) {
+  var createKeyEvent = function (mainKey, alt, ctrl, shift) {
     var keyEvent = jQuery.Event("keyup");
 
     keyEvent.keyCode = mainKey;
-    keyEvent.altKey = alt || false;
-    keyEvent.ctrlKey = ctrl || false;
-    keyEvent.shiftKey = shif || false;
+    keyEvent.altKey = alt;
+    keyEvent.ctrlKey = ctrl;
+    keyEvent.shiftKey = shift;
 
     return keyEvent;
   };
@@ -52,14 +52,6 @@ describe('uiKeyup', function () {
 
     elm.trigger(createKeyEvent(13, false, true, true));
     expect($scope.event2).toBe(true);
-  });
-
-  it('should support modifiers to be ommited from event', function () {
-    var keyEvent = jQuery.Event('keyup');
-    keyEvent.keyCode = 13;
-    createElement({'13': 'event=true'}).trigger(keyEvent);
-
-    expect($scope.event).toBe(true);
   });
 
   it('should support $event in expressions', function () {
