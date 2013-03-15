@@ -1,3 +1,4 @@
+
 describe('uiKeypress', function () {
 
   var $scope, $compile;
@@ -52,6 +53,14 @@ describe('uiKeypress', function () {
 
     elm.trigger(createKeyEvent(13, false, true, true));
     expect($scope.event2).toBe(true);
+  });
+
+  it('should support modifiers to be ommited from event', function () {
+    var keyEvent = jQuery.Event('keypress');
+    keyEvent.keyCode = 13;
+    createElement({'13': 'event=true'}).trigger(keyEvent);
+
+    expect($scope.event).toBe(true);
   });
 
   it('should support $event in expressions', function () {

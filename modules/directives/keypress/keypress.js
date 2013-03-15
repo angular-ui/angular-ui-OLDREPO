@@ -45,9 +45,9 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
     // Check only matching of pressed keys one of the conditions
     elm.bind(mode, function (event) {
       // No need to do that inside the cycle
-      var altPressed = event.metaKey || event.altKey;
-      var ctrlPressed = event.ctrlKey;
-      var shiftPressed = event.shiftKey;
+      var altPressed = event.metaKey || event.altKey || false;
+      var ctrlPressed = event.ctrlKey || false;
+      var shiftPressed = event.shiftKey || false;
       var keyCode = event.keyCode;
 
       // normalize keycodes

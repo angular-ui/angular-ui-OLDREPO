@@ -54,6 +54,14 @@ describe('uiKeyup', function () {
     expect($scope.event2).toBe(true);
   });
 
+  it('should support modifiers to be ommited from event', function () {
+    var keyEvent = jQuery.Event('keyup');
+    keyEvent.keyCode = 13;
+    createElement({'13': 'event=true'}).trigger(keyEvent);
+
+    expect($scope.event).toBe(true);
+  });
+
   it('should support $event in expressions', function () {
 
     var element = createElement({'esc': 'cb($event)', '13': 'event2=$event'});
