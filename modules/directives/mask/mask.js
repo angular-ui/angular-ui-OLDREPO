@@ -72,19 +72,21 @@ angular.module('ui.directives').directive('uiMask', [
         function bindEventListeners() {
           if (eventsBound)
             return true;
-          iElement.bind('blur', blurHandler);
-          iElement.bind('input keyup click mouseout', eventHandler);
+          iElement.bind('blur',              blurHandler);
+          iElement.bind('mousedown mouseup', mouseDownUpHandler);
+          iElement.bind('input keyup click', eventHandler);
           eventsBound = true;
         }
 
         function unbindEventListeners() {
           if (!eventsBound)
             return true;
-          iElement.unbind('blur', blurHandler);
-          iElement.unbind('input', eventHandler);
-          iElement.unbind('keyup', eventHandler);
-          iElement.unbind('click', eventHandler);
-          iElement.unbind('mouseout', eventHandler);
+          iElement.unbind('blur',      blurHandler);
+          iElement.unbind('mousedown', mouseDownUpHandler);
+          iElement.unbind('mouseup',   mouseDownUpHandler);
+          iElement.unbind('input',     eventHandler);
+          iElement.unbind('keyup',     eventHandler);
+          iElement.unbind('click',     eventHandler);
           eventsBound = false;
         }
 
@@ -197,8 +199,22 @@ angular.module('ui.directives').directive('uiMask', [
           }
         }
 
+        iElement.bind('mousedown mouseup', mouseDownUpHandler);
+
+        function mouseoutHandler(e) {
+          oldSelectionLength = getSelectionLength(this);
+          iElement.unbind('mouseout', mouseoutHandler);
+        }
+
+        function mouseDownUpHandler(e) {
+          if (e.type === 'mousedown')
+            iElement.bind('mouseout', mouseoutHandler);
+          else
+            iElement.unbind('mouseout', mouseoutHandler);
+        }
+
         function eventHandler(e) {
-          e = e || {};
+          e = e || { which:0, type:'input' };
           // Allows more efficient minification
           var eventWhich = e.which,
               eventType  = e.type;
@@ -245,7 +261,7 @@ angular.module('ui.directives').directive('uiMask', [
           oldSelectionLength  = selectionLen;
 
           // These events don't require any action
-          if (eventType == 'mouseout' || isSelection || (isSelected && (eventType == 'click' || eventType == 'keyup')))
+          if (isSelection || (isSelected && (eventType == 'click' || eventType == 'keyup')))
             return true;
 
           // Value Handling
