@@ -24,12 +24,13 @@ describe('uiRoute', function () {
   });
 
   function runTests(routeModel) {
+    var modelProp = routeModel || '$uiRoute', elm = angular.noop;
     function compileRoute(template) {
-      var elm = $(template);
+      elm = $(template);
       if (routeModel) elm.attr('ng-model', routeModel);
       return $compile(elm[0])(scope);
     }
-    var modelProp = routeModel || '$uiRoute';
+    
     describe('with uiRoute defined', function(){
       it('should use the uiRoute property', function(){
         compileRoute('<div ui-route="/foo">');
@@ -38,16 +39,16 @@ describe('uiRoute', function () {
         setPath('/bar');
         scope.$apply('foobar = "foo"');
         compileRoute('<div ui-route="/{{foobar}}">');
-        expect(scope[modelProp]).toBeFalsy();
+        expect(elm.scope()[modelProp]).toBeFalsy();
         scope.$apply('foobar = "bar"');
-        expect(scope[modelProp]).toBe(true);
+        expect(elm.scope()[modelProp]).toBe(true);
         scope.$apply('foobar = "foo"');
-        expect(scope[modelProp]).toBe(false);
+        expect(elm.scope()[modelProp]).toBe(false);
       });
       it('should support regular expression', function(){
         setPath('/foo/123');
         compileRoute('<div ui-route="/foo/[0-9]*">');
-        expect(scope[modelProp]).toBe(true);
+        expect(elm.scope()[modelProp]).toBe(true);
       });
     });
 
@@ -56,17 +57,17 @@ describe('uiRoute', function () {
       it('should use the ngHref property', function(){
         setPath('/foo');
         compileRoute('<a ng-href="/foo" ui-route>');
-        expect(scope[modelProp]).toBe(true);
+        expect(elm.scope()[modelProp]).toBe(true);
       });
       it('should update model on $observe', function(){
         setPath('/bar');
         scope.$apply('foobar = "foo"');
         compileRoute('<a ng-href="/{{foobar}}" ui-route>');
-        expect(scope[modelProp]).toBeFalsy();
+        expect(elm.scope()[modelProp]).toBeFalsy();
         scope.$apply('foobar = "bar"');
-        expect(scope[modelProp]).toBe(true);
+        expect(elm.scope()[modelProp]).toBe(true);
         scope.$apply('foobar = "foo"');
-        expect(scope[modelProp]).toBe(false);
+        expect(elm.scope()[modelProp]).toBe(false);
       });
     });
 
@@ -75,7 +76,7 @@ describe('uiRoute', function () {
       it('should use the href property', function(){
         setPath('/foo');
         compileRoute('<a href="/foo" ui-route>');
-        expect(scope[modelProp]).toBe(true);
+        expect(elm.scope()[modelProp]).toBe(true);
       });
     });
 
@@ -88,11 +89,11 @@ describe('uiRoute', function () {
     it('should update model on route change', function(){
       setPath('/bar');
       compileRoute('<div ui-route="/foo">');
-      expect(scope[modelProp]).toBeFalsy();
+      expect(elm.scope()[modelProp]).toBeFalsy();
       setPath('/foo');
-      expect(scope[modelProp]).toBe(true);
+      expect(elm.scope()[modelProp]).toBe(true);
       setPath('/bar');
-      expect(scope[modelProp]).toBe(false);
+      expect(elm.scope()[modelProp]).toBe(false);
     });
   }
 });

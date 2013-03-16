@@ -4,6 +4,7 @@
 angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', function ($location, $parse) {
   return {
     restrict: 'AC',
+    scope: true,
     compile: function(tElement, tAttrs) {
       var useProperty;
       if (tAttrs.uiRoute) {
