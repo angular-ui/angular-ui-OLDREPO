@@ -1,5 +1,5 @@
 describe('uiValidate', function ($compile) {
-  var scope, compileAndDigest;
+  var scope, compileAndDigest, changeInputValue;
 
   var trueValidator = function () {
     return true;
@@ -25,6 +25,10 @@ describe('uiValidate', function ($compile) {
       scope.$digest();
 
       return inputElm;
+    };
+    changeInputValue = function(elm, value) {
+      elm.val(value);
+      elm.trigger('input');
     };
   }));
 
@@ -105,9 +109,9 @@ describe('uiValidate', function ($compile) {
       scope.validateWatch = validateWatch;
     });
 
-    it('should watch the string and refire the single validator', function () {
+    it('should watch the model and refire the single validator', function () {
       scope.watchMe = false;
-      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validateWatch(watchMe)\'" ui-validate-watch="\'watchMe\'">', scope);
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validateWatch(watchMe)\'" ui-validate-watch="watchMe">', scope);
       expect(scope.form.input.$valid).toBe(false);
       expect(scope.form.input.$error.validator).toBe(true);
       scope.$apply('watchMe=true');
@@ -115,9 +119,9 @@ describe('uiValidate', function ($compile) {
       expect(scope.form.input.$error.validator).toBe(false);
     });
 
-    it('should watch the string and refire all validators', function () {
+    it('should watch the model and refire all validators', function () {
       scope.watchMe = false;
-      compileAndDigest('<input name="input" ng-model="value" ui-validate="{foo:\'validateWatch(watchMe)\',bar:\'validateWatch(watchMe)\'}" ui-validate-watch="\'watchMe\'">', scope);
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="{foo:\'validateWatch(watchMe)\',bar:\'validateWatch(watchMe)\'}" ui-validate-watch="watchMe">', scope);
       expect(scope.form.input.$valid).toBe(false);
       expect(scope.form.input.$error.foo).toBe(true);
       expect(scope.form.input.$error.bar).toBe(true);
@@ -127,26 +131,25 @@ describe('uiValidate', function ($compile) {
       expect(scope.form.input.$error.bar).toBe(false);
     });
 
-    it('should watch the all object attributes and each respective validator', function () {
-      scope.watchFoo = false;
-      scope.watchBar = false;
-      compileAndDigest('<input name="input" ng-model="value" ui-validate="{foo:\'validateWatch(watchFoo)\',bar:\'validateWatch(watchBar)\'}" ui-validate-watch="{foo:\'watchFoo\',bar:\'watchBar\'}">', scope);
+    it('should watch the model and refire the validation with the view $value', function () {
+      scope.value = "";
+      scope.watchMe = "bbb";
+      var input = compileAndDigest('<input name="input" ng-model="value" ui-validate="\'$value == watchMe\'" ui-validate-watch="watchMe">', scope);
+
+      // Initial state, form empty, invalid view value
       expect(scope.form.input.$valid).toBe(false);
-      expect(scope.form.input.$error.foo).toBe(true);
-      expect(scope.form.input.$error.bar).toBe(true);
-      scope.$apply('watchFoo=true');
+      expect(scope.form.input.$error.validator).toBe(true);
+      expect(scope.value).toBe(undefined); // Since the validator fails, the model is unset
+
+      changeInputValue(input, "aaa"); // The user types something invalid
       expect(scope.form.input.$valid).toBe(false);
-      expect(scope.form.input.$error.foo).toBe(false);
-      expect(scope.form.input.$error.bar).toBe(true);
-      scope.$apply('watchBar=true');
-      scope.$apply('watchFoo=false');
-      expect(scope.form.input.$valid).toBe(false);
-      expect(scope.form.input.$error.foo).toBe(true);
-      expect(scope.form.input.$error.bar).toBe(false);
-      scope.$apply('watchFoo=true');
+      expect(scope.form.input.$error.validator).toBe(true);
+      expect(scope.value).toBe(undefined); // Since the validator still fails, the model is still unset
+
+      scope.$apply('watchMe="aaa"'); // Now the watched model changes and matches the previously invalid view value
       expect(scope.form.input.$valid).toBe(true);
-      expect(scope.form.input.$error.foo).toBe(false);
-      expect(scope.form.input.$error.bar).toBe(false);
+      expect(scope.form.input.$error.validator).toBe(false);
+      expect(scope.value).toBe("aaa"); // Since the validator succeeds, the model is set
     });
 
   });
