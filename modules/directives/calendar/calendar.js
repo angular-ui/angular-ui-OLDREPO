@@ -35,24 +35,41 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             };
             /* update the calendar with the correct options */
             function update() {
-              //calendar object exposed on scope
               scope.calendar = elm.html('');
               var view = scope.calendar.fullCalendar('getView');
+              var m;
+              var xtraOptions = {};
+              //calendar object exposed on scope
               if(view){
-                view = view.name; //setting the default view to be whatever the current view is. This can be overwritten. 
+                var viewDate = new Date(view.start);
+                if(viewDate !== 'Invalid Date'){
+                  y = viewDate.getFullYear();
+                  m = viewDate.getMonth();
+                  d = viewDate.getDate();
+                  if(!isNaN(y) && !isNaN(m) && !isNaN(d)){
+                    xtraOptions = {
+                      year: y,
+                      month: m,
+                      date: d
+                    };
+                  }
+                }
+                view = view.name; //setting the default view to be whatever the current view is. This can be overwritten.
               }
               /* If the calendar has options added then render them */
-              var expression,
-                options = {
-                  defaultView : view,
-                  eventSources: sources
-                };
+              var expression, 
+                   options = { defaultView : view, eventSources: sources };
               if (attrs.uiCalendar) {
                 expression = scope.$eval(attrs.uiCalendar);
-              } else {
+                // Override defaultView if is set in ui-calendar attribute - OK? 
+                if (expression.defaultView) {
+                  expression.defaultView = view;
+                }     
+              } 
+              else {
                 expression = {};
               }
-              angular.extend(options, uiConfig.uiCalendar, expression);
+              angular.extend(options, uiConfig.uiCalendar, expression, xtraOptions);
               scope.calendar.fullCalendar(options);
             }
             update();
