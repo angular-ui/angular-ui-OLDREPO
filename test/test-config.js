@@ -2,8 +2,6 @@
 // It's used for running client tests on Travis (http://travis-ci.org/#!/vojtajina/testacular)
 // Most of the options can be overriden by cli arguments (see testacular --help)
 
-
-
 // base path, that will be used to resolve files and exclude
 basePath = '..';
 
@@ -34,7 +32,7 @@ exclude = [];
 
 // use dots reporter, as travis terminal does not support escaping sequences
 // possible values: 'dots' || 'progress'
-reporter = 'dots';
+reporter = 'progress';
 
 // these are default values, just to show available options
 
@@ -49,13 +47,10 @@ colors = true;
 
 // level of logging
 // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_DEBUG;
+logLevel = LOG_INFO;
 
 // enable / disable watching file and executing tests whenever any file changes
-autoWatch = false;
-
-// polling interval in ms (ignored on OS that support inotify)
-autoWatchInterval = 0;
+autoWatch = true;
 
 // Start these browsers, currently available:
 // - Chrome
@@ -64,4 +59,4 @@ autoWatchInterval = 0;
 // - Opera
 // - Safari
 // - PhantomJS
-browsers = [];
+browsers = ['Chrome'];
