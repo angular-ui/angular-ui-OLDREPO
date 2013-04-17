@@ -21,15 +21,12 @@ angular.module('ui.directives')
         require: '?ngModel',
         link: function (scope, element, attrs, controller)
         {
-          var getOptions = function ()
-          {
-            var options = angular.extend({}, uiConfig.autocomplete, scope.$eval(attrs.uiAutocomplete));
-            return options;
-          };
 
           var initAutocomplete = function ()
           {
-            var opts = getOptions();
+            var opts = angular.extend(
+              {}, uiConfig.autocomplete, scope.$eval(attrs.uiAutocomplete)
+            );
 
             // If we have a controller (i.e. ngModelController) then wire it up
             if ( controller )
@@ -53,7 +50,7 @@ angular.module('ui.directives')
             element.autocomplete(opts);
           };
           // Watch for changes to the directives options
-          scope.$watch(getOptions, initAutocomplete, true);
+          scope.$watch(attrs.icAutocomplete, initAutocomplete, true);
         }
       };
     }
