@@ -60,7 +60,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               scope.$watch(getSources, function( newVal, oldVal )
               {
                 update();
-              });
+              }, true);
          }
     };
 }]);
