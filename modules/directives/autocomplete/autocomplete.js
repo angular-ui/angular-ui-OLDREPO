@@ -31,12 +31,11 @@ angular.module('ui.directives')
             // If we have a controller (i.e. ngModelController) then wire it up
             if ( controller )
             {
-              var updateModel = function () {
+              var updateModel = function (event, ui) {
                 if ( !scope.$$phase )
                 {
                   scope.$apply(function () {
-                    var query = element.val();
-                    controller.$setViewValue(query);
+                    controller.$setViewValue(ui.item.value);
                     element.blur();
                   });
                 }
