@@ -35,7 +35,7 @@ angular.module('ui.directives')
                 if ( !scope.$$phase )
                 {
                   scope.$apply(function () {
-                    controller.$setViewValue(ui.item.value);
+                    controller.$setViewValue(ui.item);
                     element.blur();
                   });
                 }
