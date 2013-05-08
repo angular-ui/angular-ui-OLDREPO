@@ -41,6 +41,13 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
           opts.multiple = true;
         }
 
+        if (!opts.uiDataBinder) {
+          // Provide default method to just return data object.
+          opts.uiDataBinder = function(data) {
+             return data;
+          };
+        }
+
         if (controller) {
           // Watch the model for programmatic changes
           controller.$render = function () {
@@ -84,7 +91,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
             // Set the view and model value and update the angular template manually for the ajax/multiple select2.
             elm.bind("change", function () {
               scope.$apply(function () {
-                controller.$setViewValue(elm.select2('data'));
+                controller.$setViewValue(opts.uiDataBinder(elm.select2('data')));
               });
             });
 
@@ -124,7 +131,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
 
           // Not sure if I should just check for !isSelect OR if I should check for 'tags' key
           if (!opts.initSelection && !isSelect)
-            controller.$setViewValue(elm.select2('data'));
+            controller.$setViewValue(opts.uiDataBinder(elm.select2('data')));
         });
       };
     }
