@@ -65,6 +65,10 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
                 }
               }
             }
+
+            $timeout(function () {
+              elm.trigger('change');
+            });
           };
 
           // Watch the options dataset for changes
