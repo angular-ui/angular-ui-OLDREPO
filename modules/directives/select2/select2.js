@@ -118,7 +118,11 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
           elm.select2(opts);
 
           // Set initial value - I'm not sure about this but it seems to need to be there
-          elm.val(controller.$viewValue);
+          if (angular.isObject(controller.$viewValue)) {
+            elm.select2('val', controller.$viewValue);
+          } else {
+            elm.select2('data', controller.$viewValue);
+          }
           // important!
           controller.$render();
 
