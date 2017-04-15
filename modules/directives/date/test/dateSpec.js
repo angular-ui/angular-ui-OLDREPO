@@ -138,6 +138,21 @@ describe('uiDate', function() {
     });
   });
 
+  it('should update the input field correctly on a manual update', function() {
+      inject(function($compile, $rootScope) {
+          var aDateString, element;
+          aDateString = '2012-08-17';
+          element = $compile('<input ui-date="{dateFormat: \'yy-mm-dd\'}" ng-model="x"/>')($rootScope);
+          $rootScope.$apply(function() {
+              $rootScope.x = aDateString;
+          });
+          element.val('2012-8-01');
+          element.trigger("change");
+          expect($.datepicker.formatDate('yy-mm-dd', element.datepicker('getDate'))).toEqual('2012-08-01');
+          expect(element.val()).toEqual('2012-08-01');
+      });
+  });
+
   describe('use with ng-required directive', function() {
     it('should be invalid initially', function() {
       inject(function($compile, $rootScope) {
