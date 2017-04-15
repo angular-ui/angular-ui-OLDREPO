@@ -83,6 +83,7 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout',
           if (!isSelect) {
             // Set the view and model value and update the angular template manually for the ajax/multiple select2.
             elm.bind("change", function () {
+              if (scope.$$phase) return;
               scope.$apply(function () {
                 controller.$setViewValue(elm.select2('data'));
               });
