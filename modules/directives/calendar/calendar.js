@@ -45,7 +45,13 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               var expression,
                 options = {
                   defaultView : view,
-                  eventSources: sources
+                  eventSources: sources,
+                  eventDrop: function() {
+                    scope.$apply();
+                  },
+                  eventResize: function() {
+                    scope.$apply();
+                  }
                 };
               if (attrs.uiCalendar) {
                 expression = scope.$eval(attrs.uiCalendar);
