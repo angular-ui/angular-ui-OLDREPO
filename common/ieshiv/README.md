@@ -8,7 +8,7 @@ If not installed properly, angular WILL throw an exception.
 
 Which means you have not included the angular-ui library in the file, or the shiv is in the wrong place.
 
-WHY? Well, angular is throwing the exception and I can't catch and stop it. If properly setup, you should be good. 
+WHY? Well, angular is throwing the exception and I can't catch and stop it.
 If not, then you should probably fix it or yank it out. Of course, then you won't have the shiv for ie. 
 
 ## Description
@@ -28,20 +28,29 @@ angular's ngView, ngInclude, ngPluralize directives.
 ## Usage
 
 The shiv needs to run after angular has compiled the application.  Best to load angular-ui-ieshiv.js at 
-bottom of <head> section. 
+bottom of <head> section, it needs to load synchronously. 
 
-    <!--[if lte IE 8]> <script src="build/angular-ui-ieshiv.js"></script><![endif]-->
+    <!--[if lte IE 8]> 
+        <script src="build/angular-ui-ieshiv.js"></script>
+    <![endif]-->
 
 ### Options
 
-    There will be
+If you have custom directives, the shiv needs to know about them. Unfortunately at this time, they cannot be 
+automagically discovered. The good news is if you have them in a module, then they can. Add a script like below
+before the ieshiv declaration.
+
+The window.ieShivDebug is just for your debugging (works even in non-IE) 
+it will show that your directives have indeed been shivved. Make sure to remove for production. 
+
+    <script>
+        window.myAngularModules = [ 'yourModule.ThatContainsAtLeastSomeDirectives' ];  
+        window.ieShivDebug = true; 
+    </script>
 
 ### Notes
-    - modules are searched for directives 
+    
+    - modules are searched for directives
     - only IE 8 and earlier will cause shiv to run
     - there will be a slight performance hit (for IE) 
-    
-### Todo
-    - provide ability to specify which directives to include/exclude
-    - automagically locate all custom directives in current ng-app (this will involve recursion)
     
