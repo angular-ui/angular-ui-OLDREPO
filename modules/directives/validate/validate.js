@@ -31,10 +31,21 @@ angular.module('ui.directives').directive('uiValidate', function () {
 
       angular.forEach(validateExpr, function (expression, key) {
         validateFn = function (valueToValidate) {
-          if (scope.$eval(expression, { '$value' : valueToValidate })) {
+          var expression = scope.$eval(expression, { '$value' : valueToValidate });
+          if (angular.isFunction(expression.then)) {
+            // expression is a promise
+            expression.then(function(){
+              ctrl.$setVa­lid­ity­(key, true);
+            }, function(){
+              ctrl.$setVa­lid­ity­(key, false);
+            });
+            return valueToValidate;
+          } else if (expression) {
+            // expression is true
             ctrl.$setValidity(key, true);
             return valueToValidate;
           } else {
+            // expression is false
             ctrl.$setValidity(key, false);
             return undefined;
           }
